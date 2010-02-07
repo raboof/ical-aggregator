@@ -136,7 +136,7 @@ public class FeedServiceImpl implements FeedService {
 		}
 		Query query = em.createQuery("select e from Event e where feed.prio > :prio and upper(summary) like upper(:summary) and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
 		query.setParameter("prio", event.feed.getPrio());
-		query.setParameter("summary", summary + "%");
+		query.setParameter("summary", "%" + summary + "%");
 		query.setParameter("start", event.getStart());
 		List<Event> resultList = query.getResultList();
 		if (!resultList.isEmpty())

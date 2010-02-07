@@ -1,3 +1,7 @@
 testdb.log
 testdb.lck
 testdb.script
+testdb.properties
+target
+.classpath
+.settings
