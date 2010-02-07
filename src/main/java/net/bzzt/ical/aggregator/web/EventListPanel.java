@@ -1,6 +1,7 @@
 package net.bzzt.ical.aggregator.web;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,7 +21,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -62,7 +62,9 @@ public class EventListPanel extends Panel {
 
 			@Override
 			protected void populateCaption(ListItem<Date> item) {
-				item.add(new Label("date", item.getDefaultModel()));
+				SimpleDateFormat dateConverter = new SimpleDateFormat("EEEEE dd-MM-yyyy");
+				String date = dateConverter.format(item.getModelObject());
+				item.add(new Label("date", date));
 			}
 
 			@Override

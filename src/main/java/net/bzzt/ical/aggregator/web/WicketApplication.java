@@ -18,22 +18,21 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.time.Time;
 
 /**
- * Application object for your web application. If you want to run this application without deploying, run the Start class.
+ * Application object for your web application. If you want to run this
+ * application without deploying, run the Start class.
  * 
  * @see net.bzzt.ical.aggregator.Start#main(String[])
  */
-public class WicketApplication extends WebApplication
-{    
-    /**
-     * Constructor
-     */
-	public WicketApplication()
-	{
+public class WicketApplication extends WebApplication {
+	/**
+	 * Constructor
+	 */
+	public WicketApplication() {
 	}
-	
-	
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.apache.wicket.protocol.http.WebApplication#init()
 	 */
 	@Override
@@ -42,14 +41,10 @@ public class WicketApplication extends WebApplication
 		super.init();
 	}
 
-	
-
 	@Override
 	public Session newSession(Request request, Response response) {
 		return new AggregatorSession(request);
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
@@ -67,10 +62,10 @@ public class WicketApplication extends WebApplication
 			private static final long serialVersionUID = 1L;
 
 			public Object convertToObject(String value, Locale locale) {
-				if (StringUtils.isBlank(value)){
+				if (StringUtils.isBlank(value)) {
 					return null;
 				}
-				
+
 				try {
 					return new URL(value);
 				} catch (Exception e) {
@@ -79,12 +74,12 @@ public class WicketApplication extends WebApplication
 			}
 
 			public String convertToString(Object value, Locale locale) {
-					return ((URL) value).toExternalForm();
+				return ((URL) value).toExternalForm();
 			}
 
 		});
 
-		locator.set(Time.class, new IConverter(){
+		locator.set(Time.class, new IConverter() {
 
 			/**
 			 * 
@@ -100,16 +95,18 @@ public class WicketApplication extends WebApplication
 			@Override
 			public String convertToString(Object value, Locale locale) {
 				SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-				return format.format(new Date(((Time)value).getMilliseconds()));
-			}});
-		
+				return format
+						.format(new Date(((Time) value).getMilliseconds()));
+			}
+		});
+
 		return locator;
 	}
+
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
-	public Class<HomePage> getHomePage()
-	{
+	public Class<HomePage> getHomePage() {
 		return HomePage.class;
 	}
 
