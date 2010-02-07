@@ -1,0 +1,76 @@
+package net.bzzt.ical.aggregator.model;
+
+import java.io.Serializable;
+import java.net.URL;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import net.bzzt.ical.aggregator.web.model.Identifiable;
+
+@Entity
+public class Feed implements Serializable, Identifiable<Long> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue
+	public Long id;
+
+	@Column(nullable=false)
+	public String name;
+	
+	@Column(nullable=false)
+	public String shortName;
+	
+	/**
+	 * Feeds zonder URL hebben alleen handmatige events
+	 */
+	@Column(nullable=true)
+	public URL url;
+	
+	public Date lastUpdate;
+	
+	private Integer prio = 50;
+
+	public Feed() { }
+	
+	public Feed(String name, String shortName) {
+		this.shortName = shortName;
+		this.name = name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public URL getUrl() {
+		return url;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	public Integer getPrio() {
+		return prio;
+	}
+	
+	public void setPrio(Integer prio)
+	{
+		if (prio == null)
+		{
+			this.prio = 50;
+		}
+		else
+		{
+			this.prio = prio;
+		}
+	}
+}

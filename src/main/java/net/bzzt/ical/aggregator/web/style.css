@@ -1,0 +1,164 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	padding: 20px;
+	text-align: center;
+	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f4f4f4);
+}
+
+#wrapper {
+	margin: 0 auto;
+	text-align: left;
+	background: #f9f9f9
+		-moz-linear-gradient(124deg, #fff 49%, #f9f9f9, #f9f9f9 51%, #fff);
+	/*padding: 10px 20px 20px 20px;*/
+	-moz-border-radius: 10px;
+	/*-moz-box-shadow: 0px 0px 10px #999;
+	border: 1px solid #999;*/
+	height: 100%;
+}
+
+h1 {
+	font-size: 24px;
+	color: #333;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #bbb;
+	padding: 10px 15px;
+	-moz-box-shadow: 0px 1px 5px #eee;
+}
+
+h2 {
+	font-size: 20px;
+	color: #333;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #bbb;
+	padding: 10px 15px;
+	-moz-box-shadow: 0px 1px 5px #eee;
+}
+
+p.footer {
+	margin: 10px 15px;
+}
+
+a {
+	color: #4E6069;
+}
+
+a:hover {
+	color: #D15D0A;
+}
+
+.text {
+	margin-bottom: 5px;
+	padding: 5px 15px;
+}
+
+.component {
+	margin-bottom: 5px;
+	padding: 5px 15px;
+}
+
+label {
+	float: left;
+	width: 100px;
+}
+
+.submit {
+	width: auto;
+}
+
+textarea {
+	width: 490px;
+	display: block;
+}
+
+form {
+	border: 1px solid #ccc;
+	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f5f5f5);
+	-moz-box-shadow: 0 1px 0px #eee; +
+	-moz-border-radius: 5px;
+	padding: 10px;
+	margin: 10px 15px;
+}
+
+form:hover {
+	border-color: #aaa;
+	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f1f5f5);
+	position: relative;
+	top: 0px;
+	-moz-box-shadow: 0 2px 2px #ddd;
+}
+
+pre {
+	border: 1px solid;
+	padding: 3px;
+}
+
+.start
+{
+	display: block;
+	width: 4em;
+	float: left;
+}
+
+.datecaption
+{
+	font-size: .7em;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.eventlistevent
+{
+	margin-left: 3em;
+}
+
+.shortName
+{
+	font-size: .7em;
+	display: block;
+	width: 4em;
+	float: left;
+}
+
+.feedSelection
+{
+	width: 16em;
+	position: fixed;
+	top: 8em;
+}
+
+.feedSelection label
+{
+	float: none;
+}
+
+.feedSelection li
+{
+	display: block;
+	list-style: none;
+}
+
+.content
+{
+	position: relative;
+	bottom: 0px;
+}
+
+.calendar
+{
+	position: absolute;
+	left: 20em;
+}

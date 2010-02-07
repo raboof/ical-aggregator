@@ -1,0 +1,16 @@
+<wicket:panel>
+	<form wicket:id="form">
+		<label>Name:</label> <input wicket:id="name"></input>
+		<br/>
+		<div>
+			<label>Short name:</label> <input wicket:id="shortName" size="4"></input><br/>
+			<label>Prio:</label> <input size="4" wicket:id="prio"></input><br/>
+			<label>URL:</label> <input size="50" wicket:id="url"></input><br/>
+			<span wicket:id="lastUpdate"></span>
+			<a wicket:id="reload">reload now</a>
+			<a wicket:id="clear">clear and reload</a>
+			<a wicket:id="validate">validate</a><br></br>
+			<input type="submit"></input>
+		</div>
+	</form>
+</wicket:panel>
