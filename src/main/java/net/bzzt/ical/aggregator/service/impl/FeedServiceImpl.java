@@ -16,6 +16,7 @@ import javax.persistence.Query;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.impl.SessionImpl;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
@@ -32,14 +33,14 @@ import net.fortuna.ical4j.util.CompatibilityHints;
 
 public class FeedServiceImpl implements FeedService {
 	private static final Log LOG = LogFactory.getLog(FeedServiceImpl.class);
-	
+
 	public static EntityManager em;
 
 	private EntityManagerFactory emf;
-	
+
 	public FeedServiceImpl() {
 		if (em == null) {
-			 emf = Persistence
+			emf = Persistence
 					.createEntityManagerFactory("aggregatorPersistenceUnit");
 			FeedServiceImpl.em = emf.createEntityManager();
 		}
@@ -53,7 +54,8 @@ public class FeedServiceImpl implements FeedService {
 
 	public List<Feed> getFeeds() {
 		@SuppressWarnings("unchecked")
-		List<Feed> resultList = em.createQuery("select f from Feed f").getResultList();
+		List<Feed> resultList = em.createQuery("select f from Feed f")
+				.getResultList();
 		return resultList;
 	}
 
@@ -80,7 +82,7 @@ public class FeedServiceImpl implements FeedService {
 	private void addEvent(Feed feed, VEvent vevent) {
 		Event event = new Event();
 		event.feed = feed;
-			
+
 		updateFields(event, vevent);
 	}
 
@@ -94,57 +96,70 @@ public class FeedServiceImpl implements FeedService {
 	private void updateFields(Event event, VEvent vevent) {
 		event.setStart(vevent.getStartDate().getDate());
 		DtEnd endDate = vevent.getEndDate();
-		if (endDate != null)
-		{
+		if (endDate != null) {
 			event.setEnding(endDate.getDate());
 		}
 		event.rawEvent = vevent.toString();
 		event.uid = vevent.getUid().getValue();
 		event.summary = vevent.getSummary().getValue();
 		Url url = vevent.getUrl();
-		if (url != null)
-		{
+		if (url != null) {
 			try {
 				event.url = new URL(url.getValue());
 			} catch (MalformedURLException e) {
 				LOG.info("Invalid URL, skipping: " + url.getValue());
 			}
 		}
-		
+
 		// See if this event is a duplicate of an existing event
-		if (event.duplicate_of == null)
-		{
+		if (event.duplicate_of == null) {
 			event.duplicate_of = findParent(event);
 		}
-		
+
 		saveOrUpdateEvent(event);
 	}
 
 	private Event findParent(Event event) {
 		String summary = event.summary;
-		if (summary.contains(" + more"))
-		{
+		if (summary.contains(" + more")) {
 			summary.replace(" + more", "");
 		}
-		if (summary.contains(" at "))
-		{
+		if (summary.contains(" at ")) {
 			summary = summary.substring(0, summary.indexOf(" at "));
 		}
-		if (summary.contains(" @ "))
-		{
+		if (summary.contains(" @ ")) {
 			summary = summary.substring(0, summary.indexOf(" @ "));
 		}
-		Query query = em.createQuery("select e from Event e where feed.prio > :prio and upper(summary) like upper(:summary) and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
+
+		// we want to do some smarter query'ing here.... :/
+		SessionImpl impl = (SessionImpl) em.getDelegate();
+
+		String charsToIgnore = ",- \t\n";
+		org.hibernate.Query query = impl
+				.createQuery("from Event where feed.prio > :prio and upper("
+						+ ignoreMultiple("summary", charsToIgnore)
+						+ ") like upper("
+						+ ignoreMultiple(":summary", charsToIgnore)
+						+ ") and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
+
 		query.setParameter("prio", event.feed.getPrio());
 		query.setParameter("summary", "%" + summary + "%");
 		query.setParameter("start", event.getStart());
-		
-		List<Event> resultList = getResults(query);
-		if (!resultList.isEmpty())
-		{
+
+		List<Event> resultList = query.list();// getResults(query);
+		if (!resultList.isEmpty()) {
 			return resultList.get(0);
 		}
 		return null;
+	}
+
+	private String ignoreMultiple(String original, String charsToIgnore) {
+		String result = original;
+		for (int i = 0; i < charsToIgnore.length(); i++) {
+			result = "replace(" + result + ", '" + charsToIgnore.charAt(i)
+					+ "', '')";
+		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -154,61 +169,54 @@ public class FeedServiceImpl implements FeedService {
 
 	private Event findPreviousVersion(Feed feed, VEvent event) {
 		String uid = event.getUid().getValue();
-		
+
 		Event previous = findPreviousVersionByUid(feed, uid);
-		if (previous != null)
-		{
+		if (previous != null) {
 			return previous;
 		}
 
-		previous = findPreviousVersionByStartAndSummary(feed, event.getStartDate(), event.getSummary());
-		
+		previous = findPreviousVersionByStartAndSummary(feed, event
+				.getStartDate(), event.getSummary());
+
 		return previous;
 	}
 
 	private Event findPreviousVersionByStartAndSummary(Feed feed,
 			DtStart startDate, Summary summary) {
-		if (startDate == null || summary == null)
-		{
+		if (startDate == null || summary == null) {
 			return null;
 		}
-		
-		Query query = em.createQuery("select e from Event e where feed = :feed and summary = :summary and start = :start");
+
+		Query query = em
+				.createQuery("select e from Event e where feed = :feed and summary = :summary and start = :start");
 		query.setParameter("feed", feed);
 		query.setParameter("summary", summary.getValue());
 		query.setParameter("start", startDate.getDate());
-		
+
 		@SuppressWarnings("unchecked")
 		List<Event> results = query.getResultList();
-		if (results.isEmpty() || results.size() > 1)
-		{
+		if (results.isEmpty() || results.size() > 1) {
 			return null;
-		}
-		else
-		{
+		} else {
 			return results.get(0);
 		}
 	}
 
 	private Event findPreviousVersionByUid(Feed feed, String uid) {
-		if (StringUtils.isBlank(uid))
-		{
+		if (StringUtils.isBlank(uid)) {
 			return null;
 		}
-		Query query = em.createQuery("select e from Event e where feed = :feed and uid = :uid");
+		Query query = em
+				.createQuery("select e from Event e where feed = :feed and uid = :uid");
 		query.setParameter("feed", feed);
 		query.setParameter("uid", uid);
-		
+
 		@SuppressWarnings("unchecked")
 		List<Event> results = query.getResultList();
-		if (results.isEmpty())
-		{
+		if (results.isEmpty()) {
 			return null;
-		}
-		else
-		{
-			if (results.size() > 1)
-			{
+		} else {
+			if (results.size() > 1) {
 				LOG.error("Multiple events with uid " + uid);
 			}
 			return results.get(0);
@@ -222,7 +230,7 @@ public class FeedServiceImpl implements FeedService {
 		CalendarBuilder builder = new CalendarBuilder();
 
 		LOG.info("Fetching " + feed.getUrl() + " and building calendar");
-		
+
 		// TODO FIXME we should look at the header to find out the charset...
 		Calendar calendar = builder.build(feed.getUrl().openStream());
 		LOG.info("Finished building calendar for " + feed.getUrl());
@@ -230,45 +238,38 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean alleenUpcoming) {
+	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
+			boolean alleenUpcoming) {
 		String queryString = "select e from Event e where feed = :feed";
-		if (alleenUpcoming)
-		{
+		if (alleenUpcoming) {
 			queryString += " and start >= now";
 		}
 		Query query = em.createQuery(queryString);
 		query.setParameter("feed", feed);
-		
+
 		@SuppressWarnings("unchecked")
 		List<Event> results = query.getResultList();
-		
-		if (resolveDuplicates)
-		{
-			for(Event event : new ArrayList<Event>(results))
-			{
-				if (event.duplicate_of != null)
-				{
+
+		if (resolveDuplicates) {
+			for (Event event : new ArrayList<Event>(results)) {
+				if (event.duplicate_of != null) {
 					results.remove(event);
 					Event master = getMaster(event);
-					if (!results.contains(master))
-					{
+					if (!results.contains(master)) {
 						results.add(master);
 					}
 				}
 			}
 		}
-		
+
 		return results;
 
 	}
 
 	private Event getMaster(@Nonnull Event event) {
-		if (event.duplicate_of != null)
-		{
+		if (event.duplicate_of != null) {
 			return getMaster(event.duplicate_of);
-		}
-		else
-		{
+		} else {
 			return event;
 		}
 	}
@@ -276,7 +277,7 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public void markDuplicate(Event master, Event duplicate) {
 		duplicate.duplicate_of = master;
-		
+
 		em.getTransaction().begin();
 		em.persist(duplicate);
 		em.getTransaction().commit();
@@ -286,7 +287,7 @@ public class FeedServiceImpl implements FeedService {
 	public void clear(@Nonnull Feed feed) {
 		em.getTransaction().begin();
 		unlinkEvents(feed);
-		
+
 		Query query = em.createQuery("delete from Event where feed = :feed");
 		query.setParameter("feed", feed);
 		query.executeUpdate();
@@ -294,24 +295,23 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	/**
-	 * Unlink events from events in the given feed, so that the given feed can be cleared.
+	 * Unlink events from events in the given feed, so that the given feed can
+	 * be cleared.
 	 * 
 	 * @param feed
 	 */
 	private void unlinkEvents(Feed feed) {
-		Query query = em.createQuery("select e from Event e where duplicate_of.feed = :feed");
+		Query query = em
+				.createQuery("select e from Event e where duplicate_of.feed = :feed");
 		query.setParameter("feed", feed);
-	
+
 		@SuppressWarnings("unchecked")
 		List<Event> events = query.getResultList();
-		for (Event event : events)
-		{
-			if (event.duplicate_of.duplicate_of != null && event.duplicate_of.duplicate_of.feed != feed)
-			{
+		for (Event event : events) {
+			if (event.duplicate_of.duplicate_of != null
+					&& event.duplicate_of.duplicate_of.feed != feed) {
 				event.duplicate_of = event.duplicate_of.duplicate_of;
-			}
-			else
-			{
+			} else {
 				event.duplicate_of = null;
 			}
 			em.persist(event);
@@ -321,7 +321,8 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public List<Feed> getManualFeeds() {
 		@SuppressWarnings("unchecked")
-		List<Feed> resultList = em.createQuery("select f from Feed f where url is null").getResultList();
+		List<Feed> resultList = em.createQuery(
+				"select f from Feed f where url is null").getResultList();
 		return resultList;
 	}
 
@@ -335,7 +336,8 @@ public class FeedServiceImpl implements FeedService {
 
 	@Override
 	public List<Feed> find(String name) {
-		Query query = em.createQuery("select f from Feed f where name like :name");
+		Query query = em
+				.createQuery("select f from Feed f where name like :name");
 		query.setParameter("name", name);
 		@SuppressWarnings("unchecked")
 		List<Feed> resultList = query.getResultList();
@@ -344,17 +346,14 @@ public class FeedServiceImpl implements FeedService {
 
 	@Override
 	public void reloadFeeds() {
-		Query query = em.createQuery("select f from Feed f where url is not null order by prio desc");
-		
+		Query query = em
+				.createQuery("select f from Feed f where url is not null order by prio desc");
+
 		List<Feed> resultList = getResults(query);
-		for (Feed feed : resultList)
-		{
-			try
-			{
+		for (Feed feed : resultList) {
+			try {
 				reloadFeed(feed);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				LOG.error(e);
 				// ... and continue to next feed.
 			}
