@@ -109,7 +109,10 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 		assertEquals(40, feedService.getEvents(feed, false, false).size());
 	}
 	
-	
+	public void testRefreshFeeds()
+	{
+		feedService.reloadFeeds();
+	}
 	
 	@Override
 	protected void tearDown() throws Exception {

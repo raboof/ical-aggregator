@@ -138,12 +138,18 @@ public class FeedServiceImpl implements FeedService {
 		query.setParameter("prio", event.feed.getPrio());
 		query.setParameter("summary", "%" + summary + "%");
 		query.setParameter("start", event.getStart());
-		List<Event> resultList = query.getResultList();
+		
+		List<Event> resultList = getResults(query);
 		if (!resultList.isEmpty())
 		{
 			return resultList.get(0);
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> List<T> getResults(Query query) {
+		return query.getResultList();
 	}
 
 	private Event findPreviousVersion(Feed feed, VEvent event) {
@@ -215,8 +221,12 @@ public class FeedServiceImpl implements FeedService {
 
 		CalendarBuilder builder = new CalendarBuilder();
 
+		LOG.info("Fetching " + feed.getUrl() + " and building calendar");
+		
 		// TODO FIXME we should look at the header to find out the charset...
-		return builder.build(feed.getUrl().openStream());
+		Calendar calendar = builder.build(feed.getUrl().openStream());
+		LOG.info("Finished building calendar for " + feed.getUrl());
+		return calendar;
 	}
 
 	@Override
@@ -330,5 +340,24 @@ public class FeedServiceImpl implements FeedService {
 		@SuppressWarnings("unchecked")
 		List<Feed> resultList = query.getResultList();
 		return resultList;
+	}
+
+	@Override
+	public void reloadFeeds() {
+		Query query = em.createQuery("select f from Feed f where url is not null order by prio desc");
+		
+		List<Feed> resultList = getResults(query);
+		for (Feed feed : resultList)
+		{
+			try
+			{
+				reloadFeed(feed);
+			}
+			catch (Exception e)
+			{
+				LOG.error(e);
+				// ... and continue to next feed.
+			}
+		}
 	}
 }

@@ -8,11 +8,21 @@
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.0.xsd">
     
-   	<bean class="net.bzzt.ical.aggregator.service.impl.FeedServiceImpl">
+   	<bean id="feedService" class="net.bzzt.ical.aggregator.service.impl.FeedServiceImpl">
 	</bean>
-
-   <!-- bean id="myEmf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-      <property name="persistenceUnitName" value="aggregatorPersistenceUnit"/>
-   </bean-->
-
+	
+	<bean id="reloadFeedsTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	    <!-- see the example of method invoking job above -->
+	    <property name="jobDetail" ref="reloadFeedsJobDetail" />
+	    <!-- 10 seconds -->
+	    <property name="startDelay" value="10000" />
+	    <!-- repeat every 12 hours -->
+	    <property name="repeatInterval" value="43200000" />
+	</bean>
+	
+	<bean id="reloadFeedsJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+  		<property name="targetObject" ref="feedService"/>
+  		<property name="targetMethod" value="reloadFeeds"/>
+	</bean>
+	
 </beans>

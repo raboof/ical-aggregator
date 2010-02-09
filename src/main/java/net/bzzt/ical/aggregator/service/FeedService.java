@@ -16,6 +16,9 @@ public interface FeedService {
 
 	void reloadFeed(Feed feed) throws IOException, ParserException;
 
+	/** reload all non-manual feeds - called periodically by quartz, see applicationContext */
+	void reloadFeeds();
+
 	/**
 	 * 
 	 * @param feed
@@ -34,4 +37,5 @@ public interface FeedService {
 	void delete(Feed feed);
 
 	List<Feed> find(String name);
+
 }
