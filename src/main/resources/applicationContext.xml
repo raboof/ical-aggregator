@@ -14,8 +14,8 @@
 	<bean id="reloadFeedsTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 	    <!-- see the example of method invoking job above -->
 	    <property name="jobDetail" ref="reloadFeedsJobDetail" />
-	    <!-- 10 seconds -->
-	    <property name="startDelay" value="10000" />
+	    <!-- 20 seconds -->
+	    <property name="startDelay" value="20000" />
 	    <!-- repeat every 12 hours -->
 	    <property name="repeatInterval" value="43200000" />
 	</bean>
@@ -25,4 +25,11 @@
   		<property name="targetMethod" value="reloadFeeds"/>
 	</bean>
 	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="triggers">
+        <list>
+            <ref bean="reloadFeedsTrigger" />
+        </list>
+    </property>
+</bean>
 </beans>
