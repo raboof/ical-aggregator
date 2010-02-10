@@ -65,6 +65,7 @@ public class FeedServiceImpl implements FeedService {
 		@SuppressWarnings("unchecked")
 		Collection<VEvent> components = (Collection<VEvent>) calendar
 				.getComponents(VEvent.VEVENT);
+		LOG.info(components.size() + " events found");
 		for (VEvent event : components) {
 			Event previousVersion = findPreviousVersion(feed, event);
 			if (previousVersion == null) {
@@ -73,6 +74,8 @@ public class FeedServiceImpl implements FeedService {
 				updateEvent(previousVersion, event);
 			}
 		}
+		LOG.info("Done reloading " + feed.url);
+		
 	}
 
 	private void updateEvent(Event previousVersion, VEvent event) {
@@ -242,7 +245,8 @@ public class FeedServiceImpl implements FeedService {
 			boolean alleenUpcoming) {
 		String queryString = "select e from Event e where feed = :feed";
 		if (alleenUpcoming) {
-			queryString += " and start >= now";
+			queryString += " and (year(start) > year(now) or (year(start) = year(now) and (month(start) > month(now) or " +
+					" (month(start) = month(now) and day(start) >= day(now)))))";
 		}
 		Query query = em.createQuery(queryString);
 		query.setParameter("feed", feed);
@@ -354,7 +358,7 @@ public class FeedServiceImpl implements FeedService {
 			try {
 				reloadFeed(feed);
 			} catch (Exception e) {
-				LOG.error(e);
+				LOG.error("Error reloading feed: " + e.getMessage(), e);
 				// ... and continue to next feed.
 			}
 		}
