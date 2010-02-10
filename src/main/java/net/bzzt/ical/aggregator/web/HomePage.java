@@ -1,6 +1,7 @@
 package net.bzzt.ical.aggregator.web;
 
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 /**
  * Homepage
@@ -21,9 +22,20 @@ public class HomePage extends AggregatorLayoutPage {
 
 	private void init() {
 
-		add(new FeedSelection("feedSelection"));
+		add(new FeedSelection("feedSelection", this));
 
-		add(new EventListPanel("calendar"));
+		refresh(null);
+	}
+
+	public void refresh(AjaxRequestTarget target) {
+		EventListPanel eventListPanel = new EventListPanel("calendar");
+		eventListPanel.setOutputMarkupId(true);
+		addOrReplace(eventListPanel);
+	
+		if (target != null)
+		{
+			target.addComponent(eventListPanel);
+		}
 	}
 	
 	
