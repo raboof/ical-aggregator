@@ -162,3 +162,8 @@ pre {
 	position: absolute;
 	left: 20em;
 }
+
+.detailLink
+{
+	font-size: 0.7em;
+}

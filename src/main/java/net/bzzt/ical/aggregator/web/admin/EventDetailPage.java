@@ -6,6 +6,7 @@ import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -28,20 +29,49 @@ public class EventDetailPage extends AggregatorLayoutPage {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public EventForm(String id, Event event) {
-			super(id, new CompoundPropertyModel<Event>(new JpaEntityModel<Identifiable<Long>>(event)));
+		private JpaEntityModel<Event> originalModel;
+		
+		public EventForm(String id, Event event, Event original) {
+			super(id, new CompoundPropertyModel<Event>(new JpaEntityModel<Event>(event)));
+			
+			if (!event.getManual())
+			{
+				throw new IllegalArgumentException();
+			}
+			
+			this.originalModel = new JpaEntityModel<Event>(original);
 			
 			add(new TextField<String>("summary").setRequired(true));
 			add(new DateField("start").setRequired(true));
-			add(new DropDownChoice<Feed>("feed", feedService.getManualFeeds()).setRequired(true));
+			add(new DropDownChoice<Feed>("feed", feedService.getManualFeeds()).setRequired(true).setVisible(event.feed == null || event.feed.url == null));
 			add(new TextField<URL>("url"));
+			
+			add(new FeedbackPanel("feedback"));
 		}
 
 		@Override
 		protected void onSubmit() {
-			feedService.saveOrUpdateEvent(getModelObject());
+			Event event = getModelObject();
+			feedService.saveOrUpdateEvent(event);
+			Event original = originalModel.getObject();
+			if (original != event)
+			{
+				original.duplicate_of = event;
+				feedService.saveOrUpdateEvent(original);
+			}
 			setResponsePage(HomePage.class);
 		}
+
+		/* (non-Javadoc)
+		 * @see org.apache.wicket.markup.html.form.Form#onDetach()
+		 */
+		@Override
+		protected void onDetach() {
+			super.onDetach();
+			originalModel.detach();
+		}
+		
+		
 	}
 
 	public EventDetailPage()
@@ -49,7 +79,22 @@ public class EventDetailPage extends AggregatorLayoutPage {
 		this(new Event());
 	}
 
-	public EventDetailPage(Event event) {
-		add(new EventForm("form", event));
+	public EventDetailPage(Event original) {
+		
+		if (original.duplicate_of != null)
+		{
+			throw new IllegalArgumentException();
+		}
+		
+		Event event;
+		if (original.getManual())
+		{
+			event = original;
+		}
+		else
+		{
+			event = (Event) original.clone();
+		}
+		add(new EventForm("form", event, original));
 	}
 }

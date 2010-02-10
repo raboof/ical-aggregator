@@ -8,21 +8,25 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.web.admin.EventDetailPage;
 import net.bzzt.ical.aggregator.web.model.CategorizedList;
 import net.bzzt.ical.aggregator.web.model.EventsCategorizer;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.IConverter;
 
 public class EventListPanel extends Panel {
 
@@ -62,15 +66,47 @@ public class EventListPanel extends Panel {
 
 			@Override
 			protected void populateCaption(ListItem<Date> item) {
-				SimpleDateFormat dateConverter = new SimpleDateFormat("EEEEE dd-MM-yyyy");
-				String date = dateConverter.format(item.getModelObject());
-				item.add(new Label("date", date));
+				item.add(new Label("date", item.getModel())
+				{
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					/* (non-Javadoc)
+					 * @see org.apache.wicket.Component#getConverter(java.lang.Class)
+					 */
+					@Override
+					public IConverter getConverter(Class<?> type) {
+						return new IConverter() {
+							
+							/**
+							 * 
+							 */
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public String convertToString(Object value, Locale locale) {
+								SimpleDateFormat dateConverter = new SimpleDateFormat("EEEEE dd-MM-yyyy", locale);
+								return dateConverter.format(value);
+							}
+							
+							@Override
+							public Object convertToObject(String value, Locale locale) {
+								// TODO Auto-generated method stub
+								return null;
+							}
+						};
+					}
+					
+				});
 			}
 
 			@Override
 			protected void populateChild(ListItem<Event> item) {
-//				item.add(new Label("startTime"));
-				item.add(new Label("feed.shortName"));
+				item.add(new FeedLink("feedLink", item.getModelObject().feed));
+
 				WebMarkupContainer link = new WebMarkupContainer("link");
 				if (item.getModelObject().url != null)
 				{
@@ -82,7 +118,19 @@ public class EventListPanel extends Panel {
 				}
 				link.add(new Label("summary"));
 				item.add(link);
-				
+				item.add(new Link<Event>("detailLink", item.getModel()){
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick() {
+						setResponsePage(new EventDetailPage(getModelObject()));
+					}
+					
+				});
 			}
 			
 		});

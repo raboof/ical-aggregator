@@ -1,9 +1,10 @@
 <wicket:extend>
 	<form wicket:id="form">
 		<label>Titel</label><input wicket:id="summary"></input><br/>
-		<label>Bron</label><select wicket:id="feed"></select><br/>
+		<wicket:enclosure><label>Bron</label><select wicket:id="feed"></select><br/></wicket:enclosure>
 		<label>Datum</label><span wicket:id="start"></span><br/>
 		<label>Link</label><input wicket:id="url"></input><br/>
+		<span wicket:id="feedback"></span>
 		<input type="submit"></input>
 	</form>
 </wicket:extend>

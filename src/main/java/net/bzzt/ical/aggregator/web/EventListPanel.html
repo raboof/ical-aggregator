@@ -1,8 +1,11 @@
-<wicket:panel>
+`<wicket:panel>
 	<div wicket:id="dates">
 		<span class="datecaption" wicket:id="date"></span>
 		<div class="eventlistevent" wicket:id="children">
-			<span class="shortName">[<span wicket:id="feed.shortName">shortName</span>]</span> <a wicket:id="link"><span wicket:id="summary"></span></a>
+			<span wicket:id="feedLink"></span>
+		 
+			<a wicket:id="link"><span wicket:id="summary"></span></a>
+			<a class="detailLink" wicket:id="detailLink">[details]</a>
 		</div>
 	</div>
 	<!-- div wicket:id="event">
