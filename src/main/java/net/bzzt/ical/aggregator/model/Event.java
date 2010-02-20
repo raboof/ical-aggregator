@@ -35,6 +35,8 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable {
 	
 	public String summary;
 	
+	public String description;
+	
 	private Date start;
 	
 	private Date ending;
@@ -45,6 +47,11 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable {
 	
 	private Boolean manual = false;
 
+	public Event()
+	{
+		
+	}
+	
 	public Date getStart() {
 		return start;
 	}
@@ -125,7 +132,7 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return summary;
+		return "[" + feed.shortName + "] " + summary;
 	}
 	
 	
