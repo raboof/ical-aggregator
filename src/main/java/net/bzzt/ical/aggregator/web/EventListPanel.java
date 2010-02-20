@@ -124,19 +124,7 @@ public class EventListPanel extends Panel {
 				
 				link.add(new Label("summary"));
 				item.add(link);
-				item.add(new Link<Event>("detailLink", item.getModel()){
-
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new EventDetailPage(getModelObject()));
-					}
-					
-				});
+				
 			}
 			
 		});

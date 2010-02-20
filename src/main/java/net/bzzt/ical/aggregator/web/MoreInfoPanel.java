@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.web.admin.EventDetailPage;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
@@ -12,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -30,7 +32,7 @@ public class MoreInfoPanel extends Panel {
 	@SpringBean
 	private FeedService feedService;
 	
-	public MoreInfoPanel(String id, final IModel<Event> model) {
+	public MoreInfoPanel(String id, IModel<Event> model) {
 		super(id, new CompoundPropertyModel<Event>(model));
 		
 		add(new Label("description"));
@@ -83,7 +85,7 @@ public class MoreInfoPanel extends Panel {
 		listView.setVisible(!alternatives.isEmpty());
 		add(listView);
 		
-		add(new AjaxLink("duplicate")
+		add(new AjaxLink<Event>("duplicate", model)
 		{
 
 			/**
@@ -94,7 +96,20 @@ public class MoreInfoPanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{
-				setResponsePage(new MarkDuplicatesPage(model));
+				setResponsePage(new MarkDuplicatesPage(getModel()));
+			}
+			
+		});
+		add(new Link<Event>("detailLink", model){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(new EventDetailPage(getModelObject()));
 			}
 			
 		});
