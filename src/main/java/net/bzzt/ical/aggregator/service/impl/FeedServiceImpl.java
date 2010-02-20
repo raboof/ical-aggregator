@@ -253,6 +253,7 @@ public class FeedServiceImpl implements FeedService {
 		LOG.info("Fetching " + feed.getUrl() + " and building calendar");
 
 		// TODO FIXME we should look at the header to find out the charset...
+		
 		Calendar calendar = builder.build(feed.getUrl().openStream());
 		LOG.info("Finished building calendar for " + feed.getUrl());
 		return calendar;

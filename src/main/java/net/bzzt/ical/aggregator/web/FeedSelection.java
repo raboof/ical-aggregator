@@ -57,9 +57,8 @@ public class FeedSelection extends Panel {
 
 			IModel<Collection<Feed>> collectionModel = (IModel) model;
 
-			IChoiceRenderer<? super Feed> renderer = new FeedRenderer();
 			CheckBoxMultipleChoice<Feed> checkBoxMultipleChoice = new CheckBoxMultipleChoice<Feed>(
-					"feed", collectionModel, feedService.getFeeds(), renderer);
+					"feed", collectionModel, feedService.getFeeds(), new FeedRenderer());
 
 			checkBoxMultipleChoice
 					.add(new AjaxFormChoiceComponentUpdatingBehavior() {
