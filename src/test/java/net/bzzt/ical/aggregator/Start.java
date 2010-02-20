@@ -1,8 +1,13 @@
 package net.bzzt.ical.aggregator;
 
+import java.security.Principal;
+
 import org.mortbay.jetty.Connector;
+import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.security.HashUserRealm;
+import org.mortbay.jetty.security.UserRealm;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public class Start {
@@ -18,6 +23,8 @@ public class Start {
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext bb = new WebAppContext();
+//		UserRealm realm = new HashUserRealm("Aggregator", users);
+//		server.addUserRealm(realm);
 		bb.setServer(server);
 		bb.setContextPath("/");
 		bb.setWar("src/main/webapp");

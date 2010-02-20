@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
 public abstract class AggregatorLayoutPage extends WebPage implements IHeaderContributor {
@@ -45,6 +46,11 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
         add(new LocaleLink("toDutch", new Locale("nl", "NL")));
         
         add(new LocaleLink("toEnglish", Locale.ENGLISH));
+
+        add(new LoginPanel("login"));
+        
+        add(new FeedbackPanel("feedback"));
+        
 	}
 	
 	@Override
