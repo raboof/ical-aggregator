@@ -1,6 +1,7 @@
 package net.bzzt.ical.aggregator.service;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import net.bzzt.ical.aggregator.model.Event;
@@ -8,6 +9,9 @@ import net.bzzt.ical.aggregator.model.Feed;
 import net.fortuna.ical4j.data.ParserException;
 
 public interface FeedService {
+	
+	<T> T load(Class<T> clazz, Serializable id);
+	
 	void saveOrUpdate(Feed feed);
 
 	void saveOrUpdateEvent(Event event);
@@ -37,5 +41,17 @@ public interface FeedService {
 	void delete(Feed feed);
 
 	List<Feed> find(String name);
+
+	List<Event> getAlternatives(Event event);
+
+	/**
+	 * Kijk welke events in aanmerking komen als parent van dit event
+	 * 
+	 * @param object
+	 * @return
+	 */
+	List<Event> getDuplicateCandidates(Event object);
+
+	List<Event> getEvents(List<Feed> selectedFeeds);
 
 }

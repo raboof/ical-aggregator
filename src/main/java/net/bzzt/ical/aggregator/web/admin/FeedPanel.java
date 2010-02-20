@@ -112,6 +112,24 @@ public class FeedPanel extends Panel {
 				}
 				
 			}.setVisible(feed.getObject().id != null));
+			
+			add(new SubmitLink("delete")
+			{
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onSubmit() {
+					Feed feed = FeedForm.this.getModelObject();
+					feedService.delete(feed);
+					setResponsePage(HomePage.class);
+					
+				}
+				
+			}.setVisible(feed.getObject().id != null));
 		}
 
 		/* (non-Javadoc)
@@ -119,6 +137,7 @@ public class FeedPanel extends Panel {
 		 */
 		@Override
 		protected void onSubmit() {
+			IModel<Feed> feedModel = getModel();
 			Feed modelObject = getModelObject();
 			boolean isNew = modelObject.getId() == null;
 			feedService.saveOrUpdate(modelObject);

@@ -1,5 +1,6 @@
 package net.bzzt.ical.aggregator.web.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bzzt.ical.aggregator.model.Feed;
@@ -7,7 +8,8 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -21,7 +23,7 @@ public class ManageFeeds extends AggregatorLayoutPage {
 	
 	public ManageFeeds()
 	{
-		add(new ListView<Feed>("feeds", new PropertyModel<List<Feed>>(this, "feeds"))
+		add(new ListView<Long>("feeds", new PropertyModel<List<Long>>(this, "feeds"))
 				{
 
 					/**
@@ -30,8 +32,8 @@ public class ManageFeeds extends AggregatorLayoutPage {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected void populateItem(ListItem<Feed> item) {
-						IModel<Feed> model = new JpaEntityModel<Feed>(item.getModelObject());
+					protected void populateItem(ListItem<Long> item) {
+						IModel<Feed> model = new JpaEntityModel<Feed>(Feed.class, item.getModelObject());
 						item.add(new FeedPanel("feed", model));
 					}
 			
@@ -41,8 +43,16 @@ public class ManageFeeds extends AggregatorLayoutPage {
 		add(new FeedbackPanel("feedback"));
 	}
 	
-	public List<Feed> getFeeds()
+	public List<Long> getFeeds()
 	{
-		return feedService.getFeeds();
+		List<Long> result = new ArrayList<Long>();
+		CollectionUtils.collect(feedService.getFeeds(), new Transformer() {
+
+			@Override
+			public Object transform(Object input)
+			{
+				return ((Feed)input).getId();
+			}}, result);
+		return result;
 	}
 }

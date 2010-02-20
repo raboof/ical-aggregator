@@ -1,22 +1,28 @@
 package net.bzzt.ical.aggregator.service.impl;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.impl.SessionImpl;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
@@ -25,31 +31,35 @@ import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.util.CompatibilityHints;
 
+@Transactional(propagation=Propagation.REQUIRED)
 public class FeedServiceImpl implements FeedService {
 	private static final Log LOG = LogFactory.getLog(FeedServiceImpl.class);
 
-	public static EntityManager em;
+	private static final Comparator<Event> eventComparator = new Comparator<Event>(){
 
-	private EntityManagerFactory emf;
+		@Override
+		public int compare(Event o1, Event o2) {
+			return o1.getStart().compareTo(o2.getStart());
+		}};
 
-	public FeedServiceImpl() {
-		if (em == null) {
-			emf = Persistence
-					.createEntityManagerFactory("aggregatorPersistenceUnit");
-			FeedServiceImpl.em = emf.createEntityManager();
-		}
-	}
+	
+	@PersistenceContext(unitName="aggregatorPersistenceUnit")
+	private EntityManager em;
 
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void saveOrUpdate(Feed feed) {
-		em.getTransaction().begin();
+		if (feed.getId() != null)
+		{
+			feed = em.merge(feed);
+		}
 		em.persist(feed);
-		em.getTransaction().commit();
 	}
 
 	public List<Feed> getFeeds() {
@@ -59,7 +69,7 @@ public class FeedServiceImpl implements FeedService {
 		return resultList;
 	}
 
-	public void reloadFeed(Feed feed) throws IOException, ParserException {
+	public void reloadFeed(@Nonnull Feed feed) throws IOException, ParserException {
 		Calendar calendar = getCalendar(feed);
 
 		@SuppressWarnings("unchecked")
@@ -91,9 +101,11 @@ public class FeedServiceImpl implements FeedService {
 
 	@Override
 	public void saveOrUpdateEvent(Event event) {
-		em.getTransaction().begin();
+		if (event.getId() != null)
+		{
+			event = em.merge(event);
+		}
 		em.persist(event);
-		em.getTransaction().commit();
 	}
 
 	private void updateFields(Event event, VEvent vevent) {
@@ -105,6 +117,11 @@ public class FeedServiceImpl implements FeedService {
 		event.rawEvent = vevent.toString();
 		event.uid = vevent.getUid().getValue();
 		event.summary = vevent.getSummary().getValue();
+		Description description = vevent.getDescription();
+		if (description != null && StringUtils.isNotBlank(description.getValue()))
+		{
+			event.description = description.getValue();
+		}
 		Url url = vevent.getUrl();
 		if (url != null) {
 			try {
@@ -137,18 +154,19 @@ public class FeedServiceImpl implements FeedService {
 		// we want to do some smarter query'ing here.... :/
 		SessionImpl impl = (SessionImpl) em.getDelegate();
 
-		String charsToIgnore = ",- \t\n";
+		String charsToIgnore = ",- \t\n/";
 		org.hibernate.Query query = impl
-				.createQuery("from Event where feed.prio > :prio and upper("
+				.createQuery("from Event where feed.prio > :prio and upper(replace("
 						+ ignoreMultiple("summary", charsToIgnore)
-						+ ") like upper("
+						+ ", '&', 'and')) like upper(replace("
 						+ ignoreMultiple(":summary", charsToIgnore)
-						+ ") and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
+						+ ", '&', 'and')) and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
 
 		query.setParameter("prio", event.feed.getPrio());
 		query.setParameter("summary", "%" + summary + "%");
 		query.setParameter("start", event.getStart());
 
+		@SuppressWarnings("unchecked")
 		List<Event> resultList = query.list();// getResults(query);
 		if (!resultList.isEmpty()) {
 			return resultList.get(0);
@@ -226,7 +244,7 @@ public class FeedServiceImpl implements FeedService {
 		}
 	}
 
-	private Calendar getCalendar(Feed feed) throws IOException, ParserException {
+	private Calendar getCalendar(@Nonnull Feed feed) throws IOException, ParserException {
 		CompatibilityHints.setHintEnabled(
 				CompatibilityHints.KEY_RELAXED_PARSING, true);
 
@@ -282,20 +300,17 @@ public class FeedServiceImpl implements FeedService {
 	public void markDuplicate(Event master, Event duplicate) {
 		duplicate.duplicate_of = master;
 
-		em.getTransaction().begin();
+		duplicate = em.merge(duplicate);
 		em.persist(duplicate);
-		em.getTransaction().commit();
 	}
 
 	@Override
 	public void clear(@Nonnull Feed feed) {
-		em.getTransaction().begin();
 		unlinkEvents(feed);
 
 		Query query = em.createQuery("delete from Event where feed = :feed");
 		query.setParameter("feed", feed);
 		query.executeUpdate();
-		em.getTransaction().commit();
 	}
 
 	/**
@@ -333,9 +348,8 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public void delete(Feed feed) {
 		clear(feed);
-		em.getTransaction().begin();
+		feed = em.merge(feed);
 		em.remove(feed);
-		em.getTransaction().commit();
 	}
 
 	@Override
@@ -362,5 +376,61 @@ public class FeedServiceImpl implements FeedService {
 				// ... and continue to next feed.
 			}
 		}
+		LOG.info("Done reloading all feeds");
+	}
+
+	@Override
+	public List<Event> getAlternatives(Event event) {
+		List<Event> result = new ArrayList<Event>();
+		
+		getAlternativesRecursive(event, result);
+		
+		return result;
+	}
+
+	private void getAlternativesRecursive(Event parent,
+			List<Event> results) {
+		Query query = em
+		.createQuery("select e from Event e where duplicate_of = :event");
+		query.setParameter("event", parent);
+		List<Event> resultList = getResults(query);
+
+		for (Event event : resultList)
+		{
+			if (!results.contains(event))
+			{
+				results.add(event);
+				getAlternativesRecursive(event, results);
+			}
+		}
+	}
+
+	@Override
+	public <T> T load(Class<T> clazz, Serializable id) {
+		return em.find(clazz, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Event> getDuplicateCandidates(Event event)
+	{
+		Query query = em.createQuery("select e from Event e where year(start) = year(:start) and month(start) = month(:start) and day(start) = day(:start) and e != :e");
+		query.setParameter("start", event.getStart());
+		query.setParameter("e", event);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Event> getEvents(List<Feed> selectedFeeds)
+	{
+		Set<Event> events = new HashSet<Event>();
+		for (Feed feed : selectedFeeds)
+		{
+			events.addAll(getEvents(feed, true, true));
+		}
+		List<Event> result = new ArrayList<Event>(events);
+		Collections.sort(result, eventComparator);
+		
+		return result;
 	}
 }
