@@ -13,6 +13,9 @@
     
    	<bean id="feedService" class="net.bzzt.ical.aggregator.service.impl.FeedServiceImpl">
 	</bean>
+
+   	<bean id="userService" class="net.bzzt.ical.aggregator.service.impl.UserServiceImpl">
+	</bean>
 	
 	<bean id="reloadFeedsTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 	    <!-- see the example of method invoking job above -->

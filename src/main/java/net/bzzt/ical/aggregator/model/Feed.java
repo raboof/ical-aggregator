@@ -73,4 +73,27 @@ public class Feed implements Serializable, Identifiable<Long> {
 			this.prio = prio;
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == null || !(obj instanceof Feed))
+		{
+			return false;
+		}
+		Feed feed = (Feed) obj;
+		if (id != null)
+		{
+			return id.equals(feed.getId());
+		}
+		else
+		{
+			return this == obj;
+		}
+	}
+	
+	
 }

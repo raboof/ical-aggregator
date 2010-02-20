@@ -64,8 +64,8 @@ public class FeedSelection extends Panel {
 					.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
 						/**
-				 * 
-				 */
+						 * 
+						 */
 						private static final long serialVersionUID = 1L;
 
 						@Override

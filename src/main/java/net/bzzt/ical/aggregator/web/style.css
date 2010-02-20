@@ -70,12 +70,10 @@ a:hover {
 	padding: 5px 15px;
 }
 
-/*
-label {
+.manageFeeds label {
 	float: left;
 	width: 100px;
 }
-*/
 
 .submit {
 	width: auto;
@@ -89,18 +87,41 @@ textarea {
 form {
 	border: 1px solid #ccc;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f5f5f5);
-	-moz-box-shadow: 0 1px 0px #eee; +
+	-moz-box-shadow: 0 1px 0px #eee;
 	-moz-border-radius: 5px;
 	padding: 10px;
 	margin: 10px 15px;
 }
 
+.loginForm
+{
+	padding: 0px;
+	border: none;
+	float: right;
+	margin: 0px;
+	-moz-box-shadow: 0 0px 0px;
+}
+
 form:hover {
 	border-color: #aaa;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f1f5f5);
-	position: relative;
-	top: 0px;
+	/*position: relative;
+	top: 0px;*/
 	-moz-box-shadow: 0 2px 2px #ddd;
+}
+
+.loginForm:hover
+{
+	padding: 0px;
+	border: none;
+	float: right;
+	margin: 0px;
+	-moz-box-shadow: 0 0px 0px;
+}
+
+.loggedInAs
+{
+	float: right;
 }
 
 pre {

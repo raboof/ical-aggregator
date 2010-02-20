@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.HomePage;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 import net.fortuna.ical4j.data.ParserException;
@@ -43,6 +44,9 @@ public class FeedPanel extends Panel {
 
 		public FeedForm(String id, IModel<Feed> feed) {
 			super(id, new CompoundPropertyModel<Feed>(feed));
+			
+			setEnabled(AggregatorSession.get().ingelogd());
+			
 			add(new TextField<String>("name"));
 			add(new TextField<String>("shortName"));
 			add(new TextField<Integer>("prio"));

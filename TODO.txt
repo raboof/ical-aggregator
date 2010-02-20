@@ -1,14 +1,15 @@
-- user management: adding users, logging in
-- shield some pages from non-logged-in users
+v manual duplicate resolution
+v user management: registration, logging in
+v shield some pages from non-logged-in users
   - allow non-logged-in users to submit events, to be validated by logged-in 
     users before they are shown
-- manual duplicate resolution
 - 'tabular' calendar view
 - mouseover details
-  - time, description, url, feed, duplicates and their urls
+  - time
+  v description, url, feed, duplicates and their urls
 - solution for dropped/cancelled events?
 - more internationalisation
   - flags for languages
 - dropdown problem with css in ff
 - checkbox 'show by default' per feed, for initial selection
-- review database concurrency approach: let spring manage transactions/EM?
+v review database concurrency approach: let spring manage transactions/EM?

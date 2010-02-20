@@ -6,6 +6,7 @@ import java.util.List;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
+import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -39,8 +40,7 @@ public class ManageFeeds extends AggregatorLayoutPage {
 			
 				});
 		
-		add(new FeedPanel("addFeed"));
-		add(new FeedbackPanel("feedback"));
+		add(new FeedPanel("addFeed").setVisible(AggregatorSession.get().ingelogd()));
 	}
 	
 	public List<Long> getFeeds()
