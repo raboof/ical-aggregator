@@ -19,6 +19,8 @@ import net.bzzt.ical.aggregator.web.model.CategorizedList;
 import net.bzzt.ical.aggregator.web.model.EventsCategorizer;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -35,12 +37,6 @@ public class EventListPanel extends Panel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Comparator<Event> eventComparator = new Comparator<Event>(){
-
-		@Override
-		public int compare(Event o1, Event o2) {
-			return o1.getStart().compareTo(o2.getStart());
-		}};
 
 	@SpringBean
 	private FeedService feedService;
@@ -48,14 +44,12 @@ public class EventListPanel extends Panel {
 	public EventListPanel(String id) {
 		super(id);
 		
-		Set<Event> events = new HashSet<Event>();
-		for (Feed feed : ((AggregatorSession)getSession()).getSelectedFeeds())
-		{
-			events.addAll(feedService.getEvents(feed, true, true));
-		}
 		
-		List<Event> eventsSorted = new ArrayList<Event>(events);
-		Collections.sort(eventsSorted, eventComparator);
+		
+		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds());
+		
+		
+		
 		
 		add(new CategorizedList<Date, Event>("dates", eventsSorted, new EventsCategorizer()){
 
@@ -107,15 +101,27 @@ public class EventListPanel extends Panel {
 			protected void populateChild(ListItem<Event> item) {
 				item.add(new FeedLink("feedLink", item.getModelObject().feed));
 
-				WebMarkupContainer link = new WebMarkupContainer("link");
-				if (item.getModelObject().url != null)
+				final WebMarkupContainer more = new MoreInfoPanel("more", item.getModel());
+				more.setOutputMarkupPlaceholderTag(true);
+				more.setVisible(false);
+				item.add(more);
+				
+				WebMarkupContainer link = new AjaxLink<Object>("link")
 				{
-					link.add(new AttributeModifier("href", true, new Model<URL>(item.getModelObject().url)));
-				}
-				else
-				{
-					link.setRenderBodyOnly(true);
-				}
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						more.setVisible(!more.isVisible());
+						target.addComponent(more);
+					}
+					
+				};
+				
 				link.add(new Label("summary"));
 				item.add(link);
 				item.add(new Link<Event>("detailLink", item.getModel()){

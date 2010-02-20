@@ -1,0 +1,15 @@
+<wicket:panel>
+	<div class="more">
+		<span wicket:id="description"></span> <wicket:enclosure>(<span wicket:id="id"></span>)</wicket:enclosure>
+		<br>
+		<a wicket:id="link"><wicket:message key="toSite">toSite</wicket:message></a>
+		<BR>
+		<wicket:enclosure child="alternatives">
+			<wicket:message key="aka">aka</wicket:message>:
+			<ul>
+			    <li wicket:id="alternatives"><span wicket:id="feedLink">[VVV]</span> <a wicket:id="link"><span wicket:id="summary">Das Weisse Band</span></a></li>
+			</ul>
+		</wicket:enclosure>
+		<a wicket:id="duplicate"><wicket:message key="markDuplicate"></wicket:message></a>
+	</div>
+</wicket:panel>
