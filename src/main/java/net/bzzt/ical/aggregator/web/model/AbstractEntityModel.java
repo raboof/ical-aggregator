@@ -55,7 +55,7 @@ public abstract class AbstractEntityModel<T extends Identifiable< ? >> implement
         }
     }
  
-    protected abstract T load(Class clazz, Serializable id);
+    protected abstract T load(Class<T> clazz, Serializable id);
  
     public void setObject(T object)
     {

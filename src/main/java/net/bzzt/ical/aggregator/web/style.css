@@ -70,10 +70,12 @@ a:hover {
 	padding: 5px 15px;
 }
 
+/*
 label {
 	float: left;
 	width: 100px;
 }
+*/
 
 .submit {
 	width: auto;
@@ -166,4 +168,22 @@ pre {
 .detailLink
 {
 	font-size: 0.7em;
+}
+
+.more {
+	margin: 0 auto;
+	text-align: left;
+	background: #f9f9f9
+		-moz-linear-gradient(124deg, #fff 49%, #f9f9f9, #f9f9f9 51%, #fff);
+	padding: 10px 20px 20px 20px;
+	-moz-border-radius: 10px;
+	-moz-box-shadow: 0px 0px 10px #999;
+	border: 1px solid #999;
+	margin-left: 2em;
+}
+
+
+.more li
+{
+	list-style: none;
 }

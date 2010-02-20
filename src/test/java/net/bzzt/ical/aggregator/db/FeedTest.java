@@ -17,25 +17,33 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	@Autowired
 	private FeedService feedService;
 
-    private Feed feed;
-    
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override
 	protected void setUp() throws Exception {
-    	feed = getFeed("/exampleCalendar.ics");
+//    	feed = getFeed("/exampleCalendar.ics");
 
-    	super.setUp();
+//    	super.setUp();
+	}
+	
+	private Feed getFeed()
+	{
+		Feed feed = getFeed("/exampleCalendar.ics");
+//		feedService.saveOrUpdate(feed);
+		
+		return feed;
 	}
 
 	private Feed getFeed(String string) {
 		URL feedUrl = FeedTest.class.getResource(string);
     	assertNotNull(feedUrl);
     	
-		feed = new Feed(string, string);
+		Feed feed = new Feed(string, string);
 		feed.url = feedUrl;
+		assertNull(feed.getId());
     	feedService.saveOrUpdate(feed);
+    	assertNotNull(feed.getId());
     	return feed;
     }
 
@@ -44,6 +52,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
     	assertNotNull(feedService);
     	
     	// Initial import: example calendar has 40 events
+		Feed feed = getFeed();
+		assertNotNull(feed.getId());
 		feedService.reloadFeed(feed);
 		assertEquals(40, feedService.getEvents(feed, true, false).size());
 		assertEquals(40, feedService.getEvents(feed, false, false).size());
@@ -52,6 +62,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	public void testReload() throws IOException, ParserException
 	{
     	// Initial import: example calendar has 40 events
+		Feed feed = getFeed();
+		
 		feedService.reloadFeed(feed);
 		assertEquals(40, feedService.getEvents(feed, true, false).size());
 		assertEquals(40, feedService.getEvents(feed, false, false).size());
@@ -79,6 +91,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	
 	public void testDuplicate () throws IOException, ParserException
 	{
+		Feed feed = getFeed();
+		
     	// Initial import: example calendar has 40 events
 		feedService.reloadFeed(feed);
 		assertEquals(40, feedService.getEvents(feed, true, false).size());
@@ -94,6 +108,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	
 	public void testDuplicateAcrossFeeds() throws IOException, ParserException
 	{
+		Feed feed = getFeed();
+		
 		// If an event is a duplicate of another event, and we find all 
 		// events for a given feed, we want to see the duplicates too
 		feedService.reloadFeed(feed);
@@ -116,8 +132,6 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	
 	@Override
 	protected void tearDown() throws Exception {
-		feed = null;
-		
 		for (Feed feed : feedService.find("/%"))
 		{
 			feedService.delete(feed);
