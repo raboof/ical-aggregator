@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.model;
 
 import java.io.Serializable;
 
+import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,9 +30,13 @@ public class User implements Serializable, Identifiable<Long>
 
 	public User() {};
 	
-	public User(String username2, String password2)
+	public User(@Nonnull String username2, @Nonnull String password2)
 	{
 		this.username = username2;
+		if (password2 == null)
+		{
+			throw new IllegalArgumentException();
+		}
 		this.password = password2;
 	}
 

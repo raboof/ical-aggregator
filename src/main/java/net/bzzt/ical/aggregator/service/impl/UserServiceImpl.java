@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User register(String username, String password)
+	public User register(@Nonnull String username, @Nonnull String password)
 	{
 		User user = new User(username, password);
 		em.persist(user);

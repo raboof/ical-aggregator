@@ -5,6 +5,7 @@ import java.io.Serializable;
 import net.bzzt.ical.aggregator.model.User;
 import net.bzzt.ical.aggregator.service.UserService;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -19,16 +20,131 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class LoginPanel extends Panel
 {
 
-	public class LoginModel implements Serializable
+	public class LoginForm extends Form<LoginModel>
+	{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public LoginForm(String id)
+		{
+			super(id, new CompoundPropertyModel<LoginModel>(new LoginModel()));
+			
+			add(new TextField<String>("username").setRequired(true));
+			add(new PasswordTextField("password"));
+			add(new SubmitLink("register")
+			{
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				/* (non-Javadoc)
+				 * @see org.apache.wicket.markup.html.form.SubmitLink#onSubmit()
+				 */
+				@Override
+				public void onSubmit()
+				{
+					LoginModel loginModel = (LoginModel) getForm().getModelObject();
+					if (StringUtils.isBlank(loginModel.username))
+					{
+						throw new IllegalStateException();
+					}
+					if (StringUtils.isBlank(loginModel.password))
+					{
+						throw new IllegalStateException();
+					}
+					User user = userService.register(loginModel.username, loginModel.password);
+					if (user == null)
+					{
+						error("Registration failed");
+					}
+					else
+					{
+						AggregatorSession.get().login(user);
+						setResponsePage(HomePage.class);
+					}
+				}
+				
+			});
+			add(new SubmitLink("login")
+			{
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				/* (non-Javadoc)
+				 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+				 */
+				@Override
+				public void onSubmit()
+				{
+					User user = userService.find(getModelObject().username, getModelObject().password);
+					if (user == null)
+					{
+						error("Login incorrect");
+					}
+					else
+					{
+						AggregatorSession.get().login(user);
+						setResponsePage(HomePage.class);
+					}
+				}
+			});
+		}
+		
+	
+
+	}
+
+	public static class LoginModel implements Serializable
 	{
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		String username;
+		private String username;
 		
-		String password;
+		private String password;
+
+		/**
+		 * @return the username
+		 */
+		public String getUsername()
+		{
+			return username;
+		}
+
+		/**
+		 * @param username the username to set
+		 */
+		public void setUsername(String username)
+		{
+			this.username = username;
+		}
+
+		/**
+		 * @return the password
+		 */
+		public String getPassword()
+		{
+			return password;
+		}
+
+		/**
+		 * @param password the password to set
+		 */
+		public void setPassword(String password)
+		{
+			this.password = password;
+		}
+		
+		
 	}
 
 	/**
@@ -45,66 +161,11 @@ public class LoginPanel extends Panel
 		User loggedIn = AggregatorSession.get().getLoggedInUser();
 		
 		WebMarkupContainer loggedInAs = new WebMarkupContainer("loggedInAs");
-		Form<LoginModel> loginForm = new Form<LoginModel>("loginForm", new CompoundPropertyModel<LoginModel>(new LoginModel()))
-		{
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			/* (non-Javadoc)
-			 * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-			 */
-			@Override
-			protected void onSubmit()
-			{
-				User user = userService.find(getModelObject().username, getModelObject().password);
-				if (user == null)
-				{
-					error("Login incorrect");
-				}
-				else
-				{
-					AggregatorSession.get().login(user);
-					setResponsePage(HomePage.class);
-				}
-			}
-			
-			
-		};
+		Form<LoginModel> loginForm = new LoginForm("loginForm");
 		if (loggedIn == null)
 		{
 			loggedInAs.setVisible(false);
-			loginForm.add(new TextField<String>("username"));
-			loginForm.add(new PasswordTextField("password"));
-			loginForm.add(new SubmitLink("register")
-			{
-
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-
-				/* (non-Javadoc)
-				 * @see org.apache.wicket.markup.html.form.SubmitLink#onSubmit()
-				 */
-				@Override
-				public void onSubmit()
-				{
-					LoginModel loginModel = (LoginModel) getForm().getModelObject();
-					User user = userService.register(loginModel.username, loginModel.password);
-					if (user == null)
-					{
-						error("Registration failed");
-					}
-					else
-					{
-						AggregatorSession.get().login(user);
-					}
-				}
-				
-			}.setDefaultFormProcessing(false));
+			
 		}
 		else
 		{
