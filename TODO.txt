@@ -1,15 +1,16 @@
 v manual duplicate resolution
 v user management: registration, logging in
 v shield some pages from non-logged-in users
-  - allow non-logged-in users to submit events, to be validated by logged-in 
+  v allow non-logged-in users to submit events, to be validated by logged-in 
     users before they are shown
-- 'tabular' calendar view
-- mouseover details
-  - time
+  v verified --> 'hidden', ook gebruiken voor te cancellen events uit feeds. hoe?
+v mouseover/onclick details
+  v time
   v description, url, feed, duplicates and their urls
-- solution for dropped/cancelled events?
+v solution for dropped/cancelled events?
+v review database concurrency approach: let spring manage transactions/EM?
 - more internationalisation
   - flags for languages
 - dropdown problem with css in ff
 - checkbox 'show by default' per feed, for initial selection
-v review database concurrency approach: let spring manage transactions/EM?
+- 'tabular' calendar view
