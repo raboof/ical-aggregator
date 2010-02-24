@@ -107,6 +107,11 @@ form {
 	-moz-box-shadow: 0 0px 0px;
 }
 
+.loginForm input
+{
+	width: 5em;
+}
+
 form:hover {
 	border-color: #aaa;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f1f5f5);
