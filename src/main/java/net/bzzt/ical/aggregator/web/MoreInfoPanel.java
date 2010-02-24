@@ -1,10 +1,14 @@
 package net.bzzt.ical.aggregator.web;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import net.bzzt.ical.aggregator.model.Event;
+import net.bzzt.ical.aggregator.model.Right;
+import net.bzzt.ical.aggregator.model.User;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.admin.EventDetailPage;
 
 import org.apache.wicket.Application;
@@ -21,6 +25,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Time;
 
 public class MoreInfoPanel extends Panel {
 
@@ -32,10 +37,17 @@ public class MoreInfoPanel extends Panel {
 	@SpringBean
 	private FeedService feedService;
 	
+	@SpringBean
+	private UserService userService;
+	
 	public MoreInfoPanel(String id, IModel<Event> model) {
 		super(id, new CompoundPropertyModel<Event>(model));
 		
 		add(new Label("description"));
+		
+		add(new Label("startTime").setVisible(model.getObject().getStartTime() != null));
+		add(new Label("endTime").setVisible(model.getObject().getEndTime() != null));
+		
 		add(new Label("id").setVisible(Application.get().getConfigurationType().equals(Application.DEVELOPMENT)));
 		
 		WebMarkupContainer link = new WebMarkupContainer("link");
@@ -86,20 +98,39 @@ public class MoreInfoPanel extends Panel {
 		add(listView);
 		
 		add(new AjaxLink<Event>("duplicate", model)
-		{
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target)
 			{
-				setResponsePage(new MarkDuplicatesPage(getModel()));
-			}
-			
-		});
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					setResponsePage(new MarkDuplicatesPage(getModel()));
+				}
+				
+			});
+		User loggedInUser = AggregatorSession.get().getLoggedInUser();
+		add(new AjaxLink<Event>("hide", model)
+			{
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target)
+				{
+					Event event = getModelObject();
+					event.setHidden(true);
+					feedService.saveOrUpdateEvent(event);
+					setResponsePage(HomePage.class);
+				}
+				
+			}.setVisible(userService.hasRight(loggedInUser , Right.HIDE_EVENT)));
 		add(new Link<Event>("detailLink", model){
 
 			/**

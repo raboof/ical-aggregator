@@ -30,6 +30,7 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.DtEnd;
@@ -68,6 +69,14 @@ public class FeedServiceImpl implements FeedService {
 				.getResultList();
 		return resultList;
 	}
+	
+	@Override
+	public List<Feed> getDefaultFeeds() {
+		@SuppressWarnings("unchecked")
+		List<Feed> resultList = em.createQuery("select f from Feed f where showByDefault = true")
+				.getResultList();
+		return resultList;
+	}
 
 	public void reloadFeed(@Nonnull Feed feed) throws IOException, ParserException {
 		Calendar calendar = getCalendar(feed);
@@ -79,7 +88,7 @@ public class FeedServiceImpl implements FeedService {
 		for (VEvent event : components) {
 			Event previousVersion = findPreviousVersion(feed, event);
 			if (previousVersion == null) {
-				addEvent(feed, event);
+				addEvent(feed, event, false);
 			} else {
 				updateEvent(previousVersion, event);
 			}
@@ -92,9 +101,8 @@ public class FeedServiceImpl implements FeedService {
 		updateFields(previousVersion, event);
 	}
 
-	private void addEvent(Feed feed, VEvent vevent) {
-		Event event = new Event();
-		event.feed = feed;
+	private void addEvent(Feed feed, VEvent vevent, Boolean hidden) {
+		Event event = new Event(feed, hidden);
 
 		updateFields(event, vevent);
 	}
@@ -110,13 +118,18 @@ public class FeedServiceImpl implements FeedService {
 
 	private void updateFields(Event event, VEvent vevent) {
 		event.setStart(vevent.getStartDate().getDate());
+		// it's a timestamp by default
+			event.setStartHasTime(vevent.getStartDate().getParameter(Parameter.VALUE) == null || !vevent.getStartDate().getParameter(Parameter.VALUE).getValue().equals("DATE"));
 		DtEnd endDate = vevent.getEndDate();
 		if (endDate != null) {
 			event.setEnding(endDate.getDate());
+			event.setEndHasTime(vevent.getEndDate().getParameter(Parameter.VALUE) == null || !vevent.getEndDate().getParameter(Parameter.VALUE).getValue().equals("DATE"));
 		}
 		event.rawEvent = vevent.toString();
 		event.uid = vevent.getUid().getValue();
 		event.summary = vevent.getSummary().getValue();
+		event.setHidden(false);
+		event.setManual(event.getManual());
 		Description description = vevent.getDescription();
 		if (description != null && StringUtils.isNotBlank(description.getValue()))
 		{
@@ -247,7 +260,11 @@ public class FeedServiceImpl implements FeedService {
 	private Calendar getCalendar(@Nonnull Feed feed) throws IOException, ParserException {
 		CompatibilityHints.setHintEnabled(
 				CompatibilityHints.KEY_RELAXED_PARSING, true);
-
+		if (feed.getUrl() == null)
+		{
+			throw new IllegalStateException("Cannot get calendar for manual feed");
+		}
+		
 		CalendarBuilder builder = new CalendarBuilder();
 
 		LOG.info("Fetching " + feed.getUrl() + " and building calendar");
@@ -261,9 +278,18 @@ public class FeedServiceImpl implements FeedService {
 
 	@Override
 	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
-			boolean alleenUpcoming) {
-		String queryString = "select e from Event e where feed = :feed";
-		if (alleenUpcoming) {
+			boolean onlyUpcoming) {
+		return getEvents(feed, resolveDuplicates, onlyUpcoming, true);
+	}
+	@Override
+	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
+			boolean onlyUpcoming, boolean noHidden) {
+		String queryString = "select e from Event e where feed = :feed ";
+		if (noHidden)
+		{
+			queryString += " and (hidden is null or hidden = false) ";
+		}
+		if (onlyUpcoming) {
 			queryString += " and (year(start) > year(now) or (year(start) = year(now) and (month(start) > month(now) or " +
 					" (month(start) = month(now) and day(start) >= day(now)))))";
 		}
@@ -276,10 +302,13 @@ public class FeedServiceImpl implements FeedService {
 		if (resolveDuplicates) {
 			for (Event event : new ArrayList<Event>(results)) {
 				if (event.duplicate_of != null) {
-					results.remove(event);
-					Event master = getMaster(event);
-					if (!results.contains(master)) {
-						results.add(master);
+					Event master = getMaster(event, noHidden);
+					if (master != null && master != event)
+					{
+						results.remove(event);
+						if (!results.contains(master)) {
+							results.add(master);
+						}
 					}
 				}
 			}
@@ -289,12 +318,28 @@ public class FeedServiceImpl implements FeedService {
 
 	}
 
-	private Event getMaster(@Nonnull Event event) {
+	/**
+	 * @param event the child event
+	 * @param noHidden skip non-verified parents
+	 * @return the event itself or its top master. null if onlyVerified is true, the event is not verified and 
+	 * does not have any verified parents.
+	 */
+	private Event getMaster(@Nonnull Event event, boolean noHidden) {
 		if (event.duplicate_of != null) {
-			return getMaster(event.duplicate_of);
-		} else {
+			Event masterCandidate = getMaster(event.duplicate_of, noHidden);
+			if (masterCandidate != null)
+			{
+				return masterCandidate;
+			}
+		}
+		if (!noHidden || !event.getHidden())
+		{
 			return event;
 		}
+		else
+		{
+			return null;
+		}		
 	}
 
 	@Override
@@ -427,11 +472,24 @@ public class FeedServiceImpl implements FeedService {
 		Set<Event> events = new HashSet<Event>();
 		for (Feed feed : selectedFeeds)
 		{
-			events.addAll(getEvents(feed, true, true));
+			events.addAll(getEvents(feed, true, true, true));
 		}
 		List<Event> result = new ArrayList<Event>(events);
 		Collections.sort(result, eventComparator);
 		
 		return result;
+	}
+
+	@Override
+	public void delete(Event event)
+	{
+		event = em.merge(event);
+		em.remove(event);
+	}
+
+	@Override
+	public List<Event> getEventsToVerify()
+	{
+		return em.createQuery("select e from Event e where hidden = true").getResultList();
 	}
 }

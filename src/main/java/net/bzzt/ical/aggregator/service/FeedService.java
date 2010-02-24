@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.wicket.model.IModel;
+
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.fortuna.ical4j.data.ParserException;
@@ -30,7 +32,17 @@ public interface FeedService {
 	 *  be returned. 
 	 * @return
 	 */
-	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean alleenUpcoming);
+	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean onlyUpcoming, boolean onlyVerified);
+
+	/**
+	 * only 'verified' events.
+	 * 
+	 * @param feed
+	 * @param resolveDuplicates
+	 * @param onlyUpcoming
+	 * @return
+	 */
+	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean onlyUpcoming);
 
 	void markDuplicate(Event master, Event duplicate);
 
@@ -39,6 +51,8 @@ public interface FeedService {
 	List<Feed> getManualFeeds();
 
 	void delete(Feed feed);
+	
+	void delete(Event event);
 
 	List<Feed> find(String name);
 
@@ -53,5 +67,10 @@ public interface FeedService {
 	List<Event> getDuplicateCandidates(Event object);
 
 	List<Event> getEvents(List<Feed> selectedFeeds);
+
+	/** list of feeds that is shown by default */
+	List<Feed> getDefaultFeeds();
+
+	List<Event> getEventsToVerify();
 
 }

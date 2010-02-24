@@ -44,12 +44,7 @@ public class EventListPanel extends Panel {
 	public EventListPanel(String id) {
 		super(id);
 		
-		
-		
 		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds());
-		
-		
-		
 		
 		add(new CategorizedList<Date, Event>("dates", eventsSorted, new EventsCategorizer()){
 

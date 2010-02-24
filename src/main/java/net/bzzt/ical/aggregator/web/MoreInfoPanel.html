@@ -2,6 +2,13 @@
 	<div class="more">
 		<span wicket:id="description"></span> <wicket:enclosure>(<span wicket:id="id"></span>)</wicket:enclosure>
 		<br>
+		<wicket:enclosure>
+			<div><span class="timeHeader"><wicket:message key="start"></wicket:message>:</span> <span wicket:id="startTime"></span></div>
+		</wicket:enclosure>
+		<wicket:enclosure>
+			<div><span class="timeHeader"><wicket:message key="end"></wicket:message>:</span> <span wicket:id="endTime"></span></div>
+		</wicket:enclosure>
+		<br>
 		<a wicket:id="link"><wicket:message key="toSite">toSite</wicket:message></a>
 		<BR>
 		<wicket:enclosure child="alternatives">
@@ -12,5 +19,6 @@
 		</wicket:enclosure>
 		<a wicket:id="duplicate"><wicket:message key="markDuplicate"></wicket:message></a><br></br>
 		<a wicket:id="detailLink"><wicket:message key="Edit"></wicket:message></a>
+		<a wicket:id="hide"><wicket:message key="hide"></wicket:message></a>
 	</div>
 </wicket:panel>
