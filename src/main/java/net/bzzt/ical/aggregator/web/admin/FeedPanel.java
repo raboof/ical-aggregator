@@ -15,6 +15,7 @@ import net.fortuna.ical4j.data.ParserException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
@@ -51,8 +52,10 @@ public class FeedPanel extends Panel {
 			add(new TextField<String>("shortName"));
 			add(new TextField<Integer>("prio"));
 			add(new TextField<URI>("url"));
+			add(new CheckBox("showByDefault"));
 			add(new Label("lastUpdate"));
 			
+			boolean existingIcsFeed = feed.getObject().id != null && feed.getObject().getUrl() != null;
 			add(new SubmitLink("reload")
 			{
 
@@ -76,7 +79,7 @@ public class FeedPanel extends Panel {
 					
 				}
 				
-			}.setVisible(feed.getObject().id != null));
+			}.setVisible(existingIcsFeed));
 			
 			WebMarkupContainer validateLink = new WebMarkupContainer("validate");
 			validateLink.setVisible(false);
@@ -89,6 +92,7 @@ public class FeedPanel extends Panel {
 				}
 			} catch (UnsupportedEncodingException e1) {
 			}
+			validateLink.setVisible(existingIcsFeed);
 			add(validateLink);
 			
 			add(new SubmitLink("clear")

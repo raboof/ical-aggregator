@@ -12,8 +12,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
+import net.bzzt.ical.aggregator.model.Right;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
+import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.HomePage;
 import net.bzzt.ical.aggregator.web.model.Identifiable;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
@@ -21,6 +24,9 @@ import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 public class EventDetailPage extends AggregatorLayoutPage {
 	@SpringBean
 	private FeedService feedService;
+	
+	@SpringBean
+	private UserService userService;
 	
 	public class EventForm extends Form<Event> {
 
@@ -52,6 +58,7 @@ public class EventDetailPage extends AggregatorLayoutPage {
 		@Override
 		protected void onSubmit() {
 			Event event = getModelObject();
+			event.setHidden(!userService.hasRight(AggregatorSession.get().getLoggedInUser(), Right.ADD_EVENT_DIRECT));
 			feedService.saveOrUpdateEvent(event);
 			Event original = originalModel.getObject();
 			if (original != event)
@@ -76,7 +83,7 @@ public class EventDetailPage extends AggregatorLayoutPage {
 
 	public EventDetailPage()
 	{
-		this(new Event());
+		this(new Event(true));
 	}
 
 	public EventDetailPage(Event original) {

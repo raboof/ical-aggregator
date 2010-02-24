@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import net.bzzt.ical.aggregator.model.Right;
 import net.bzzt.ical.aggregator.model.User;
 import net.bzzt.ical.aggregator.service.UserService;
 
@@ -61,5 +62,9 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-
+	@Override
+	public boolean hasRight(User loggedInUser, Right addEventDirect)
+	{
+		return loggedInUser != null && "raboof".equals(loggedInUser.getUsername());
+	}
 }

@@ -42,7 +42,14 @@ public abstract class CategorizedList<T1, T2> extends ListView<T1> {
 	protected void populateItem(ListItem<T1> item) {
 		populateCaption(item);
 		
-		item.add(new PropertyListView<T2>("children", new Model<ArrayList<? extends T2>>((ArrayList<? extends T2>) objectMap.get(item.getDefaultModelObject()))){
+		ArrayList<? extends T2> sublist = (ArrayList<? extends T2>) objectMap.get(item.getDefaultModelObject());
+		Collections.sort(sublist);
+		item.add(new PropertyListView<T2>("children", new Model<ArrayList<? extends T2>>(sublist)){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<T2> item) {

@@ -75,6 +75,11 @@ a:hover {
 	width: 100px;
 }
 
+.eventDetailForm label {
+	float: left;
+	width: 100px;
+}
+
 .submit {
 	width: auto;
 }

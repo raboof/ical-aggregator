@@ -37,6 +37,8 @@ public class Feed implements Serializable, Identifiable<Long> {
 	public Date lastUpdate;
 	
 	private Integer prio = 50;
+	
+	private Boolean showByDefault = true;
 
 	public Feed() { }
 	
@@ -92,6 +94,29 @@ public class Feed implements Serializable, Identifiable<Long> {
 		else
 		{
 			return this == obj;
+		}
+	}
+
+	/**
+	 * @return the showByDefault
+	 */
+	public Boolean getShowByDefault()
+	{
+		return showByDefault;
+	}
+
+	/**
+	 * @param showByDefault the showByDefault to set
+	 */
+	public void setShowByDefault(Boolean showByDefault)
+	{
+		if (showByDefault == null)
+		{
+			this.showByDefault = true;
+		}
+		else
+		{
+			this.showByDefault = showByDefault;
 		}
 	}
 	

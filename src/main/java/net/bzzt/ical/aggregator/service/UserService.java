@@ -1,5 +1,6 @@
 package net.bzzt.ical.aggregator.service;
 
+import net.bzzt.ical.aggregator.model.Right;
 import net.bzzt.ical.aggregator.model.User;
 
 public interface UserService
@@ -10,5 +11,7 @@ public interface UserService
 	User find(String username, String password);
 
 	User register(String username, String password);
+
+	boolean hasRight(User loggedInUser, Right addEventDirect);
 
 }

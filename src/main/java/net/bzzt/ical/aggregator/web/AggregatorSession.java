@@ -31,7 +31,7 @@ public class AggregatorSession extends WebSession {
 		
 		InjectorHolder.getInjector().inject(this);
 		
-		selectedFeeds = feedService.getFeeds();
+		selectedFeeds = feedService.getDefaultFeeds();
 	}
 
 	public List<Feed> getSelectedFeeds() {
