@@ -302,7 +302,7 @@ public class FeedServiceImpl implements FeedService {
 		if (resolveDuplicates) {
 			for (Event event : new ArrayList<Event>(results)) {
 				if (event.duplicate_of != null) {
-					Event master = getMaster(event, noHidden);
+					Event master = getMaster(event, noHidden, new HashSet<Long>());
 					if (master != null && master != event)
 					{
 						results.remove(event);
@@ -321,12 +321,19 @@ public class FeedServiceImpl implements FeedService {
 	/**
 	 * @param event the child event
 	 * @param noHidden skip non-verified parents
+	 * @param seen 
 	 * @return the event itself or its top master. null if onlyVerified is true, the event is not verified and 
 	 * does not have any verified parents.
 	 */
-	private Event getMaster(@Nonnull Event event, boolean noHidden) {
+	private Event getMaster(@Nonnull Event event, boolean noHidden, HashSet<Long> seen) {
+		if (seen.contains(event.getId()))
+		{
+			LOG.error("Event " + event.getId() + " is part of a loop");
+			return event;
+		}
 		if (event.duplicate_of != null) {
-			Event masterCandidate = getMaster(event.duplicate_of, noHidden);
+			seen.add(event.getId());
+			Event masterCandidate = getMaster(event.duplicate_of, noHidden, seen);
 			if (masterCandidate != null)
 			{
 				return masterCandidate;
