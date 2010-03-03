@@ -46,11 +46,14 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 
 	public AggregatorLayoutPage()
 	{
-		add(new BookmarkablePageLink<Object>("home", HomePage.class));
+		add(new BookmarkablePageLink<Void>("home", HomePage.class));
 
-		add(new BookmarkablePageLink<Object>("manageFeeds", ManageFeeds.class));
+		add(new BookmarkablePageLink<Void>("manageFeeds", ManageFeeds.class));
 
-		add(new BookmarkablePageLink<Object>("addEvent", EventDetailPage.class));
+		add(new BookmarkablePageLink<Void>("day", DayView.class));
+		add(new BookmarkablePageLink<Void>("weekView", WeekView.class));
+
+		add(new BookmarkablePageLink<Void>("addEvent", EventDetailPage.class));
 
 		add(new BookmarkablePageLink<Void>("verifyEvents", EventVerificationPage.class).setVisible(userService
 			.hasRight(AggregatorSession.get().getLoggedInUser(), Right.VERIFY_EVENTS)));
