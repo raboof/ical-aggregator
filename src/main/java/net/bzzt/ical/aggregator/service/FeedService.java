@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.service;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.model.IModel;
@@ -26,13 +27,13 @@ public interface FeedService {
 	void reloadFeeds();
 
 	/**
+	 * only verified, resolve duplicates.
 	 * 
-	 * @param feed
-	 * @param resolveDuplicates if true, events marked 'duplicate' will not be included, instead their 'master' will
-	 *  be returned. 
+	 * @param selectedFeeds
+	 * @param date
 	 * @return
 	 */
-	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean onlyUpcoming, boolean onlyVerified);
+	List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date);
 
 	/**
 	 * only 'verified' events.
@@ -72,5 +73,6 @@ public interface FeedService {
 	List<Feed> getDefaultFeeds();
 
 	List<Event> getEventsToVerify();
+
 
 }

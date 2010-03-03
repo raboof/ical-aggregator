@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -277,32 +278,61 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
-			boolean onlyUpcoming) {
-		return getEvents(feed, resolveDuplicates, onlyUpcoming, true);
+	public List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date)
+	{
+		return getEvents(selectedFeeds, new EventFilter(date));
 	}
+	
 	@Override
 	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
-			boolean onlyUpcoming, boolean noHidden) {
+			boolean onlyUpcoming) {
+		EventFilter filter = new EventFilter();
+		filter.resolveDuplicates = resolveDuplicates;
+		if (onlyUpcoming)
+		{
+			filter.fromDate = new Date();
+		}
+		else
+		{
+			filter.fromDate = null;
+		}
+		return getEvents(feed, filter);
+	}
+
+	public List<Event> getEvents(Feed feed, EventFilter filter) {
 		String queryString = "select e from Event e where feed = :feed ";
-		if (noHidden)
+		if (filter.noHidden)
 		{
 			queryString += " and (hidden is null or hidden = false) ";
 		}
-		if (onlyUpcoming) {
-			queryString += " and (year(start) > year(now) or (year(start) = year(now) and (month(start) > month(now) or " +
-					" (month(start) = month(now) and day(start) >= day(now)))))";
+		if (filter.fromDate != null) {
+			queryString += " and (year(start) > year(:fromDate) or (year(start) = year(:fromDate) and (month(start) > month(:fromDate) or " +
+					" (month(start) = month(:fromDate) and day(start) >= day(:fromDate)))))";
 		}
+		if (filter.toDate != null) {
+			queryString += " and (year(start) < year(:toDate) or (year(start) = year(:toDate) and (month(start) < month(:toDate) or " +
+					" (month(start) = month(:toDate) and day(start) <= day(:toDate)))))";
+		}
+
 		Query query = em.createQuery(queryString);
 		query.setParameter("feed", feed);
 
+		if (filter.fromDate != null)
+		{
+			query.setParameter("fromDate", filter.fromDate);
+		}
+		if (filter.toDate != null)
+		{
+			query.setParameter("toDate", filter.toDate);
+		}
+		
 		@SuppressWarnings("unchecked")
 		List<Event> results = query.getResultList();
 
-		if (resolveDuplicates) {
+		if (filter.resolveDuplicates) {
 			for (Event event : new ArrayList<Event>(results)) {
 				if (event.duplicate_of != null) {
-					Event master = getMaster(event, noHidden, new HashSet<Long>());
+					Event master = getMaster(event, filter.noHidden, new HashSet<Long>());
 					if (master != null && master != event)
 					{
 						results.remove(event);
@@ -476,10 +506,15 @@ public class FeedServiceImpl implements FeedService {
 	@Override
 	public List<Event> getEvents(List<Feed> selectedFeeds)
 	{
+		return getEvents(selectedFeeds, new EventFilter());
+	}
+	
+	private List<Event> getEvents(List<Feed> selectedFeeds, EventFilter filter)
+	{
 		Set<Event> events = new HashSet<Event>();
 		for (Feed feed : selectedFeeds)
 		{
-			events.addAll(getEvents(feed, true, true, true));
+			events.addAll(getEvents(feed, filter));
 		}
 		List<Event> result = new ArrayList<Event>(events);
 		Collections.sort(result, eventComparator);
@@ -494,9 +529,11 @@ public class FeedServiceImpl implements FeedService {
 		em.remove(event);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Event> getEventsToVerify()
 	{
 		return em.createQuery("select e from Event e where hidden = true").getResultList();
 	}
+
 }

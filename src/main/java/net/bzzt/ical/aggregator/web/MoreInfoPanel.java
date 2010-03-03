@@ -40,15 +40,23 @@ public class MoreInfoPanel extends Panel {
 	@SpringBean
 	private UserService userService;
 	
-	public MoreInfoPanel(String id, IModel<Event> model) {
+	public MoreInfoPanel(String id, IModel<Event> model, boolean showTitle) {
 		super(id, new CompoundPropertyModel<Event>(model));
+		
+		add(new Label("summary").setVisible(showTitle));
+		add(new Label("feed.name").setVisible(showTitle));
 		
 		add(new Label("description"));
 		
 		add(new Label("startTime").setVisible(model.getObject().getStartTime() != null));
 		add(new Label("endTime").setVisible(model.getObject().getEndTime() != null));
 		
-		add(new Label("id").setVisible(Application.get().getConfigurationType().equals(Application.DEVELOPMENT)));
+		Label idLabel = new Label("id");
+		if (!Application.get().getConfigurationType().equals(Application.DEVELOPMENT))
+		{
+			idLabel.add(new AttributeModifier("style", true, new Model<String>("display: none")));
+		}
+		add(idLabel);
 		
 		WebMarkupContainer link = new WebMarkupContainer("link");
 		

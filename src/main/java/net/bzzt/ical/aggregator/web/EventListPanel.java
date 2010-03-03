@@ -94,32 +94,7 @@ public class EventListPanel extends Panel {
 
 			@Override
 			protected void populateChild(ListItem<Event> item) {
-				item.add(new FeedLink("feedLink", item.getModelObject().feed));
-
-				final WebMarkupContainer more = new MoreInfoPanel("more", item.getModel());
-				more.setOutputMarkupPlaceholderTag(true);
-				more.setVisible(false);
-				item.add(more);
-				
-				WebMarkupContainer link = new AjaxLink<Object>("link")
-				{
-
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						more.setVisible(!more.isVisible());
-						target.addComponent(more);
-					}
-					
-				};
-				
-				link.add(new Label("summary"));
-				item.add(link);
-				
+				item.add(new EventPanel("event", item.getModel()));
 			}
 			
 		});
