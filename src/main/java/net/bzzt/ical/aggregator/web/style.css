@@ -119,18 +119,6 @@ form {
 form:hover {
 	border-color: #aaa;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f1f5f5);
-	/*position: relative;
-	top: 0px;*/
-	-moz-box-shadow: 0 2px 2px #ddd;
-}
-
-.loginForm:hover
-{
-	padding: 0px;
-	border: none;
-	float: right;
-	margin: 0px;
-	-moz-box-shadow: 0 0px 0px;
 }
 
 .loggedInAs
@@ -174,7 +162,7 @@ pre {
 {
 	width: 16em;
 	position: fixed;
-	top: 8em;
+	top: 9em;
 }
 
 .feedSelection label
@@ -217,8 +205,39 @@ pre {
 	margin-left: 2em;
 }
 
+.more div .extra
+{
+	visibility: hidden;
+}
+
+.more div:hover .extra
+{
+	visibility: visible;
+}
 
 .more li
 {
 	list-style: none;
+}
+
+.aka
+{
+	padding-left: 2em;
+}
+
+.dayBlock
+{
+	width: 33%;
+	float: left;
+}
+
+.weekView table
+{
+	width: 100%;
+}
+
+.weekView td
+{
+	vertical-align: top;
+	width: 33%;
 }
