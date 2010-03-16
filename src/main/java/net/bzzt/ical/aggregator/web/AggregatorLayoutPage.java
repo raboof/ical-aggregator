@@ -9,6 +9,7 @@ import net.bzzt.ical.aggregator.web.admin.ManageFeeds;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
@@ -66,16 +67,26 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 
 		add(new FeedbackPanel("feedback"));
 
+		add(new FeedSelection("feedSelection", this));
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response)
 	{
 		response.renderCSSReference(new ResourceReference(AggregatorLayoutPage.class, "style.css"));
+		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class, "jquery-1.4.2.min.js"), "JQUERY");
+		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class, "jquery.layout.min-1.2.0.js"), "JQUERY_LAYOUT");
+		response.renderOnDomReadyJavascript("$('body').layout({ applyDefaultStyles: true });");
 	}
 
 	public AggregatorSession getSession()
 	{
 		return (AggregatorSession) Session.get();
 	}
+
+	public void refresh(AjaxRequestTarget target)
+	{
+	}
+	
+	
 }

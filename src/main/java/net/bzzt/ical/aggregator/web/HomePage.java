@@ -22,11 +22,10 @@ public class HomePage extends AggregatorLayoutPage {
 
 	private void init() {
 
-		add(new FeedSelection("feedSelection", this));
-
 		refresh(null);
 	}
 
+	@Override
 	public void refresh(AjaxRequestTarget target) {
 		EventListPanel eventListPanel = new EventListPanel("calendar");
 		eventListPanel.setOutputMarkupId(true);

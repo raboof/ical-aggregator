@@ -3,9 +3,11 @@
 		<title>ICalendar Aggregator</title>
 	</head>
 	<body>
-		<div id="wrapper">
+		<div class="ui-layout-center">
+			<wicket:child/>
+		</div>
+		<div class="ui-layout-north">
 			<h1>ICalendar Aggregator</h1>
-			<wicket:message key="tagline"></wicket:message>
 			<span wicket:id="feedback"></span>
 			<table width="100%">
 				<tr>
@@ -16,15 +18,19 @@
 		    	    	<a wicket:id="manageFeeds"><wicket:message key="Manage_feeds"></wicket:message></a>
 		    	    	<a wicket:id="verifyEvents"><wicket:message key="Verify_events"></wicket:message></a>
 		    	    	<a wicket:id="addEvent"><wicket:message key="Add_event"></wicket:message></a>
-	    	    	</td><td align="right">
-	    	    		<wicket:container wicket:id="login"></wicket:container>
-	    	    		<br>
 		    	    	<a wicket:id="toDutch"><img border="0" src="flags/png/nl.png"></img></a>
 		    	    	<a wicket:id="toEnglish"><img border="0" src="flags/png/gb.png"></img></a>
+	    	    	</td><td align="right">
+	    	    		<wicket:container wicket:id="login"></wicket:container>
 	    	    	</td>
 	    	    </tr>
     	    </table>
-			<wicket:child/>
-		</div>
+    	</div>
+    	<div class="ui-layout-south">
+    		<wicket:message key="tagline"></wicket:message>
+    	</div>
+    	<div class="ui-layout-west">
+    		<div wicket:id="feedSelection"></div>
+    	</div>
 	</body>
 </html>

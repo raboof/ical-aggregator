@@ -9,6 +9,7 @@ import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -21,13 +22,16 @@ public class DayView extends AggregatorLayoutPage
 	@SpringBean
 	private FeedService feedService;
 	
+	private Date date;
+	
 	public DayView()
 	{
 		this(new Date());
 	}
 	
-	public DayView(final Date date)
+	public DayView(Date dateToShow)
 	{
+		this.date = dateToShow;
 		add(new Link<Void>("previous")
 			{
 
@@ -112,4 +116,15 @@ public class DayView extends AggregatorLayoutPage
 		}
 		return result;
 	}
+
+	/* (non-Javadoc)
+	 * @see net.bzzt.ical.aggregator.web.AggregatorLayoutPage#refresh(org.apache.wicket.ajax.AjaxRequestTarget)
+	 */
+	@Override
+	public void refresh(AjaxRequestTarget target)
+	{
+		setResponsePage(new DayView(date));
+	}
+	
+	
 }

@@ -19,11 +19,12 @@ html {
 
 body {
 	padding: 20px;
-	text-align: center;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f4f4f4);
+/*
+	text-align: center;
 }
 
-#wrapper {
+#wrapper {*/
 	margin: 0 auto;
 	text-align: left;
 	background: #f9f9f9
@@ -38,9 +39,9 @@ body {
 h1 {
 	font-size: 24px;
 	color: #333;
-	margin-bottom: 10px;
+	margin-bottom: 7px;
 	border-bottom: 1px solid #bbb;
-	padding: 10px 15px;
+	padding: 5px 7px;
 	-moz-box-shadow: 0px 1px 5px #eee;
 }
 
@@ -92,6 +93,12 @@ a:hover {
 textarea {
 	width: 490px;
 	display: block;
+}
+
+form.feedSelection
+{
+	border: none;
+	margin: auto;
 }
 
 form {
@@ -160,14 +167,12 @@ pre {
 
 .feedSelection
 {
-	width: 16em;
-	position: fixed;
-	top: 9em;
 }
 
 .feedSelection label
 {
 	float: none;
+	padding-left: 3px;
 }
 
 .feedSelection li
@@ -178,13 +183,11 @@ pre {
 
 .content
 {
-	position: relative;
 	bottom: 0px;
 }
 
 .calendar
 {
-	position: absolute;
 	left: 20em;
 }
 
@@ -203,6 +206,16 @@ pre {
 	-moz-box-shadow: 0px 0px 10px #999;
 	border: 1px solid #999;
 	margin-left: 2em;
+}
+
+.ui-layout-north
+{
+	padding: 5px !important; margin: 0px;
+}
+
+img
+{
+	border: none;
 }
 
 .more div .extra
@@ -240,4 +253,9 @@ pre {
 {
 	vertical-align: top;
 	width: 33%;
+}
+
+.selected
+{
+	background-color: #EEEEFF;
 }

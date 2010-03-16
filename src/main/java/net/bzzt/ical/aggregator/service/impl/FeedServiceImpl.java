@@ -129,7 +129,7 @@ public class FeedServiceImpl implements FeedService {
 		event.rawEvent = vevent.toString();
 		event.uid = vevent.getUid().getValue();
 		event.summary = vevent.getSummary().getValue();
-		event.setHidden(false);
+		event.setHidden(event.getHidden());
 		event.setManual(event.getManual());
 		Description description = vevent.getDescription();
 		if (description != null && StringUtils.isNotBlank(description.getValue()))
