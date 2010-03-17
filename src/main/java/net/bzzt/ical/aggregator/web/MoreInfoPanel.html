@@ -12,18 +12,18 @@
 				<div style="float: left; width: 60%; text-align: right">
 					<a wicket:id="duplicate"><img wicket:message="alt:markDuplicate,title:markDuplicate" src="iconic/raster/black/link_16x16.png"></img></a> 
 					<a wicket:id="detailLink"><img wicket:message="alt:Edit,title:Edit" src="iconic/raster/black/pen_16x16.png"></a>
-					<a wicket:id="hide"><wicket:message key="hide"></wicket:message></a>
+					<a wicket:id="hide"><img wicket:message="alt:hide,title:hide" src="iconic/raster/black/x_14x14.png"></a>
 				</div>
 			</div>
 			<div style="clear: left">
 				<span wicket:id="description"></span> <span wicket:id="id"></span>
 			</div>
 			<div class="extra">
-				<wicket:enclosure>
-					<div><span class="timeHeader"><wicket:message key="start"></wicket:message>:</span> <span wicket:id="startTime"></span></div>
+				<wicket:enclosure child="startTime">
+					<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/sun_12x12.png"></img>:</span> <span wicket:id="startTime"></span></div>
 				</wicket:enclosure>
-				<wicket:enclosure>
-					<div><span class="timeHeader"><wicket:message key="end"></wicket:message>:</span> <span wicket:id="endTime"></span></div>
+				<wicket:enclosure child="endTime">
+					<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/moon_stroke_12x12.png">:</span> <span wicket:id="endTime"></span></div>
 				</wicket:enclosure>
 				<wicket:enclosure child="alternatives">
 					<div class="aka">
