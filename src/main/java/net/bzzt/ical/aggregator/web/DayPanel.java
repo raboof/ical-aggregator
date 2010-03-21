@@ -10,7 +10,9 @@ import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -32,12 +34,31 @@ public class DayPanel extends Panel
 	{
 		super(id);
 		
-		Label label = new Label("date", new Model<Date>(date));
+		WebMarkupContainer head = new WebMarkupContainer("head");
 		if (isToday(date))
 		{
-			label.add(new AttributeModifier("class", true, new Model<String>("selected")));
+			head.add(new AttributeModifier("class", true, new Model<String>("selected")));
 		}
-		add(label);
+		
+		Link<Date> link = new Link<Date>("link", new Model<Date>(date))
+		{
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick()
+			{
+				setResponsePage(new DayView(getModelObject()));
+			}
+			
+		};
+		Label label = new Label("date", new Model<Date>(date));
+		link.add(label);
+		head.add(link);
+		add(head);
 		
 		add(new ListView<Event>("events", feedService.getEventsForDay(AggregatorSession.get().getSelectedFeeds(), date)){
 
