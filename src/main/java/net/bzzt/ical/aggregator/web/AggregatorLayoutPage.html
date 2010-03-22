@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+
 <html>
 	<head>
+		<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>ICalendar Aggregator</title>
 	</head>
 	<body>
@@ -9,18 +12,18 @@
 		<div class="ui-layout-north">
 			<h1>ICalendar Aggregator</h1>
 			<span wicket:id="feedback"></span>
-			<table width="100%">
+			<table class="menubar">
 				<tr>
-					<td valign="top">
+					<td>
 		    	    	<a wicket:id="home"><wicket:message key="Home">Home</wicket:message></a>
 		    	    	<a wicket:id="day"><wicket:message key="day">Day view</wicket:message></a>
 		    	    	<a wicket:id="weekView"><wicket:message key="weekView">Week view</wicket:message></a>
 		    	    	<a wicket:id="manageFeeds"><wicket:message key="Manage_feeds"></wicket:message></a>
 		    	    	<a wicket:id="verifyEvents"><wicket:message key="Verify_events"></wicket:message></a>
 		    	    	<a wicket:id="addEvent"><wicket:message key="Add_event"></wicket:message></a>
-		    	    	<a wicket:id="toDutch"><img border="0" src="flags/png/nl.png"></img></a>
-		    	    	<a wicket:id="toEnglish"><img border="0" src="flags/png/gb.png"></img></a>
-	    	    	</td><td align="right">
+		    	    	<a wicket:id="toDutch"><img src="flags/png/nl.png"></a>
+		    	    	<a wicket:id="toEnglish"><img src="flags/png/gb.png"></a>
+	    	    	</td><td class="login">
 	    	    		<wicket:container wicket:id="login"></wicket:container>
 	    	    	</td>
 	    	    </tr>

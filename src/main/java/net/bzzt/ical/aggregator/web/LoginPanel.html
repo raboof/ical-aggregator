@@ -1,9 +1,9 @@
 <wicket:panel>
 	<form wicket:id="loginForm" class="loginForm">
-		<label><wicket:message key="user"></wicket:message>: <input wicket:id="username"></input></label>
-		<label><wicket:message key="pass"></wicket:message>: <input type="password" wicket:id="password"></input></label>
-		<input type="submit" wicket:id="login" value="Log in"></input>
-		<input type="submit" wicket:id="register" value="Register"></input>
+		<label><wicket:message key="user"></wicket:message>: <input wicket:id="username"></label>
+		<label><wicket:message key="pass"></wicket:message>: <input type="password" wicket:id="password"></label>
+		<input type="submit" wicket:id="login" value="Log in">
+		<input type="submit" wicket:id="register" value="Register">
 	</form>
 	<span class="loggedInAs" wicket:id="loggedInAs">
 		<wicket:message key="loggedInAs"></wicket:message>: <span wicket:id="name"></span>

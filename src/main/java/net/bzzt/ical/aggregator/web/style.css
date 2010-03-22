@@ -265,3 +265,18 @@ img
 {
 	background-color: #EEEEFF;
 }
+
+.menubar
+{
+	width: 100%;
+}
+
+.menubar td
+{
+	vertical-align: top;
+}
+
+.menubar login
+{
+	text-align: right;
+}
