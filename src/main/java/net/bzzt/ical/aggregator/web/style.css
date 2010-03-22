@@ -273,10 +273,21 @@ img
 
 .menubar td
 {
-	vertical-align: top;
+	vertical-align: center;
 }
 
-.menubar login
+.menubar .login
 {
 	text-align: right;
+}
+
+.footer
+{
+	vertical-align: middle;
+	padding: 2px !important; margin: 0px;
+}
+
+.footer *
+{
+	vertical-align: middle;
 }

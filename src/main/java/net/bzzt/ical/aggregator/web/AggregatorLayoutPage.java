@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -47,12 +48,20 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 
 	public AggregatorLayoutPage()
 	{
-		add(new BookmarkablePageLink<Void>("home", HomePage.class));
+		String title = System.getenv("title");
+		if (title == null)
+		{
+			title = "ICalendar Aggregator";
+		}
+		add(new Label("title", title));
+		add(new Label("header", title));
+		
+		add(new BookmarkablePageLink<Void>("home", HomePage.class).setEnabled(!(this instanceof HomePage)));
 
 		add(new BookmarkablePageLink<Void>("manageFeeds", ManageFeeds.class));
 
-		add(new BookmarkablePageLink<Void>("day", DayView.class));
-		add(new BookmarkablePageLink<Void>("weekView", WeekView.class));
+		add(new BookmarkablePageLink<Void>("day", DayView.class).setEnabled(!(this instanceof DayView)));
+		add(new BookmarkablePageLink<Void>("weekView", WeekView.class).setEnabled(!(this instanceof WeekView)));
 
 		add(new BookmarkablePageLink<Void>("addEvent", EventDetailPage.class));
 
