@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -40,10 +43,12 @@ import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.util.CompatibilityHints;
 
-@Transactional(propagation=Propagation.REQUIRED)
+@Transactional(propagation=Propagation.SUPPORTS)
 public class FeedServiceImpl implements FeedService {
 	private static final Log LOG = LogFactory.getLog(FeedServiceImpl.class);
 
+	private static Date staticDate = new Date();
+	
 	private static final Comparator<Event> eventComparator = new Comparator<Event>(){
 
 		@Override
@@ -65,9 +70,10 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	public List<Feed> getFeeds() {
+		Query query = em.createQuery("select f from Feed f");
+		query.setHint("org.hibernate.cacheable", true);
 		@SuppressWarnings("unchecked")
-		List<Feed> resultList = em.createQuery("select f from Feed f")
-				.getResultList();
+		List<Feed> resultList = query.getResultList();
 		return resultList;
 	}
 	
@@ -79,6 +85,7 @@ public class FeedServiceImpl implements FeedService {
 		return resultList;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void reloadFeed(@Nonnull Feed feed) throws IOException, ParserException {
 		Calendar calendar = getCalendar(feed);
 
@@ -109,6 +116,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void saveOrUpdateEvent(Event event) {
 		if (event.getId() != null)
 		{
@@ -174,7 +182,7 @@ public class FeedServiceImpl implements FeedService {
 						+ ignoreMultiple("summary", charsToIgnore)
 						+ ", '&', 'and')) like upper(replace("
 						+ ignoreMultiple(":summary", charsToIgnore)
-						+ ", '&', 'and')) and day(start) = day(:start) and month(start) = month(:start) and year(start) = year(:start)");
+						+ ", '&', 'and')) and day(cast(start as date)) = day(cast(:start as date)) and month(cast(start as date)) = month(cast(:start as date)) and year(cast(start as date)) = year(cast(:start as date))");
 
 		query.setParameter("prio", event.feed.getPrio());
 		query.setParameter("summary", "%" + summary + "%");
@@ -300,30 +308,41 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	public List<Event> getEvents(Feed feed, EventFilter filter) {
-		String queryString = "select e from Event e where feed = :feed ";
+		String queryString = "select e from Event e";
+		queryString += " where feed = :feed ";
 		if (filter.noHidden)
 		{
 			queryString += " and (hidden is null or hidden = false) ";
 		}
 		if (filter.fromDate != null) {
-			queryString += " and (year(start) > year(:fromDate) or (year(start) = year(:fromDate) and (month(start) > month(:fromDate) or " +
-					" (month(start) = month(:fromDate) and day(start) >= day(:fromDate)))))";
+			queryString += " and (year(start) > year(cast(:fromDate as date)) or (year(start) = year(cast(:fromDate as date)) and (month(start) > month(cast(:fromDate as date)) or " +
+					" (month(start) = month(cast(:fromDate as date)) and day(start) >= day(cast(:fromDate as date))))))";
 		}
 		if (filter.toDate != null) {
-			queryString += " and (year(start) < year(:toDate) or (year(start) = year(:toDate) and (month(start) < month(:toDate) or " +
-					" (month(start) = month(:toDate) and day(start) <= day(:toDate)))))";
+			queryString += " and (year(start) < year(cast(:toDate as date)) or   (year(start) = year(cast(:toDate as date))   and (month(start) < month(cast(:toDate as date)) or " +
+					" (month(start) = month(cast(:toDate as date)) and day(start) <= day(cast(:toDate as date))))))";
 		}
 
 		Query query = em.createQuery(queryString);
+		query.setHint("org.hibernate.cacheable", true);
 		query.setParameter("feed", feed);
 
-		if (filter.fromDate != null)
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		try
 		{
-			query.setParameter("fromDate", filter.fromDate);
+			if (filter.fromDate != null)
+			{
+				query.setParameter("fromDate", format.parse(format.format(filter.fromDate)), TemporalType.DATE);
+			}
+			if (filter.toDate != null)
+			{
+				query.setParameter("toDate", format.parse(format.format(filter.toDate)), TemporalType.DATE);
+			}
 		}
-		if (filter.toDate != null)
+		catch (ParseException e)
 		{
-			query.setParameter("toDate", filter.toDate);
+			throw new IllegalStateException(e.getMessage(), e);
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -380,6 +399,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void markDuplicate(Event master, Event duplicate) {
 		duplicate.duplicate_of = master;
 
@@ -388,6 +408,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void clear(@Nonnull Feed feed) {
 		unlinkEvents(feed);
 
@@ -429,6 +450,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void delete(Feed feed) {
 		clear(feed);
 		feed = em.merge(feed);
@@ -445,6 +467,7 @@ public class FeedServiceImpl implements FeedService {
 		return resultList;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public void reloadFeeds() {
 		Query query = em
@@ -473,8 +496,9 @@ public class FeedServiceImpl implements FeedService {
 
 	private void getAlternativesRecursive(Event parent,
 			List<Event> results) {
-		Query query = em
-		.createQuery("select e from Event e where duplicate_of = :event");
+		Query query = em.createQuery("select e from Event e where duplicate_of = :event");
+		query.setHint("org.hibernate.cacheable", true);
+		
 		query.setParameter("event", parent);
 		List<Event> resultList = getResults(query);
 
@@ -523,6 +547,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void delete(Event event)
 	{
 		event = em.merge(event);

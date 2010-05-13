@@ -1,13 +1,15 @@
 <wicket:extend>
-	<div style="width: 100%">
-		<div style="width: 33%; float: left"><a wicket:id="previous"><img wicket:message="alt:previousDay,title:previousDay" src="iconic/raster/black/arrow_left_24x24.png"></a></div>
-		<div style="width: 33%; float: left; text-align:center"><h3 wicket:id="date"></h3></div>
-		<div style="width: 33%; float: left; text-align:right"><a wicket:id="next"><img wicket:message="alt:previousWeek,title:previousWeek" src="iconic/raster/black/arrow_right_24x24.png"></a></div>
-	</div>
-	<div style="clear: both"></div>
-	<div class="dayBlock" wicket:id="column">
-		<div wicket:id="event">
-			<wicket:container wicket:id="infoPanel"></wicket:container>
+	<div wicket:id="dayContainer">
+		<div style="width: 100%">
+			<div style="width: 33%; float: left"><a wicket:id="previous"><img wicket:message="alt:previousDay,title:previousDay" src="iconic/raster/black/arrow_left_24x24.png"></a></div>
+			<div style="width: 33%; float: left; text-align:center"><h3><span wicket:id="date"></span> <input class="dateSelect" wicket:id="dateField"></h3></div>
+			<div style="width: 33%; float: left; text-align:right"><a wicket:id="next"><img wicket:message="alt:previousWeek,title:previousWeek" src="iconic/raster/black/arrow_right_24x24.png"></a></div>
+		</div>
+		<div style="clear: both"></div>
+		<div class="dayBlock" wicket:id="column">
+			<div wicket:id="event">
+				<wicket:container wicket:id="infoPanel"></wicket:container>
+			</div>
 		</div>
 	</div>
 </wicket:extend>

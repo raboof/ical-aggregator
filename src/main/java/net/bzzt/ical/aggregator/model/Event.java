@@ -8,14 +8,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.apache.wicket.util.time.Time;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import net.bzzt.ical.aggregator.web.model.Identifiable;
 import net.fortuna.ical4j.model.Iso8601;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Event implements Serializable, Identifiable<Long>, Cloneable, Comparable<Event> {
 	/**
 	 * 
@@ -36,6 +40,7 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 	
 	public String summary;
 	
+	@Lob
 	public String description;
 	
 	private Date start;
@@ -47,6 +52,7 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 	
 	private Boolean endHasTime = false;
 	
+	@Lob
 	public String rawEvent;
 
 	public URL url;

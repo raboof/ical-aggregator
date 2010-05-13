@@ -291,3 +291,36 @@ img
 {
 	vertical-align: middle;
 }
+
+.editDesc
+{
+	padding: 10px;
+}
+
+.topRightLinks
+{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.dateSelect
+{
+	display: none;
+}
+
+.break
+{
+	clear: both;
+}
+
+.viewHeader
+{
+	width: 100%;
+}
+
+.viewHeader div
+{
+	width: 33%;
+	float: left;
+}

@@ -17,20 +17,13 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	@Autowired
 	private FeedService feedService;
 
-	/* (non-Javadoc)
-	 * @see junit.framework.TestCase#setUp()
-	 */
 	@Override
 	protected void setUp() throws Exception {
-//    	feed = getFeed("/exampleCalendar.ics");
-
-//    	super.setUp();
 	}
 	
 	private Feed getFeed()
 	{
 		Feed feed = getFeed("/exampleCalendar.ics");
-//		feedService.saveOrUpdate(feed);
 		
 		return feed;
 	}

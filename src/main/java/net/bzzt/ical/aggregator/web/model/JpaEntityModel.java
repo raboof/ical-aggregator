@@ -18,7 +18,7 @@ public class JpaEntityModel<T extends Identifiable<?>> extends AbstractEntityMod
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean
+	@SpringBean(name="feedService")
 	private FeedService feedService;
 	
 	public JpaEntityModel(T entity) {

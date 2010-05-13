@@ -34,10 +34,10 @@ public class MoreInfoPanel extends Panel {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SpringBean
+	@SpringBean(name="feedService")
 	private FeedService feedService;
 	
-	@SpringBean
+	@SpringBean(name="userService")
 	private UserService userService;
 	
 	public MoreInfoPanel(String id, IModel<Event> model, boolean showTitle) {
@@ -138,7 +138,7 @@ public class MoreInfoPanel extends Panel {
 					setResponsePage(HomePage.class);
 				}
 				
-			}.setVisible(userService.hasRight(loggedInUser , Right.HIDE_EVENT)));
+			}.setVisible(userService.hasRight(loggedInUser, Right.HIDE_EVENT)));
 		add(new Link<Event>("detailLink", model){
 
 			/**

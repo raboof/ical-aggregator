@@ -6,36 +6,51 @@
 		<title wicket:id="title">ICalendar Aggregator</title>
 	</head>
 	<body>
-		<div class="ui-layout-center">
-			<wicket:child/>
-		</div>
 		<div class="ui-layout-north">
 			<h1 wicket:id="header">ICalendar Aggregator</h1>
-			<span wicket:id="feedback"></span>
+			<wicket:container wicket:id="feedback"></wicket:container>
 			<table class="menubar">
 				<tr>
 					<td>
-						<wicket:message key="display">Display</wicket:message>:
 		    	    	<a wicket:id="day"><wicket:message key="day">Day</wicket:message></a>
 		    	    	<a wicket:id="weekView"><wicket:message key="week">Week</wicket:message></a>
 		    	    	<a wicket:id="home"><wicket:message key="list">List</wicket:message></a>
-		    	    	|
-		    	    	<a wicket:id="manageFeeds"><wicket:message key="Manage_feeds"></wicket:message></a>
-		    	    	<a wicket:id="verifyEvents"><wicket:message key="Verify_events"></wicket:message></a>
-		    	    	<a wicket:id="addEvent"><wicket:message key="Add_event"></wicket:message></a>
-		    	    	<a wicket:id="toDutch"><img src="flags/png/nl.png"></a>
-		    	    	<a wicket:id="toEnglish"><img src="flags/png/gb.png"></a>
+		    	    	<div class="topRightLinks">
+			    	    	<a wicket:id="toDutch"><img src="flags/png/nl.png"></a>
+			    	    	<a wicket:id="toEnglish"><img src="flags/png/gb.png"></a>
+		    	    		<a wicket:id="edit"><img src="iconic/raster/black/cog_12x12.png" wicket:message="alt:edit,title:edit"></a>
+		    	    	</div>
 	    	    	</td><td class="login">
 	    	    		<wicket:container wicket:id="login"></wicket:container>
 	    	    	</td>
 	    	    </tr>
     	    </table>
     	</div>
-    	<div class="ui-layout-south footer">
-    		<a href="http://repo.or.cz/w/ical-aggregator.git"><img src="opensource.png"></a><wicket:message key="tagline"></wicket:message> 
-    	</div>
     	<div class="ui-layout-west">
-    		<div wicket:id="feedSelection"></div>
+    		<wicket:container wicket:id="feedSelection"></wicket:container>
     	</div>
+    	<div class="ui-layout-center" id="center">
+			<wicket:child/>
+		</div>
+    	<div class="ui-layout-south footer">
+    		<a href="http://repo.or.cz/w/ical-aggregator.git"><img width="32" height="31" src="opensource.png"></a><wicket:message key="tagline"></wicket:message> 
+    	</div>
+    	<script>
+    	$(document).ready( function() {
+	    	$('body').layout(
+	    	{ 
+		    	applyDefaultStyles: true, 
+		    	defaults:
+		    	{
+		    		applyDefaultStyles: true
+		    	},
+		    	center:
+		    	{
+					applyDefaultStyles: true,
+	    			paneSelector: "#center"
+		    	}
+	    	 });
+    	});
+    	</script>
 	</body>
 </html>

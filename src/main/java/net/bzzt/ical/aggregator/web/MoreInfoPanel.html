@@ -1,39 +1,37 @@
 <wicket:panel>
 	<div class="more">
-		<div>
-			<div style="width: 100%; text-align: center">
-				<h3 wicket:id="summary"></h3>
-				<h4 wicket:id="feed.name"></h4>
+		<div style="width: 100%; text-align: center">
+			<h3 wicket:id="summary"></h3>
+			<h4 wicket:id="feed.name"></h4>
+		</div>
+		<div style="width: 100%" class="extra">
+			<div style="float: left; width: 40%">
+				<a wicket:id="link"><img wicket:message="alt:toSite,title:toSite" src="iconic/raster/black/home_16x16.png"></a>
 			</div>
-			<div style="width: 100%" class="extra">
-				<div style="float: left; width: 40%">
-					<a wicket:id="link"><img wicket:message="alt:toSite,title:toSite" src="iconic/raster/black/home_16x16.png"></a>
+			<div style="float: left; width: 60%; text-align: right">
+				<a wicket:id="duplicate"><img wicket:message="alt:markDuplicate,title:markDuplicate" src="iconic/raster/black/link_16x16.png"></a> 
+				<a wicket:id="detailLink"><img wicket:message="alt:Edit,title:Edit" src="iconic/raster/black/pen_16x16.png"></a>
+				<a wicket:id="hide"><img wicket:message="alt:hide,title:hide" src="iconic/raster/black/x_14x14.png"></a>
+			</div>
+		</div>
+		<div style="clear: left">
+			<span wicket:id="description"></span> <span wicket:id="id"></span>
+		</div>
+		<div class="extra">
+			<wicket:enclosure child="startTime">
+				<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/sun_12x12.png"></img>:</span> <span wicket:id="startTime"></span></div>
+			</wicket:enclosure>
+			<wicket:enclosure child="endTime">
+				<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/moon_stroke_12x12.png">:</span> <span wicket:id="endTime"></span></div>
+			</wicket:enclosure>
+			<wicket:enclosure child="alternatives">
+				<div class="aka">
+					<i><wicket:message key="aka">aka</wicket:message>:</i>
+					<ul>
+					    <li wicket:id="alternatives"><span wicket:id="feedLink">[VVV]</span> <a wicket:id="link"><span wicket:id="summary">Das Weisse Band</span></a></li>
+					</ul>
 				</div>
-				<div style="float: left; width: 60%; text-align: right">
-					<a wicket:id="duplicate"><img wicket:message="alt:markDuplicate,title:markDuplicate" src="iconic/raster/black/link_16x16.png"></a> 
-					<a wicket:id="detailLink"><img wicket:message="alt:Edit,title:Edit" src="iconic/raster/black/pen_16x16.png"></a>
-					<a wicket:id="hide"><img wicket:message="alt:hide,title:hide" src="iconic/raster/black/x_14x14.png"></a>
-				</div>
-			</div>
-			<div style="clear: left">
-				<span wicket:id="description"></span> <span wicket:id="id"></span>
-			</div>
-			<div class="extra">
-				<wicket:enclosure child="startTime">
-					<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/sun_12x12.png"></img>:</span> <span wicket:id="startTime"></span></div>
-				</wicket:enclosure>
-				<wicket:enclosure child="endTime">
-					<div><span class="timeHeader"><img wicket:message="alt:start,title:start" src="iconic/raster/black/moon_stroke_12x12.png">:</span> <span wicket:id="endTime"></span></div>
-				</wicket:enclosure>
-				<wicket:enclosure child="alternatives">
-					<div class="aka">
-						<i><wicket:message key="aka">aka</wicket:message>:</i>
-						<ul>
-						    <li wicket:id="alternatives"><span wicket:id="feedLink">[VVV]</span> <a wicket:id="link"><span wicket:id="summary">Das Weisse Band</span></a></li>
-						</ul>
-					</div>
-				</wicket:enclosure>
-			</div>
+			</wicket:enclosure>
 		</div>
 	</div>
 </wicket:panel>

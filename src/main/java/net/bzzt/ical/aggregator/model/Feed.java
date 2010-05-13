@@ -9,9 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import net.bzzt.ical.aggregator.web.model.Identifiable;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Feed implements Serializable, Identifiable<Long> {
 	/**
 	 * 

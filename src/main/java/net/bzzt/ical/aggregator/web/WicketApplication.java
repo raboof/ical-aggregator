@@ -5,12 +5,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
+import net.bzzt.ical.aggregator.web.rss.UpcomingEventsFeedPage;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.request.target.coding.MixedParamHybridUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.MixedParamUrlCodingStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.ConverterLocator;
@@ -40,6 +48,10 @@ public class WicketApplication extends WebApplication {
 		addComponentInstantiationListener(new SpringComponentInjector(this));
 		
 		getMarkupSettings().setStripWicketTags(true);
+		
+		mount(new MixedParamUrlCodingStrategy("/day", DayView.class, new String[0]));
+		mount(new MixedParamUrlCodingStrategy("/week", WeekView.class, new String[0]));
+		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/rss", UpcomingEventsFeedPage.class, new String[0]));
 		
 		super.init();
 	}
@@ -111,6 +123,32 @@ public class WicketApplication extends WebApplication {
 	 */
 	public Class<HomePage> getHomePage() {
 		return HomePage.class;
+	}
+
+	public static String getTitle()
+	{
+		String title = System.getProperty("title");
+		if (title == null)
+		{
+			title = "ICalendar Aggregator";
+		}
+		return title;
+	}
+
+	public static String getLink()
+	{
+		HttpServletRequest httpServletRequest = ((WebRequest)RequestCycle.get().getRequest()).getHttpServletRequest();
+		int serverPort = httpServletRequest.getServerPort();
+		String scheme = httpServletRequest.getScheme();
+		String portExtension = "";
+		if (!("http".equalsIgnoreCase(scheme) && serverPort == 80 || "https".equalsIgnoreCase(scheme)
+			&& serverPort == 443))
+		{
+			portExtension = ":" + serverPort;
+		}
+		String url = scheme + "://" + httpServletRequest.getServerName() + portExtension;
+//			+ httpServletRequest.getContextPath();
+		return url;
 	}
 
 }

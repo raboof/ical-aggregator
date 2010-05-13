@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(propagation=Propagation.REQUIRED)
+@Transactional(propagation=Propagation.SUPPORTS)
 public class UserServiceImpl implements UserService {
 	private static final Log LOG = LogFactory.getLog(UserServiceImpl.class);
 	
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User find(String username, String password)
 	{
-		Query query = em.createQuery("select u from User u where username = :username and password = :password");
+		Query query = em.createQuery("select u from Users u where username = :username and password = :password");
 		query.setParameter("username", username);
 		query.setParameter("password", password);
 		List<User> resultList = query.getResultList();
@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public User register(@Nonnull String username, @Nonnull String password)
 	{
 		User user = new User(username, password);

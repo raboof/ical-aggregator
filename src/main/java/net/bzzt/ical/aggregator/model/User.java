@@ -8,9 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import net.bzzt.ical.aggregator.web.model.Identifiable;
 
-@Entity
+/** 'user' is not a valid database name in postgresql */
+@Entity(name="Users")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Serializable, Identifiable<Long>
 {
 	/**

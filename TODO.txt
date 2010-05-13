@@ -9,8 +9,21 @@ v mouseover/onclick details
   v description, url, feed, duplicates and their urls
 v solution for dropped/cancelled events?
 v review database concurrency approach: let spring manage transactions/EM?
-- more internationalisation
-  - flags for languages
+v more internationalisation
+  v flags for languages
+v checkbox 'show by default' per feed, for initial selection
+v 'tabular' calendar view
 - dropdown problem with css in ff
-- checkbox 'show by default' per feed, for initial selection
-- 'tabular' calendar view
+v descriptions deventer.nl
+v Elegast
+
+Voor Deventer:
+- betere rss2ical (tijdzones, entity-encoding) voor OB
+- fred&douwe
+- persee
+- VVV Deventer
+ 
+Views:
+v 1 day (today/tomorrow): 3xn 'blocks' of expanded events
+v 1 week: 'week view', 3x3 grid (mon/tue, wed, thu / fri sat sun / mon/tue, wed, thu), 'roll'
+v More: list view.

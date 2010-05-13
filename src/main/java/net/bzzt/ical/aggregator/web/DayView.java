@@ -10,17 +10,26 @@ import net.bzzt.ical.aggregator.service.FeedService;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.datetime.DateConverter;
+import org.apache.wicket.datetime.StyleDateConverter;
+import org.apache.wicket.datetime.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class DayView extends AggregatorLayoutPage
 {
 	@SpringBean
 	private FeedService feedService;
+	
+	private WebMarkupContainer dayContainer;
 	
 	private Date date;
 	
@@ -32,7 +41,17 @@ public class DayView extends AggregatorLayoutPage
 	public DayView(Date dateToShow)
 	{
 		this.date = dateToShow;
-		add(new Link<Void>("previous")
+
+		dayContainer = getDayContainer("dayContainer");
+		add(dayContainer);
+	}
+	
+	private WebMarkupContainer getDayContainer(String id)
+	{
+		WebMarkupContainer dayContainer = new WebMarkupContainer(id);
+		dayContainer.setOutputMarkupId(true);
+		
+		dayContainer.add(new AjaxLink<Void>("previous")
 			{
 
 				/**
@@ -41,14 +60,34 @@ public class DayView extends AggregatorLayoutPage
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void onClick()
+				public void onClick(AjaxRequestTarget target)
 				{
-					setResponsePage(new DayView(DateUtils.addDays(date, -1)));
+					date = DateUtils.addDays(date, -1);
+					refresh(target);
 				}
 				
 			});
-		add(new Label("date", new Model<Date>(date)));
-		add(new Link<Void>("next")
+		dayContainer.add(new Label("date", new Model<Date>(date)));
+		
+		DateConverter converter = new StyleDateConverter(false);
+		DateTextField dateTextField = new DateTextField("dateField", new PropertyModel<Date>(DayView.this, "date"), converter);
+		dateTextField.add(new DatePicker());
+		dayContainer.add(dateTextField);
+		dateTextField.add(new AjaxFormComponentUpdatingBehavior("onchange")
+		{
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				refresh(target);
+			}
+		});
+		
+		dayContainer.add(new AjaxLink<Void>("next")
 			{
 
 				/**
@@ -57,9 +96,10 @@ public class DayView extends AggregatorLayoutPage
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void onClick()
+				public void onClick(AjaxRequestTarget target)
 				{
-					setResponsePage(new DayView(DateUtils.addDays(date, 1)));
+					date = DateUtils.addDays(date, 1);
+					refresh(target);
 				}
 				
 			});
@@ -69,7 +109,7 @@ public class DayView extends AggregatorLayoutPage
 		
 		List<List<Event>> columns = splitEvents(eventsForDay, 3);
 		
-		add(new ListView<List<Event>>("column", columns)
+		dayContainer.add(new ListView<List<Event>>("column", columns)
 			{
 
 				/**
@@ -97,7 +137,7 @@ public class DayView extends AggregatorLayoutPage
 			
 			}
 			);
-		
+		return dayContainer;
 	}
 
 	private List<List<Event>> splitEvents(List<Event> eventsForDay, int sublists)
@@ -123,7 +163,10 @@ public class DayView extends AggregatorLayoutPage
 	@Override
 	public void refresh(AjaxRequestTarget target)
 	{
-		setResponsePage(new DayView(date));
+		WebMarkupContainer newDayContainer = getDayContainer("dayContainer");
+		dayContainer.replaceWith(newDayContainer);
+		target.addComponent(newDayContainer);
+		dayContainer = newDayContainer;
 	}
 	
 	
