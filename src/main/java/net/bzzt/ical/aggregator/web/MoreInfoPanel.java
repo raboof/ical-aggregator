@@ -9,6 +9,7 @@ import net.bzzt.ical.aggregator.model.Right;
 import net.bzzt.ical.aggregator.model.User;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.service.UserService;
+import net.bzzt.ical.aggregator.web.addthis.AddThisPanel;
 import net.bzzt.ical.aggregator.web.admin.EventDetailPage;
 
 import org.apache.wicket.Application;
@@ -152,6 +153,15 @@ public class MoreInfoPanel extends Panel {
 			}
 			
 		});
+		if (url == null)
+		{
+			add(new WebMarkupContainer("addThis").setVisible(false));
+		}
+		else
+		{
+			String postfix = " (via " + WicketApplication.getLink() + ")";
+			add(new AddThisPanel("addThis", model.getObject().summary + postfix, model.getObject().description + postfix, url.toExternalForm(), "raboof"));
+		}
 	}
 
 }
