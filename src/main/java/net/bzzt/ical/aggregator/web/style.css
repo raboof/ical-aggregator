@@ -224,12 +224,12 @@ img
 	border: none;
 }
 
-.more div .extra
+.more .extra
 {
 	visibility: hidden;
 }
 
-.more div:hover .extra
+.more:hover .extra
 {
 	visibility: visible;
 }

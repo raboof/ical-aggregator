@@ -16,10 +16,21 @@ v 'tabular' calendar view
 - dropdown problem with css in ff
 v descriptions deventer.nl
 v Elegast
+v deventer.nl fixen
+v filmhuis de keizer fixen
+v fred&douwe
+- RSS-feeds: kalenders kunnen selecteren
+- geaggregeerde ICalendar-feeds?
+- 'embeddable' urls
+- makkelijk overzicht van 1 feed
+- bij account de te tonen feeds onthouden
+- prive-feeds
+- bugtracker
+- plaatjes?
+- lijst feeds exporteren/importen (OPML?)
 
 Voor Deventer:
 - betere rss2ical (tijdzones, entity-encoding) voor OB
-- fred&douwe
 - persee
 - VVV Deventer
  
