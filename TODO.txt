@@ -19,6 +19,7 @@ v Elegast
 v deventer.nl fixen
 v filmhuis de keizer fixen
 v fred&douwe
+- day-view slimmer ordenen
 - RSS-feeds: kalenders kunnen selecteren
 - geaggregeerde ICalendar-feeds?
 - 'embeddable' urls
