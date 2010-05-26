@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -559,6 +560,41 @@ public class FeedServiceImpl implements FeedService {
 	public List<Event> getEventsToVerify()
 	{
 		return em.createQuery("select e from Event e where hidden = true").getResultList();
+	}
+
+	@Override
+	public Feed getFeedByShortName(String shortName)
+	{
+		Query query = em.createQuery("select f from Feed f where upper(shortName) = :shortName");
+		query.setParameter("shortName", shortName.toUpperCase());
+		List<Feed> results = query.getResultList();
+		if (results.isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return results.get(0);
+		}
+	}
+
+	@Override
+	public List<Feed> getSelectedFeeds(List<String> shortNames)
+	{
+		List<Feed> selectedFeeds = new ArrayList<Feed>();
+		if (shortNames.isEmpty())
+		{
+			selectedFeeds = getDefaultFeeds();
+		}
+		else
+		{
+			selectedFeeds = new ArrayList<Feed>();
+			for (String shortName : shortNames)
+			{
+				selectedFeeds.add(getFeedByShortName(shortName));
+			}
+		}	
+		return selectedFeeds;
 	}
 
 }

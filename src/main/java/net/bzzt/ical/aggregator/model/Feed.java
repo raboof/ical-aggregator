@@ -29,7 +29,7 @@ public class Feed implements Serializable, Identifiable<Long> {
 	@Column(nullable=false)
 	public String name;
 	
-	@Column(nullable=false)
+	@Column(nullable=false,unique=true)
 	public String shortName;
 	
 	/**

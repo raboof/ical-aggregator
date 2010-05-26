@@ -74,5 +74,7 @@ public interface FeedService {
 
 	List<Event> getEventsToVerify();
 
+	Feed getFeedByShortName(String input);
 
+	List<Feed> getSelectedFeeds(List<String> shortNames);
 }
