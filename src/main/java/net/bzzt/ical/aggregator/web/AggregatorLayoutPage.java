@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.web;
 
 import java.util.Locale;
 
+import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.web.admin.EditPage;
 
 import org.apache.wicket.ResourceReference;
@@ -15,6 +16,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 
 public abstract class AggregatorLayoutPage extends WebPage implements IHeaderContributor
 {
@@ -74,10 +76,25 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 			"jquery.layout.min-1.2.0.js"), "JQUERY_LAYOUT");
 		// response.renderOnDomReadyJavascript("$('body').layout({ applyDefaultStyles: true });");
 
-		response.renderString("<link rel=\"alternate\" type=\"application/rss+xml\" title=\""
-			+ WicketApplication.getTitle() + " Upcoming Events Feed\" href=\"" + WicketApplication.getLink()
-			+ "/feeds/upcoming/rss\"/>");
+		addAlternateLink(response, WicketApplication.getTitle() + " Upcoming Events Feed", "");
+		for (Feed feed : AggregatorSession.get().getSelectedFeeds())
+		{
+			addAlternateLink(response, feed.name + " at " + WicketApplication.getTitle() + " Upcoming Events Feed", "?sn=" + feed.shortName);
+		}
 	}
+	
+	private void addAlternateLink(IHeaderResponse response, String title, String postfix)
+	{
+		CharSequence fmtTitle = Strings.escapeMarkup(title);
+		
+		response.renderString("<link rel=\"alternate\" type=\"application/rss+xml\" title=\""
+			+ fmtTitle + "\" href=\"" + WicketApplication.getLink()
+			+ "/feeds/upcoming/rss" + postfix + "\"/>");
+		response.renderString("<link rel=\"alternate\" type=\"text/calendar\" title=\""
+			+ fmtTitle + "\" href=\"" + WicketApplication.getLink()
+			+ "/feeds/upcoming/ical" + postfix + "\"/>");
+	}
+
 
 	public AggregatorSession getSession()
 	{
