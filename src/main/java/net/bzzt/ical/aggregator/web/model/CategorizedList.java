@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.web.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.model.Model;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
-public abstract class CategorizedList<T1, T2> extends ListView<T1> {
+public abstract class CategorizedList<T1 extends Comparable<T1>, T2 extends Comparable<T2>> extends ListView<T1> {
 
 	/**
 	 * 

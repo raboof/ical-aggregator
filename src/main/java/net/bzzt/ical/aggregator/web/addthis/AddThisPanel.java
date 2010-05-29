@@ -56,7 +56,7 @@ public class AddThisPanel extends Panel implements IHeaderContributor
 		String bookmarkUrl = "http://addthis.com/bookmark.php?v=250";
 		if (StringUtils.isNotBlank(username))
 		{
-			bookmarkUrl += "&username=" + username;
+			bookmarkUrl += "&amp;username=" + username;
 		}
 		expanded.add(new AttributeModifier("href", new Model<String>(bookmarkUrl)));
 		add(expanded);

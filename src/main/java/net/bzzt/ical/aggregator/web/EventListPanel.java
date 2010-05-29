@@ -54,7 +54,7 @@ public class EventListPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateCaption(ListItem<Date> item) {
+			public void populateCaption(ListItem<Date> item) {
 				item.add(new Label("date", item.getModel())
 				{
 
