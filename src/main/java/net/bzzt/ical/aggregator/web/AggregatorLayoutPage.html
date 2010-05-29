@@ -27,7 +27,7 @@
 	    	    </tr>
     	    </table>
     	</div>
-    	<div class="ui-layout-west">
+    	<div class="ui-layout-west" style="display: none">
     		<wicket:container wicket:id="feedSelection"></wicket:container>
     	</div>
     	<div class="ui-layout-center" id="center">
@@ -49,8 +49,19 @@
 		    	{
 					applyDefaultStyles: true,
 	    			paneSelector: "#center"
+		    	},
+		    	west:
+		    	{
+		    		spacing_open: 21,
+		    		togglerLength_open: 400,
+		    		spacing_closed: 21,
+		    		togglerLength_closed: 400,
+		    		togglerTip_closed: 'Bronnen kiezen',
+		    		//slideTrigger_open: 'mouseover',
+		    		initClosed: true
 		    	}
 	    	 });
+	    	 $('ui-layout-west').show();
     	});
     	</script>
 	</body>

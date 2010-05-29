@@ -329,3 +329,8 @@ img
 {
 	margin-top: 3px;
 }
+
+.ui-layout-toggler-west
+{
+	background: transparent url(/kies_bronnen.png) no-repeat scroll center center !important;
+}
