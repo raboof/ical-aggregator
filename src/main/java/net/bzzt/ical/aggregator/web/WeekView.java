@@ -3,7 +3,10 @@ package net.bzzt.ical.aggregator.web;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -14,6 +17,8 @@ public class WeekView extends AggregatorLayoutPage
 {
 	private Date date;
 	
+	private WebMarkupContainer weekViewContainer;
+	
 	public WeekView()
 	{
 		this(new Date());
@@ -23,10 +28,19 @@ public class WeekView extends AggregatorLayoutPage
 	{
 		this.date = dateToShow;
 		
+		weekViewContainer = getWeekContainer("weekContainer");
+		add(weekViewContainer);
+	}
+	
+	private WebMarkupContainer getWeekContainer(String id)
+	{
+		WebMarkupContainer result = new WebMarkupContainer(id);
+		result.setOutputMarkupId(true);
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
-		add(new Link<Void>("previous")
+		result.add(new AjaxLink<Void>("previous")
 		{
 
 			/**
@@ -35,17 +49,15 @@ public class WeekView extends AggregatorLayoutPage
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick()
+			public void onClick(AjaxRequestTarget target)
 			{
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
-				calendar.add(Calendar.WEEK_OF_YEAR, -1);
-				setResponsePage(new WeekView(calendar.getTime()));
+				date = DateUtils.addWeeks(date, -1);
+				refresh(target);
 			}
 			
 		});
-		add(new Label("week", new Model<Integer>(calendar.get(Calendar.WEEK_OF_YEAR))));
-		add(new Link<Void>("next")
+		result.add(new Label("week", new Model<Integer>(calendar.get(Calendar.WEEK_OF_YEAR))));
+		result.add(new AjaxLink<Void>("next")
 		{
 
 			/**
@@ -54,12 +66,10 @@ public class WeekView extends AggregatorLayoutPage
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClick()
+			public void onClick(AjaxRequestTarget target)
 			{
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
-				calendar.add(Calendar.WEEK_OF_YEAR, 1);
-				setResponsePage(new WeekView(calendar.getTime()));
+				date = DateUtils.addWeeks(date, 1);
+				refresh(target);
 			}
 			
 		});
@@ -71,25 +81,27 @@ public class WeekView extends AggregatorLayoutPage
 		selected_day = (selected_day + 5) % 7;
 		
 		calendar.add(Calendar.DAY_OF_MONTH, -selected_day);
-		add(new DayPanel("monday", calendar.getTime()));
+		result.add(new DayPanel("monday", calendar.getTime()));
 		
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("tuesday", calendar.getTime()));
+		result.add(new DayPanel("tuesday", calendar.getTime()));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("wednesday", calendar.getTime()));
+		result.add(new DayPanel("wednesday", calendar.getTime()));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("thursday", calendar.getTime()));
+		result.add(new DayPanel("thursday", calendar.getTime()));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("friday", calendar.getTime()));
+		result.add(new DayPanel("friday", calendar.getTime()));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("saturday", calendar.getTime()));
+		result.add(new DayPanel("saturday", calendar.getTime()));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		add(new DayPanel("sunday", calendar.getTime()));
+		result.add(new DayPanel("sunday", calendar.getTime()));
+		
+		return result;
 	}
 
 	/* (non-Javadoc)
@@ -98,7 +110,10 @@ public class WeekView extends AggregatorLayoutPage
 	@Override
 	public void refresh(AjaxRequestTarget target)
 	{
-		setResponsePage(new WeekView(date));
+		WebMarkupContainer newWeekContainer = getWeekContainer("weekContainer");
+		weekViewContainer.replaceWith(newWeekContainer);
+		target.addComponent(newWeekContainer);
+		weekViewContainer = newWeekContainer;
 	}
 	
 	
