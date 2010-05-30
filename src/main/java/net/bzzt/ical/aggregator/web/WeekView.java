@@ -3,15 +3,16 @@ package net.bzzt.ical.aggregator.web;
 import java.util.Calendar;
 import java.util.Date;
 
+import net.bzzt.ical.aggregator.web.ajax.uniqueurls.UniqueUrlHelper;
+
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.wicket.Application;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
-
-import sun.util.calendar.CalendarUtils;
 
 public class WeekView extends AggregatorLayoutPage
 {
@@ -22,6 +23,20 @@ public class WeekView extends AggregatorLayoutPage
 	public WeekView()
 	{
 		this(new Date());
+	}
+	
+	public WeekView(PageParameters parameters)
+	{
+		this(getDate(parameters));
+	}
+	
+	private static Date getDate(PageParameters parameters)
+	{
+		String dateAsString = parameters.getString("date");
+
+		Date date = (Date) Application.get().getConverterLocator().getConverter(Date.class).convertToObject(dateAsString, null);
+		
+		return date;
 	}
 
 	public WeekView(Date dateToShow)
@@ -113,8 +128,7 @@ public class WeekView extends AggregatorLayoutPage
 		WebMarkupContainer newWeekContainer = getWeekContainer("weekContainer");
 		weekViewContainer.replaceWith(newWeekContainer);
 		target.addComponent(newWeekContainer);
+		UniqueUrlHelper.resetHash(target, "date", date);
 		weekViewContainer = newWeekContainer;
-	}
-	
-	
+	}	
 }

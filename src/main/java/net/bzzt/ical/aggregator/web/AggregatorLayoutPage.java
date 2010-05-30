@@ -75,7 +75,10 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class,
 			"jquery.layout.min-1.2.0.js"), "JQUERY_LAYOUT");
 		// response.renderOnDomReadyJavascript("$('body').layout({ applyDefaultStyles: true });");
-
+		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class,
+			"ajax/uniqueurls/wicket.ajax.uniqueurls.js"), "UNIQUEURLS");
+		response.renderOnLoadJavascript("initialiseStateFromURL()");
+		
 		addAlternateLink(response, WicketApplication.getTitle() + " Upcoming Events Feed", "");
 		for (Feed feed : AggregatorSession.get().getSelectedFeeds())
 		{
