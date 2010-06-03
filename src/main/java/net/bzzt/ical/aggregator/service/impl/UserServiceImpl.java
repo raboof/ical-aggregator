@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(propagation=Propagation.SUPPORTS)
 public class UserServiceImpl implements UserService {
+	@SuppressWarnings("unused")
 	private static final Log LOG = LogFactory.getLog(UserServiceImpl.class);
 	
 	@PersistenceContext(unitName="aggregatorPersistenceUnit")
@@ -39,7 +40,10 @@ public class UserServiceImpl implements UserService {
 		Query query = em.createQuery("select u from Users u where username = :username and password = :password");
 		query.setParameter("username", username);
 		query.setParameter("password", password);
+		
+		@SuppressWarnings("unchecked")
 		List<User> resultList = query.getResultList();
+		
 		if (resultList.isEmpty())
 		{
 			return null;

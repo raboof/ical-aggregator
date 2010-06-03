@@ -1,13 +1,8 @@
 package net.bzzt.ical.aggregator;
 
-import java.security.Principal;
-
 import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Request;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.security.HashUserRealm;
-import org.mortbay.jetty.security.UserRealm;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public class Start {

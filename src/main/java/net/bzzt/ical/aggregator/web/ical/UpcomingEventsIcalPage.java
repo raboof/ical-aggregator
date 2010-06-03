@@ -1,6 +1,5 @@
 package net.bzzt.ical.aggregator.web.ical;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,22 +9,13 @@ import javax.annotation.Nonnull;
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
-import net.bzzt.ical.aggregator.web.AggregatorSession;
-import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wicketstuff.rome.web.FeedPage;
-
-import com.mchange.v2.codegen.bean.Property;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
 
 public class UpcomingEventsIcalPage extends IcalPage
 {

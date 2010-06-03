@@ -6,13 +6,11 @@ import java.util.List;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class FeedLink extends Panel {
 

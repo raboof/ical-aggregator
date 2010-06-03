@@ -10,7 +10,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.util.string.JavascriptUtils;
-import org.apache.wicket.util.time.Time;
 
 public class UniqueUrlHelper
 {

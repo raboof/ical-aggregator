@@ -1,6 +1,5 @@
 package net.bzzt.ical.aggregator.web.ical;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import net.bzzt.ical.aggregator.model.Event;

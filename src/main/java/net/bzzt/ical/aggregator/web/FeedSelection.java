@@ -9,13 +9,11 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -52,6 +50,7 @@ public class FeedSelection extends Panel {
 		@SpringBean(name="feedService")
 		private FeedService feedService;
 
+		@SuppressWarnings("unchecked")
 		public FeedSelectionForm(String id, IModel<List<Feed>> model) {
 			super(id, model);
 

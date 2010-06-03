@@ -1,6 +1,7 @@
 package net.bzzt.ical.aggregator.web;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.model.User;
@@ -28,6 +29,9 @@ public class AggregatorSession extends WebSession {
 	
 	public AggregatorSession(Request request) {
 		super(request);
+		
+		// Default locale. TODO: make this configurable.
+		setLocale(new Locale("nl", "NL"));
 		
 		InjectorHolder.getInjector().inject(this);
 		

@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.wicket.model.IModel;
-
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.fortuna.ical4j.data.ParserException;

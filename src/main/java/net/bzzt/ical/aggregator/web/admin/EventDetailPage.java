@@ -2,14 +2,6 @@ package net.bzzt.ical.aggregator.web.admin;
 
 import java.net.URL;
 
-import org.apache.wicket.extensions.yui.calendar.DateField;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.model.Right;
@@ -18,8 +10,15 @@ import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.HomePage;
-import net.bzzt.ical.aggregator.web.model.Identifiable;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
+
+import org.apache.wicket.extensions.yui.calendar.DateField;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class EventDetailPage extends AggregatorLayoutPage {
 	@SpringBean

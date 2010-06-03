@@ -9,7 +9,6 @@ import javax.annotation.Nonnull;
 
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
-import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.WicketApplication;
 
 import org.apache.commons.collections.CollectionUtils;

@@ -21,17 +21,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.impl.SessionImpl;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
-import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -44,12 +36,17 @@ import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.util.CompatibilityHints;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.impl.SessionImpl;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 @Transactional(propagation=Propagation.SUPPORTS)
 public class FeedServiceImpl implements FeedService {
 	private static final Log LOG = LogFactory.getLog(FeedServiceImpl.class);
 
-	private static Date staticDate = new Date();
-	
 	private static final Comparator<Event> eventComparator = new Comparator<Event>(){
 
 		@Override
@@ -567,7 +564,10 @@ public class FeedServiceImpl implements FeedService {
 	{
 		Query query = em.createQuery("select f from Feed f where upper(shortName) = :shortName");
 		query.setParameter("shortName", shortName.toUpperCase());
+		
+		@SuppressWarnings("unchecked")
 		List<Feed> results = query.getResultList();
+		
 		if (results.isEmpty())
 		{
 			return null;

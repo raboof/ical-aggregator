@@ -1,17 +1,13 @@
 package net.bzzt.ical.aggregator;
 
 import junit.framework.TestCase;
-import net.bzzt.ical.aggregator.web.HomePage;
-import net.bzzt.ical.aggregator.web.WicketApplication;
-
-import org.apache.wicket.util.tester.WicketTester;
 
 /**
  * Simple test using the WicketTester
  */
 public class TestHomePage extends TestCase
 {
-	private WicketTester tester;
+//	private WicketTester tester;
 
 	@Override
 	public void setUp()

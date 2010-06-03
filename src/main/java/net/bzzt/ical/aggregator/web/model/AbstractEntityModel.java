@@ -9,14 +9,20 @@ import org.apache.wicket.model.IModel;
 
 public abstract class AbstractEntityModel<T extends Identifiable< ? >> implements IModel<T>
 {
-    private final Class clazz;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private final Class<? extends T> clazz;
     private Serializable id;
  
     private T entity;
  
-    public AbstractEntityModel(T entity)
+    @SuppressWarnings("unchecked")
+	public AbstractEntityModel(T entity)
     {
-        clazz = entity.getClass();
+        clazz = (Class<T>) entity.getClass();
         id = entity.getId();
         this.entity = entity;
     }
@@ -55,7 +61,7 @@ public abstract class AbstractEntityModel<T extends Identifiable< ? >> implement
         }
     }
  
-    protected abstract T load(Class<T> clazz, Serializable id);
+    protected abstract T load(Class<? extends T> clazz, Serializable id);
  
     public void setObject(T object)
     {

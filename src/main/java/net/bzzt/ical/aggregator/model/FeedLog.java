@@ -1,6 +1,5 @@
 package net.bzzt.ical.aggregator.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;

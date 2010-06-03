@@ -19,7 +19,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -145,7 +144,6 @@ public class FeedPanel extends Panel {
 		 */
 		@Override
 		protected void onSubmit() {
-			IModel<Feed> feedModel = getModel();
 			Feed modelObject = getModelObject();
 			boolean isNew = modelObject.getId() == null;
 			feedService.saveOrUpdate(modelObject);
