@@ -4,8 +4,15 @@
 }
 
 body {
+	margin-left: 100px;
 	font-size: 12px;
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+#mainContent {
+	margin: 0px !important;
+	padding: 0px 150px 0px 150px !important;
+	border: 0px none !important;
 }
 
 td {
@@ -45,9 +52,12 @@ h1 {
 	font-size: 24px;
 	color: #333;
 	margin-bottom: 7px;
+	/*
 	border-bottom: 1px solid #bbb;
-	padding: 5px 7px;
 	-moz-box-shadow: 0px 1px 5px #eee;
+	*/
+	padding: 5px 7px;
+	
 }
 
 h2 {
@@ -106,6 +116,24 @@ form.feedSelection
 	margin: auto;
 }
 
+form.feedSelection .cb
+{
+}
+
+form.feedSelection td.toggle
+{
+	width: 15px;
+	height: 15px;
+	background-color: #dddddd;
+	text-align: center;
+}
+
+form.feedSelection span.description
+{
+	border: 1px solid #ccc;
+	padding: 4px;
+}
+
 form {
 	border: 1px solid #ccc;
 	background: #f9f9f9 -moz-linear-gradient(top, #fff, #f5f5f5);
@@ -158,6 +186,16 @@ pre {
 }
 
 .eventlistevent
+{
+	margin-left: 3em;
+}
+
+.eventlistevent span div.summary
+{
+	margin-left: 3em;
+}
+
+.dayEvent div.summary
 {
 	margin-left: 3em;
 }
@@ -216,7 +254,7 @@ pre {
 
 .ui-layout-north
 {
-	padding: 5px !important; margin: 0px;
+	padding: 7px !important; margin: 0px;
 }
 
 img
@@ -281,6 +319,53 @@ img
 	text-align: right;
 }
 
+.menu
+{
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin-left: 3em;
+}
+
+.menu li
+{
+	float: left;
+}
+
+.menu a
+{
+	letter-spacing:2px;
+	text-transform:uppercase;
+	border-width:1px;
+	padding:0.436em 0.836em 0.536em 0.836em;
+	background-color: #efefef;
+	color: #111111;
+	text-decoration: none;
+	font-size: 0.9em;
+	line-height:1.273em;
+	border-style: solid;
+	border-color: #dddddd;
+}
+
+.menu em
+{
+	letter-spacing:2px;
+	text-transform:uppercase;
+	border-width:1px;
+	padding:0.436em 0.836em 0.536em 0.836em;
+	color: #111111;
+	text-decoration: none;
+	font-size: 0.9em;
+	line-height:1.273em;
+	border-style: solid;
+	border-color: #dddddd;
+}
+
+.menu a:hover
+{
+	background-color: #dddddd;
+}
+
 .footer
 {
 	vertical-align: middle;
@@ -330,6 +415,18 @@ img
 	margin-top: 3px;
 }
 
+#center
+{
+	border-color: white !important;
+}
+.ui-layout-north
+{
+	border-color: white !important;
+}
+.ui-layout-south
+{
+	border-color: white !important;
+}
 .ui-layout-toggler-west
 {
 	background: transparent url(/kies_bronnen.png) no-repeat scroll center center !important;

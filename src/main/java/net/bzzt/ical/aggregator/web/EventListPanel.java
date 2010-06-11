@@ -1,9 +1,7 @@
 package net.bzzt.ical.aggregator.web;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
@@ -22,7 +20,6 @@ public class EventListPanel extends Panel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 
 	@SpringBean
 	private FeedService feedService;
@@ -54,25 +51,7 @@ public class EventListPanel extends Panel {
 					 */
 					@Override
 					public IConverter getConverter(Class<?> type) {
-						return new IConverter() {
-							
-							/**
-							 * 
-							 */
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							public String convertToString(Object value, Locale locale) {
-								SimpleDateFormat dateConverter = new SimpleDateFormat("EEEEE dd-MM-yyyy", locale);
-								return dateConverter.format(value);
-							}
-							
-							@Override
-							public Object convertToObject(String value, Locale locale) {
-								// TODO Auto-generated method stub
-								return null;
-							}
-						};
+						return new LongDateFormatter();
 					}
 					
 				});

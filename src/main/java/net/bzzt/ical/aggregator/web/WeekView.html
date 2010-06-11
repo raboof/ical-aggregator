@@ -1,25 +1,27 @@
 <wicket:extend>
-<div wicket:id="weekContainer" class="weekView">
-	<div class="viewHeader">
-		<div><a wicket:id="previous"><img wicket:message="alt:previousWeek,title:previousWeek" src="iconic/raster/black/arrow_left_24x24.png"></a></div>
-		<div style="text-align:center"><h3>Week <wicket:container wicket:id="week"></wicket:container></h3></div>
-		<div style="text-align:right"><a wicket:id="next"><img wicket:message="alt:nextWeek,title:nextWeek" src="iconic/raster/black/arrow_right_24x24.png"></a></div>
+<div class="ui-layout-center weekView" id="center">
+	<div wicket:id="weekContainer">
+		<div class="viewHeader">
+			<div><a wicket:id="previous"><img wicket:message="alt:previousWeek,title:previousWeek" src="iconic/raster/black/arrow_left_24x24.png"></a></div>
+			<div style="text-align:center"><h3>Week <wicket:container wicket:id="week"></wicket:container></h3></div>
+			<div style="text-align:right"><a wicket:id="next"><img wicket:message="alt:nextWeek,title:nextWeek" src="iconic/raster/black/arrow_right_24x24.png"></a></div>
+		</div>
+		<br class="break">
+		<table>
+			<tr>
+				<td wicket:id="monday">xx</td>
+				<td wicket:id="wednesday" rowspan="2">xx</td>
+				<td wicket:id="thursday" rowspan="2">xx</td>
+			</tr>
+			<tr>
+				<td wicket:id="tuesday"></td>
+			</tr>
+			<tr>
+				<td wicket:id="friday"></td>
+				<td wicket:id="saturday"></td>
+				<td wicket:id="sunday"></td>
+			</tr>
+		</table>
 	</div>
-	<br class="break">
-	<table>
-		<tr>
-			<td wicket:id="monday">xx</td>
-			<td wicket:id="wednesday" rowspan="2">xx</td>
-			<td wicket:id="thursday" rowspan="2">xx</td>
-		</tr>
-		<tr>
-			<td wicket:id="tuesday"></td>
-		</tr>
-		<tr>
-			<td wicket:id="friday"></td>
-			<td wicket:id="saturday"></td>
-			<td wicket:id="sunday"></td>
-		</tr>
-	</table>
 </div>
 </wicket:extend>

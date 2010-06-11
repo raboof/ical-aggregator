@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
-import net.bzzt.ical.aggregator.web.HomePage;
+import net.bzzt.ical.aggregator.web.EventListPage;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 import net.fortuna.ical4j.data.ParserException;
 
@@ -49,8 +49,10 @@ public class FeedPanel extends Panel {
 			
 			add(new TextField<String>("name"));
 			add(new TextField<String>("shortName"));
+			add(new TextField<String>("description"));
 			add(new TextField<Integer>("prio"));
 			add(new TextField<URI>("url"));
+			add(new TextField<URI>("link"));
 			add(new CheckBox("showByDefault"));
 			add(new Label("lastUpdate"));
 			
@@ -69,7 +71,7 @@ public class FeedPanel extends Panel {
 					try {
 						feedService.reloadFeed(feed);
 						//setResponsePage(new FeedDetails(feed));
-						setResponsePage(HomePage.class);
+						setResponsePage(EventListPage.class);
 					} catch (IOException e) {
 						error("Error loading feed: " + e.getMessage());
 					} catch (ParserException e) {
@@ -109,7 +111,7 @@ public class FeedPanel extends Panel {
 					try {
 						feedService.reloadFeed(feed);
 						//setResponsePage(new FeedDetails(feed));
-						setResponsePage(HomePage.class);
+						setResponsePage(EventListPage.class);
 					} catch (IOException e) {
 						error("Error loading feed: " + e.getMessage());
 					} catch (ParserException e) {
@@ -132,7 +134,7 @@ public class FeedPanel extends Panel {
 				public void onSubmit() {
 					Feed feed = FeedForm.this.getModelObject();
 					feedService.delete(feed);
-					setResponsePage(HomePage.class);
+					setResponsePage(EventListPage.class);
 					
 				}
 				

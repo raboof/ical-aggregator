@@ -44,6 +44,11 @@ public class Feed implements Serializable, Identifiable<Long> {
 	
 	private Boolean showByDefault = true;
 
+	/** bijv. homepage van de bron */
+	public URL link;
+	
+	public String description;
+
 	public Feed() { }
 	
 	public Feed(String name, String shortName) {

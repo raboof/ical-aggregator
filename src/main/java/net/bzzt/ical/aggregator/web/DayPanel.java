@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.convert.IConverter;
 
 public class DayPanel extends Panel
 {
@@ -55,7 +56,24 @@ public class DayPanel extends Panel
 			}
 			
 		};
-		Label label = new Label("date", new Model<Date>(date));
+		Label label = new Label("date", new Model<Date>(date))
+		{
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			/* (non-Javadoc)
+			 * @see org.apache.wicket.Component#getConverter(java.lang.Class)
+			 */
+			@Override
+			public IConverter getConverter(Class<?> type)
+			{
+				return new LongDateFormatter();
+			}
+			
+		};
 		link.add(label);
 		head.add(link);
 		add(head);

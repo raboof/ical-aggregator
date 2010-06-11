@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import net.bzzt.ical.aggregator.model.User;
 import net.bzzt.ical.aggregator.service.UserService;
+import net.bzzt.ical.aggregator.web.admin.EditPage;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -65,7 +66,7 @@ public class LoginPanel extends Panel
 					else
 					{
 						AggregatorSession.get().login(user);
-						setResponsePage(HomePage.class);
+						setResponsePage(EditPage.class);
 					}
 				}
 				
@@ -91,7 +92,7 @@ public class LoginPanel extends Panel
 					else
 					{
 						AggregatorSession.get().login(user);
-						setResponsePage(HomePage.class);
+						setResponsePage(EditPage.class);
 					}
 				}
 			});
@@ -182,7 +183,7 @@ public class LoginPanel extends Panel
 				public void onClick()
 				{
 					AggregatorSession.get().invalidateNow();
-					setResponsePage(HomePage.class);
+					setResponsePage(EventListPage.class);
 				}
 				
 			});

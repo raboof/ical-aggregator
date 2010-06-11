@@ -50,7 +50,7 @@ public class DayView extends AggregatorLayoutPage
 	{
 		WebMarkupContainer dayContainer = new WebMarkupContainer(id);
 		dayContainer.setOutputMarkupId(true);
-		
+
 		dayContainer.add(new AjaxLink<Void>("previous")
 			{
 
@@ -130,7 +130,7 @@ public class DayView extends AggregatorLayoutPage
 							@Override
 							protected void populateItem(ListItem<Event> item)
 							{
-								item.add(new MoreInfoPanel("infoPanel", item.getModel(), true));
+								item.add(new MoreInfoPanel("infoPanel", item.getModel(), true, true));
 							}
 						});
 				}

@@ -7,38 +7,44 @@
 		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
 	</head>
 	<body>
-		<div class="ui-layout-north">
-			<h1 wicket:id="header">ICalendar Aggregator</h1>
-			<wicket:container wicket:id="feedback"></wicket:container>
-			<table class="menubar">
-				<tr>
-					<td>
-		    	    	<a wicket:id="day"><wicket:message key="day">Day</wicket:message></a>
-		    	    	<a wicket:id="weekView"><wicket:message key="week">Week</wicket:message></a>
-		    	    	<a wicket:id="home"><wicket:message key="list">List</wicket:message></a>
-		    	    	<div class="topRightLinks">
-			    	    	<a wicket:id="toDutch"><img src="flags/png/nl.png"></a>
-			    	    	<a wicket:id="toEnglish"><img src="flags/png/gb.png"></a>
-		    	    		<a wicket:id="edit"><img src="iconic/raster/black/cog_12x12.png" wicket:message="alt:edit,title:edit"></a>
-		    	    	</div>
-	    	    	</td><td class="login">
-	    	    		<wicket:container wicket:id="login"></wicket:container>
-	    	    	</td>
-	    	    </tr>
-    	    </table>
-    	</div>
-    	<div class="ui-layout-west" style="display: none">
-    		<wicket:container wicket:id="feedSelection"></wicket:container>
-    	</div>
-    	<div class="ui-layout-center" id="center">
+		<div id="mainContent">
+			<div class="ui-layout-north">
+				<h1 wicket:id="header">ICalendar Aggregator</h1>
+				<wicket:container wicket:id="feedback"></wicket:container>
+				<div class="menubar">
+					<ul class="menu">
+		    	    	<li><a class="item" wicket:id="home"><wicket:message key="home">Home</wicket:message></a></li>
+		    	    	<li><a class="item" wicket:id="day"><wicket:message key="day">Day</wicket:message></a></li>
+		    	    	<li><a class="item" wicket:id="weekView"><wicket:message key="week">Week</wicket:message></a></li>
+		    	    	<li><a class="item" wicket:id="list"><wicket:message key="list">List</wicket:message></a></li>
+		   	    	</ul>
+		   	    	<div class="topRightLinks">
+		    	    	<a wicket:id="toDutch"><img alt="Nederlands" src="flags/png/nl.png"></a>
+		    	    	<a wicket:id="toEnglish"><img alt="English" src="flags/png/gb.png"></a>
+		   	    	</div>
+		   	    </div>
+		   	</div>
+		   	<div class="ui-layout-west" style="display: none">
+		   		<wicket:container wicket:id="feedSelection"></wicket:container>
+		   	</div>
+		   	<div class="ui-layout-east" style="display: none">
+		   	</div>
+		   	<!--  wicket:child zorgt zelf voor class="ui-layout-center content" id="center" -->
 			<wicket:child/>
-		</div>
-    	<div class="ui-layout-south footer">
-    		<a href="http://repo.or.cz/w/ical-aggregator.git"><img width="32" height="31" src="opensource.png"></a><wicket:message key="tagline"></wicket:message> 
-    	</div>
+		   	<div class="ui-layout-south footer">
+		   		<a href="http://repo.or.cz/w/ical-aggregator.git"><img width="32" height="31" src="opensource.png" alt="Open source"></a><wicket:message key="tagline"></wicket:message> 
+		   	</div>
+	   	</div>
     	<script>
     	$(document).ready( function() {
-	    	$('body').layout(
+    		$('body').layout({
+    			center:
+		    	{
+					applyDefaultStyles: true,
+	    			paneSelector: "#mainContent"
+		    	}
+   			});
+	    	$('#mainContent').layout(
 	    	{ 
 		    	applyDefaultStyles: true, 
 		    	defaults:
@@ -60,6 +66,17 @@
 		    		togglerLength_closed: 400,
 		    		togglerTip_open: 'Bronnen kiezen',
 		    		togglerTip_closed: 'Bronnen kiezen',
+		    		//slideTrigger_open: 'mouseover',
+		    		initClosed: true
+		    	},
+		    	east:
+		    	{
+		    		spacing_open: 21,
+		    		spacing_closed: 21,
+		    		togglerAlign_open: 'top',
+		    		togglerAlign_closed: 'top',
+		    		togglerLength_open: 0,
+		    		togglerLength_closed: 0,
 		    		//slideTrigger_open: 'mouseover',
 		    		initClosed: true
 		    	}

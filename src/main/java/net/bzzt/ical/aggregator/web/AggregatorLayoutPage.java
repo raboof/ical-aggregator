@@ -3,7 +3,6 @@ package net.bzzt.ical.aggregator.web;
 import java.util.Locale;
 
 import net.bzzt.ical.aggregator.model.Feed;
-import net.bzzt.ical.aggregator.web.admin.EditPage;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.Session;
@@ -48,18 +47,16 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		add(new Label("title", title));
 		add(new Label("header", title));
 
+		
 		add(new BookmarkablePageLink<Void>("home", HomePage.class).setEnabled(!(this instanceof HomePage)));
+		add(new BookmarkablePageLink<Void>("list", EventListPage.class).setEnabled(!(this instanceof EventListPage)));
 
 		add(new BookmarkablePageLink<Void>("day", DayView.class).setEnabled(!(this instanceof DayView)));
 		add(new BookmarkablePageLink<Void>("weekView", WeekView.class).setEnabled(!(this instanceof WeekView)));
 
-		add(new BookmarkablePageLink<Void>("edit", EditPage.class).setEnabled(!(this instanceof EditPage)));
-
 		add(new LocaleLink("toDutch", new Locale("nl", "NL")));
 
 		add(new LocaleLink("toEnglish", Locale.ENGLISH));
-
-		add(new LoginPanel("login"));
 
 		add(new FeedbackPanel("feedback"));
 

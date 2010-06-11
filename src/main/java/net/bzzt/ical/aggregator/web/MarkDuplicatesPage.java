@@ -42,7 +42,7 @@ public class MarkDuplicatesPage extends AggregatorLayoutPage
 					Event event = model.getObject();
 					event.duplicate_of = parent;
 					feedService.saveOrUpdateEvent(event);
-					setResponsePage(HomePage.class);
+					setResponsePage(EventListPage.class);
 				}
 				else
 				{

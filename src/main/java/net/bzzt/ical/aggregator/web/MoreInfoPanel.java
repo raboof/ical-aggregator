@@ -39,13 +39,20 @@ public class MoreInfoPanel extends Panel {
 	@SpringBean(name="userService")
 	private UserService userService;
 	
-	public MoreInfoPanel(String id, IModel<Event> model, boolean showTitle) {
+	public MoreInfoPanel(String id, IModel<Event> model, boolean showTitle, boolean truncateLongTexts) {
 		super(id, new CompoundPropertyModel<Event>(model));
 		
 		add(new Label("summary").setVisible(showTitle));
 		add(new Label("feed.name").setVisible(showTitle));
 		
-		add(new Label("description"));
+		if (truncateLongTexts)
+		{
+			add(new AutoEllipsedText("description"));
+		}
+		else
+		{
+			add(new Label("description"));
+		}
 		
 		add(new Label("startTime").setVisible(model.getObject().getStartTime() != null));
 		add(new Label("endTime").setVisible(model.getObject().getEndTime() != null));
@@ -104,6 +111,7 @@ public class MoreInfoPanel extends Panel {
 		listView.setVisible(!alternatives.isEmpty());
 		add(listView);
 		
+		User loggedInUser = AggregatorSession.get().getLoggedInUser();
 		add(new AjaxLink<Event>("duplicate", model)
 			{
 
@@ -118,8 +126,7 @@ public class MoreInfoPanel extends Panel {
 					setResponsePage(new MarkDuplicatesPage(getModel()));
 				}
 				
-			});
-		User loggedInUser = AggregatorSession.get().getLoggedInUser();
+			}.setVisible(userService.hasRight(loggedInUser, Right.MARK_DUPLICATE)));
 		add(new AjaxLink<Event>("hide", model)
 			{
 
@@ -134,7 +141,7 @@ public class MoreInfoPanel extends Panel {
 					Event event = getModelObject();
 					event.setHidden(true);
 					feedService.saveOrUpdateEvent(event);
-					setResponsePage(HomePage.class);
+					setResponsePage(EventListPage.class);
 				}
 				
 			}.setVisible(userService.hasRight(loggedInUser, Right.HIDE_EVENT)));
@@ -150,7 +157,7 @@ public class MoreInfoPanel extends Panel {
 				setResponsePage(new EventDetailPage(getModelObject()));
 			}
 			
-		});
+		}.setVisible(userService.hasRight(loggedInUser, Right.EDIT_EVENT)));
 		if (url == null)
 		{
 			add(new WebMarkupContainer("addThis").setVisible(false));

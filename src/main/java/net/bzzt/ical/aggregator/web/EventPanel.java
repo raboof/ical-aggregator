@@ -20,11 +20,16 @@ public class EventPanel extends Panel
 
 	public EventPanel(String id, IModel<Event> model)
 	{
+		this(id, model, false);
+	}
+	
+	public EventPanel(String id, IModel<Event> model, boolean truncateLongTexts)
+	{
 		super(id, new CompoundPropertyModel<Event>(model));
 		
 		add(new FeedLink("feedLink", model.getObject().feed));
 
-		final WebMarkupContainer more = new MoreInfoPanel("more", model, false);
+		final WebMarkupContainer more = new MoreInfoPanel("more", model, false, truncateLongTexts);
 		more.setOutputMarkupPlaceholderTag(true);
 		more.setVisible(false);
 		add(more);

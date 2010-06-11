@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.bzzt.ical.aggregator.web.admin.EditPage;
 import net.bzzt.ical.aggregator.web.ical.UpcomingEventsIcalPage;
 import net.bzzt.ical.aggregator.web.rss.UpcomingEventsFeedPage;
 
@@ -50,6 +51,8 @@ public class WicketApplication extends WebApplication {
 		getMarkupSettings().setStripWicketTags(true);
 		
 		mount(new MixedParamUrlCodingStrategy("/day", DayView.class, new String[0]));
+		mount(new MixedParamUrlCodingStrategy("/login", LoginPage.class, new String[0]));
+		mount(new MixedParamUrlCodingStrategy("/edit", EditPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/week", WeekView.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/rss", UpcomingEventsFeedPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/ical", UpcomingEventsIcalPage.class, new String[0]));
@@ -104,7 +107,6 @@ public class WicketApplication extends WebApplication {
 
 			@Override
 			public Object convertToObject(String value, Locale locale) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
@@ -122,7 +124,7 @@ public class WicketApplication extends WebApplication {
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
-	public Class<HomePage> getHomePage() {
+	public Class<? extends AggregatorLayoutPage> getHomePage() {
 		return HomePage.class;
 	}
 
