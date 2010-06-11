@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import net.bzzt.ical.aggregator.model.Event;
+import net.bzzt.ical.aggregator.util.Categorizer;
 
 public class EventsCategorizer implements Categorizer<Event, Date>
 {

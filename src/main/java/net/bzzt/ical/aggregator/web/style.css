@@ -185,6 +185,14 @@ pre {
 	font-style: italic;
 }
 
+.feedcaption
+{
+	font-size: .6em;
+	font-weight: normal;
+	font-style: normal;
+	margin-left: 2.5em;
+}
+
 .eventlistevent
 {
 	margin-left: 3em;

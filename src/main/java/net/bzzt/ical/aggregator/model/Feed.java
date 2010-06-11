@@ -16,7 +16,7 @@ import net.bzzt.ical.aggregator.web.model.Identifiable;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-public class Feed implements Serializable, Identifiable<Long> {
+public class Feed implements Serializable, Identifiable<Long>, Comparable<Feed> {
 	/**
 	 * 
 	 */
@@ -127,6 +127,12 @@ public class Feed implements Serializable, Identifiable<Long> {
 		{
 			this.showByDefault = showByDefault;
 		}
+	}
+
+	@Override
+	public int compareTo(Feed o)
+	{
+		return name.compareTo(o.name);
 	}
 	
 	
