@@ -67,14 +67,22 @@ public class AutoEllipsedText extends Panel
 
 	public String getInitialText()
 	{
-		String fullText = getDefaultModelObjectAsString();
-		if (fullText.length() > maximumLength)
+		Object defaultModelObject = getDefaultModelObject();
+		if (defaultModelObject == null)
 		{
-			return fullText.substring(0, truncatePoint);
+			return "";
 		}
 		else
 		{
-			return fullText;
+			String fullText = defaultModelObject.toString();
+			if (fullText.length() > maximumLength)
+			{
+				return fullText.substring(0, truncatePoint);
+			}
+			else
+			{
+				return fullText;
+			}
 		}
 	}
 }
