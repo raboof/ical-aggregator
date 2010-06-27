@@ -5,3 +5,6 @@ testdb.properties
 target
 .classpath
 .settings
+/.settings
+/target
+/.classpath
