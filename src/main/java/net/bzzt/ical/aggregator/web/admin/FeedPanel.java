@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
-import net.bzzt.ical.aggregator.web.EventListPage;
+import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 import net.fortuna.ical4j.data.ParserException;
 
@@ -70,8 +70,7 @@ public class FeedPanel extends Panel {
 					Feed feed = FeedForm.this.getModelObject();
 					try {
 						feedService.reloadFeed(feed);
-						//setResponsePage(new FeedDetails(feed));
-						setResponsePage(EventListPage.class);
+						setResponsePage(WicketApplication.get().getHomePage());
 					} catch (IOException e) {
 						error("Error loading feed: " + e.getMessage());
 					} catch (ParserException e) {
@@ -110,8 +109,7 @@ public class FeedPanel extends Panel {
 					feedService.clear(feed);
 					try {
 						feedService.reloadFeed(feed);
-						//setResponsePage(new FeedDetails(feed));
-						setResponsePage(EventListPage.class);
+						setResponsePage(WicketApplication.get().getHomePage());
 					} catch (IOException e) {
 						error("Error loading feed: " + e.getMessage());
 					} catch (ParserException e) {
@@ -135,8 +133,7 @@ public class FeedPanel extends Panel {
 					Feed feed = FeedForm.this.getModelObject();
 					AggregatorSession.get().removeFromFeedSelection(feed);
 					feedService.delete(feed);
-					setResponsePage(EventListPage.class);
-					
+					setResponsePage(WicketApplication.get().getHomePage());
 				}
 				
 			}.setVisible(feed.getObject().id != null));

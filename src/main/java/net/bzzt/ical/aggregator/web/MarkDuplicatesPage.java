@@ -5,6 +5,7 @@ import java.util.List;
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -19,7 +20,7 @@ public class MarkDuplicatesPage extends AggregatorLayoutPage
 	
 	private Event parent;
 	
-	public MarkDuplicatesPage(final IModel<Event> model)
+	public MarkDuplicatesPage(final IModel<Event> model, final Class<? extends Page> previousView)
 	{
 		add(new Label("summary", model.getObject().summary));
 		
@@ -42,7 +43,7 @@ public class MarkDuplicatesPage extends AggregatorLayoutPage
 					Event event = model.getObject();
 					event.duplicate_of = parent;
 					feedService.saveOrUpdateEvent(event);
-					setResponsePage(EventListPage.class);
+					setResponsePage(previousView);
 				}
 				else
 				{

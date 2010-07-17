@@ -123,7 +123,7 @@ public abstract class MoreInfoPanel extends Panel {
 				@Override
 				public void onClick(AjaxRequestTarget target)
 				{
-					setResponsePage(new MarkDuplicatesPage(getModel()));
+					setResponsePage(new MarkDuplicatesPage(getModel(), getPage().getClass()));
 				}
 				
 			}.setVisible(userService.hasRight(loggedInUser, Right.MARK_DUPLICATE)));

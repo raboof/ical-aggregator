@@ -183,7 +183,7 @@ public class LoginPanel extends Panel
 				public void onClick()
 				{
 					AggregatorSession.get().invalidateNow();
-					setResponsePage(EventListPage.class);
+					setResponsePage(WicketApplication.get().getHomePage());
 				}
 				
 			});

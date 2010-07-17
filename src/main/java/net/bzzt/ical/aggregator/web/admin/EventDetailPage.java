@@ -10,6 +10,7 @@ import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.EventListPage;
+import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 
 import org.apache.wicket.extensions.yui.calendar.DateField;
@@ -65,7 +66,7 @@ public class EventDetailPage extends AggregatorLayoutPage {
 				original.duplicate_of = event;
 				feedService.saveOrUpdateEvent(original);
 			}
-			setResponsePage(EventListPage.class);
+			setResponsePage(WicketApplication.get().getHomePage());
 		}
 
 		/* (non-Javadoc)

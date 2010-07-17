@@ -35,7 +35,7 @@ public class FeedLink extends Panel {
 				List<Feed> feedList = new ArrayList<Feed>();
 				feedList.add(getModelObject());
 				((AggregatorSession) Session.get()).setSelectedFeeds(feedList);
-				setResponsePage(EventListPage.class);
+				setResponsePage(WicketApplication.get().getHomePage());
 			}
 			
 		};

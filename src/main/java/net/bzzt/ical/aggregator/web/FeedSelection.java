@@ -176,7 +176,7 @@ public class FeedSelection extends Panel
 		protected void onSubmit()
 		{
 			((AggregatorSession) getSession()).setSelectedFeeds(getModelObject());
-			setResponsePage(EventListPage.class);
+			setResponsePage(WicketApplication.get().getHomePage());
 		}
 
 	}
