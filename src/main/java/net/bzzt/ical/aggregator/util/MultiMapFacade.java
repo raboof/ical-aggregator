@@ -1,5 +1,6 @@
 package net.bzzt.ical.aggregator.util;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,13 @@ import java.util.Set;
 import org.apache.commons.collections.MultiHashMap;
 
 @SuppressWarnings("unchecked")
-public class MultiMapFacade<T, U> implements MultiMap<T, U>
+public class MultiMapFacade<T, U> implements MultiMap<T, U>, Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final MultiHashMap multiMap;
 	
 	public MultiMapFacade(MultiHashMap multiHashMap)
