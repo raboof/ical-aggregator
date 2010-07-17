@@ -2,6 +2,7 @@ package net.bzzt.ical.aggregator.web;
 
 import net.bzzt.ical.aggregator.model.Event;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -23,18 +24,18 @@ public class EventPanel extends Panel
 		this(id, model, false);
 	}
 	
-	public EventPanel(String id, IModel<Event> model, boolean truncateLongTexts)
+	public EventPanel(String id, IModel<Event> model, final boolean truncateLongTexts)
 	{
 		super(id, new CompoundPropertyModel<Event>(model));
 		
 		add(new FeedLink("feedLink", model.getObject().feed));
 
-		final WebMarkupContainer more = new MoreInfoPanel("more", model, false, truncateLongTexts);
+		WebMarkupContainer more = new WebMarkupContainer("more"); 		
 		more.setOutputMarkupPlaceholderTag(true);
 		more.setVisible(false);
 		add(more);
 		
-		WebMarkupContainer link = new AjaxLink<Object>("link")
+		WebMarkupContainer link = new AjaxLink<Event>("link", model)
 		{
 
 			/**
@@ -44,7 +45,18 @@ public class EventPanel extends Panel
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				more.setVisible(!more.isVisible());
+				Component more = EventPanel.this.get("more");
+				if (more instanceof MoreInfoPanel)
+				{
+					more.setVisible(!more.isVisible());
+				}
+				else
+				{
+					MoreInfoPanel replacement = new MoreInfoPanel("more", getModel(), false, truncateLongTexts);
+					replacement.setOutputMarkupPlaceholderTag(true);
+					more.replaceWith(replacement);
+					more = replacement;
+				}
 				target.addComponent(more);
 			}
 			

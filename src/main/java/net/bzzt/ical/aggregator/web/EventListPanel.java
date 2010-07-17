@@ -10,10 +10,10 @@ import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.util.Categorizer;
 import net.bzzt.ical.aggregator.util.CategoryHelper;
+import net.bzzt.ical.aggregator.util.MultiMap;
 import net.bzzt.ical.aggregator.web.model.CategorizedList;
 import net.bzzt.ical.aggregator.web.model.EventsCategorizer;
 
-import org.apache.commons.collections.MultiMap;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -47,7 +47,7 @@ public class EventListPanel extends Panel {
 		
 		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds());
 		
-		final MultiMap eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
+		final MultiMap<Date,Event> eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
 		List<Date> dates = new ArrayList<Date>(eventsPerDate.keySet());
 		Collections.sort(dates);
 		
@@ -79,7 +79,7 @@ public class EventListPanel extends Panel {
 						}
 						
 					});
-					item.add(new CategorizedList<Feed, Event>("feeds", (List<Event>)eventsPerDate.get(item.getModelObject()), new EventPerFeedCategorizer())
+					item.add(new CategorizedList<Feed, Event>("feeds", eventsPerDate.get(item.getModelObject()), new EventPerFeedCategorizer())
 						{
 
 							/**
