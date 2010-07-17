@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.bzzt.ical.aggregator.web.admin.EditPage;
 import net.bzzt.ical.aggregator.web.ical.UpcomingEventsIcalPage;
+import net.bzzt.ical.aggregator.web.opml.OpmlPage;
 import net.bzzt.ical.aggregator.web.rss.UpcomingEventsFeedPage;
 
 import org.apache.commons.lang.StringUtils;
@@ -56,6 +57,7 @@ public class WicketApplication extends WebApplication {
 		mount(new MixedParamUrlCodingStrategy("/week", WeekView.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/rss", UpcomingEventsFeedPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/ical", UpcomingEventsIcalPage.class, new String[0]));
+		mount(new MixedParamUrlCodingStrategy("/feeds/opml", OpmlPage.class, new String[0]));
 		
 		super.init();
 	}

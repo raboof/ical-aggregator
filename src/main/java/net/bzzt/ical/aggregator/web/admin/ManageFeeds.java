@@ -8,9 +8,11 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
+import net.bzzt.ical.aggregator.web.opml.OpmlPage;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -40,6 +42,7 @@ public class ManageFeeds extends AggregatorLayoutPage {
 				});
 		
 		add(new FeedPanel("addFeed").setVisible(AggregatorSession.get().ingelogd()));
+		add(new BookmarkablePageLink<OpmlPage>("opml", OpmlPage.class));
 	}
 	
 	public List<Long> getFeeds()

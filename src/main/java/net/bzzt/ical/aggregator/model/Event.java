@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import org.apache.wicket.util.time.Time;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Index;
 
 import net.bzzt.ical.aggregator.web.model.Identifiable;
 import net.fortuna.ical4j.model.Iso8601;

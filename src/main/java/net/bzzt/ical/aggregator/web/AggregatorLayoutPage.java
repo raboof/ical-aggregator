@@ -81,6 +81,10 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		{
 			addAlternateLink(response, feed.name + " at " + WicketApplication.getTitle() + " Upcoming Events Feed", "?sn=" + feed.shortName);
 		}
+		response.renderString("<link rel=\"outline\" type=\"text/x-opml\" title=\""
+			+ WicketApplication.getTitle() + " Source Feeds\" href=\"" + WicketApplication.getLink()
+			+ "/feeds/opml\"/>");
+		
 	}
 	
 	private void addAlternateLink(IHeaderResponse response, String title, String postfix)
