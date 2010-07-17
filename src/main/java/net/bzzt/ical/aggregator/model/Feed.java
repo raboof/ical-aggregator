@@ -56,6 +56,17 @@ public class Feed implements Serializable, Identifiable<Long>, Comparable<Feed> 
 		this.name = name;
 	}
 
+	public Feed(String name, String shortName, URL url, URL link, String description, Integer prio, Boolean showByDefault)
+	{
+		this.name = name;
+		this.shortName = shortName;
+		this.url = url;
+		this.link = link;
+		this.description = description;
+		this.prio = prio;
+		this.showByDefault = showByDefault;
+	}
+
 	public Long getId() {
 		return id;
 	}

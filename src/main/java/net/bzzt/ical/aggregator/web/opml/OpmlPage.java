@@ -35,10 +35,9 @@ public class OpmlPage extends Page
 		
 		response.setContentType("text/x-opml");
 		
-		JAXBContext jc;
 		try
 		{
-			jc = JAXBContext.newInstance(Opml.class);
+			JAXBContext jc = JAXBContext.newInstance(Opml.class);
 			Marshaller m = jc.createMarshaller();
 			m.marshal(getOpml(), new OutputStreamWriter(response.getOutputStream()));
 		}
@@ -61,7 +60,7 @@ public class OpmlPage extends Page
 				result.body.outline.add(new Outline(feed.name, 
 					"text/calendar", feed.getUrl(), 
 					feed.description,
-					feed.link, feed.shortName));
+					feed.link, feed.shortName, feed.getPrio(), feed.getShowByDefault()));
 			}
 		}
 		

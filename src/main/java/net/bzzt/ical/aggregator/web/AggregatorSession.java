@@ -1,5 +1,6 @@
 package net.bzzt.ical.aggregator.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,5 +65,16 @@ public class AggregatorSession extends WebSession {
 	public void login(User user)
 	{
 		loggedInUser = user;
+	}
+
+	public void removeFromFeedSelection(Feed feed)
+	{
+		for (Feed selectedFeed : new ArrayList<Feed>(selectedFeeds))
+		{
+			if (feed.id.equals(selectedFeed.id))
+			{
+				selectedFeeds.remove(selectedFeed);
+			}
+		}
 	}
 }

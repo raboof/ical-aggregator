@@ -453,6 +453,7 @@ public class FeedServiceImpl implements FeedService {
 		clear(feed);
 		feed = em.merge(feed);
 		em.remove(feed);
+		em.flush();
 	}
 
 	@Override

@@ -133,6 +133,7 @@ public class FeedPanel extends Panel {
 				@Override
 				public void onSubmit() {
 					Feed feed = FeedForm.this.getModelObject();
+					AggregatorSession.get().removeFromFeedSelection(feed);
 					feedService.delete(feed);
 					setResponsePage(EventListPage.class);
 					
