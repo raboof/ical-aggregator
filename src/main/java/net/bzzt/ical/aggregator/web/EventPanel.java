@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
-public class EventPanel extends Panel
+public abstract class EventPanel extends Panel
 {
 
 	/**
@@ -52,7 +52,21 @@ public class EventPanel extends Panel
 				}
 				else
 				{
-					MoreInfoPanel replacement = new MoreInfoPanel("more", getModel(), false, truncateLongTexts);
+					MoreInfoPanel replacement = new MoreInfoPanel("more", getModel(), false, truncateLongTexts)
+					{
+
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected void refresh(AjaxRequestTarget target)
+						{
+							EventPanel.this.refresh(target);
+						}
+						
+					};
 					replacement.setOutputMarkupPlaceholderTag(true);
 					more.replaceWith(replacement);
 					more = replacement;
@@ -65,5 +79,7 @@ public class EventPanel extends Panel
 		link.add(new Label("summary"));
 		add(link);
 	}
+
+	protected abstract void refresh(AjaxRequestTarget target);
 
 }

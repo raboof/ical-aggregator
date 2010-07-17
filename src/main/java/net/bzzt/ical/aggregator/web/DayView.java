@@ -130,7 +130,21 @@ public class DayView extends AggregatorLayoutPage
 							@Override
 							protected void populateItem(ListItem<Event> item)
 							{
-								item.add(new MoreInfoPanel("infoPanel", item.getModel(), true, true));
+								item.add(new MoreInfoPanel("infoPanel", item.getModel(), true, true)
+								{
+
+									/**
+									 * 
+									 */
+									private static final long serialVersionUID = 1L;
+
+									@Override
+									protected void refresh(AjaxRequestTarget target)
+									{
+										DayView.this.refresh(target);
+									}
+									
+								});
 							}
 						});
 				}

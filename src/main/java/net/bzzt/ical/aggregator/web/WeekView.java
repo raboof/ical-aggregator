@@ -96,25 +96,25 @@ public class WeekView extends AggregatorLayoutPage
 		selected_day = (selected_day + 5) % 7;
 		
 		calendar.add(Calendar.DAY_OF_MONTH, -selected_day);
-		result.add(new DayPanel("monday", calendar.getTime()));
+		result.add(new DayPanel("monday", calendar.getTime(), this));
 		
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("tuesday", calendar.getTime()));
+		result.add(new DayPanel("tuesday", calendar.getTime(), this));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("wednesday", calendar.getTime()));
+		result.add(new DayPanel("wednesday", calendar.getTime(), this));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("thursday", calendar.getTime()));
+		result.add(new DayPanel("thursday", calendar.getTime(), this));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("friday", calendar.getTime()));
+		result.add(new DayPanel("friday", calendar.getTime(), this));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("saturday", calendar.getTime()));
+		result.add(new DayPanel("saturday", calendar.getTime(), this));
 
 		calendar.add(Calendar.DAY_OF_MONTH, 1);
-		result.add(new DayPanel("sunday", calendar.getTime()));
+		result.add(new DayPanel("sunday", calendar.getTime(), this));
 		
 		return result;
 	}

@@ -10,6 +10,7 @@ import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -31,7 +32,7 @@ public class DayPanel extends Panel
 	@SpringBean(name="feedService")
 	private FeedService feedService;
 	
-	public DayPanel(String id, Date date)
+	public DayPanel(String id, Date date, final WeekView parent)
 	{
 		super(id);
 		
@@ -88,7 +89,21 @@ public class DayPanel extends Panel
 			@Override
 			protected void populateItem(ListItem<Event> item)
 			{
-				item.add(new EventPanel("event", item.getModel()));
+				item.add(new EventPanel("event", item.getModel())
+				{
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void refresh(AjaxRequestTarget target)
+					{
+						parent.refresh(target);
+					}
+					
+				});
 			}});
 	}
 

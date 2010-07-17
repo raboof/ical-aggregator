@@ -14,6 +14,7 @@ import net.bzzt.ical.aggregator.util.MultiMap;
 import net.bzzt.ical.aggregator.web.model.CategorizedList;
 import net.bzzt.ical.aggregator.web.model.EventsCategorizer;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -96,7 +97,21 @@ public class EventListPanel extends Panel {
 							@Override
 							protected void populateChild(ListItem<Event> item)
 							{
-								item.add(new EventPanel("event", item.getModel()));
+								item.add(new EventPanel("event", item.getModel())
+								{
+
+									/**
+									 * 
+									 */
+									private static final long serialVersionUID = 1L;
+
+									@Override
+									protected void refresh(AjaxRequestTarget target)
+									{
+										setResponsePage(EventListPage.class);
+									}
+									
+								});
 							}
 						
 						});

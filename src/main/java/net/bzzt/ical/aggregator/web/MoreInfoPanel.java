@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class MoreInfoPanel extends Panel {
+public abstract class MoreInfoPanel extends Panel {
 
 	/**
 	 * 
@@ -141,7 +141,7 @@ public class MoreInfoPanel extends Panel {
 					Event event = getModelObject();
 					event.setHidden(true);
 					feedService.saveOrUpdateEvent(event);
-					setResponsePage(EventListPage.class);
+					refresh(target);
 				}
 				
 			}.setVisible(userService.hasRight(loggedInUser, Right.HIDE_EVENT)));
@@ -168,5 +168,7 @@ public class MoreInfoPanel extends Panel {
 			add(new AddThisPanel("addThis", model.getObject().summary + postfix, model.getObject().description + postfix, url.toExternalForm(), "raboof"));
 		}
 	}
+
+	protected abstract void refresh(AjaxRequestTarget target);
 
 }
