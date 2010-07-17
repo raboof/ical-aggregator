@@ -94,7 +94,7 @@ public class EventDetailPage extends AggregatorLayoutPage {
 		}
 		
 		Event event;
-		if (original.getManual())
+		if (original.getManual() == true)
 		{
 			event = original;
 		}

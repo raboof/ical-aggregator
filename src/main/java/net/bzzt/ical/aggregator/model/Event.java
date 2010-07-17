@@ -166,7 +166,7 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 		}
 		result.id = null;
 		result.uid = null;
-		setManual(true);
+		result.setManual(true);
 		return result;
 	}
 
