@@ -16,6 +16,7 @@ import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -51,6 +52,7 @@ public class EventDetailPage extends AggregatorLayoutPage {
 			add(new DateField("start").setRequired(true));
 			add(new DropDownChoice<Feed>("feed", feedService.getManualFeeds()).setRequired(true).setVisible(event.feed == null || event.feed.url == null));
 			add(new TextField<URL>("url"));
+			add(new TextArea<String>("description"));
 			
 			add(new FeedbackPanel("feedback"));
 		}
