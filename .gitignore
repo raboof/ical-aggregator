@@ -9,3 +9,10 @@ target
 /target
 /.classpath
 /target
+/target
+/testdb.lck
+/testdb.properties
+/testdb.script
+/testdb.lck
+/testdb.properties
+/testdb.script
