@@ -18,14 +18,18 @@ public class EventFilter implements Serializable
 	
 	public boolean noHidden = true;
 	
-	public EventFilter(Date date)
+	public Integer maxRecurrence;
+	
+	public EventFilter(Date date, int maxRecurrence)
 	{
+		this.maxRecurrence = maxRecurrence;
 		this.fromDate = date;
 		this.toDate = date;
 	}
 
-	public EventFilter()
+	public EventFilter(Integer maxRecurrence)
 	{
+		this.maxRecurrence = maxRecurrence;
 	}
 
 }

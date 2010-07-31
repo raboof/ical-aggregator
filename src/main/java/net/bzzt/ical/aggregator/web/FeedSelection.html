@@ -1,28 +1,31 @@
 <wicket:panel>
 	<form wicket:id="form" class="feedSelection">
-			<table wicket:id="feed" style="width: 90%" summary="Feed selection">
-				<tbody wicket:id="feeds" style="border: solid 1px;">
-					<tr>
-						<td>
-							<input class="cb" type="checkbox" wicket:id="check">
-						</td>
-						<td>
-							<label wicket:id="name"></label>
-						</td>
-						<td class="toggle" wicket:id="toggle">
-							(?)
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3">
-							<span class="description" style="display: none" wicket:id="descriptionContainer">
-								<span wicket:id="description">Neem ook de koopzondagen op in de agenda.</span>
-								<a wicket:id="link"><img alt="homepage" src="iconic/raster/black/home_16x16.png"></a>
-							</span>
-						</td>
-					</tr>
-				</tbody>
-				<!-- span class="shortName">[<wicket:container wicket:id="shortName">shortName</wicket:container>]</span> <span wicket:id="name"></span--> 			</table>
-				<input type="submit" style="display: none">
+		<table wicket:id="feed" style="width: 90%" summary="Feed selection">
+			<tbody wicket:id="feeds" style="border: solid 1px;">
+				<tr>
+					<td>
+						<input class="cb" type="checkbox" wicket:id="check">
+					</td>
+					<td>
+						<label wicket:id="name"></label>
+					</td>
+					<td class="toggle" wicket:id="toggle">
+						(?)
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<span class="description" style="display: none" wicket:id="descriptionContainer">
+							<span wicket:id="description">Neem ook de koopzondagen op in de agenda.</span>
+							<a wicket:id="link"><img alt="homepage" src="iconic/raster/black/home_16x16.png"></a>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+			<!-- span class="shortName">[<wicket:container wicket:id="shortName">shortName</wicket:container>]</span> <span wicket:id="name"></span--> 			
+		</table>
+		
+		<input wicket:id="showRecurring" type="checkbox"></input> <wicket:message key="showRecurring"></wicket:message>
+		<input type="submit" style="display: none">
 	</form>
 </wicket:panel>

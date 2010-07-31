@@ -9,7 +9,6 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
-import net.bzzt.ical.aggregator.web.EventListPage;
 import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 

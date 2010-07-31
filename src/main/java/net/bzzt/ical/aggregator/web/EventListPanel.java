@@ -46,7 +46,7 @@ public class EventListPanel extends Panel {
 	public EventListPanel(String id) {
 		super(id);
 		
-		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds());
+		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds(), AggregatorSession.get().getMaxRecurrence());
 		
 		final MultiMap<Date,Event> eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
 		List<Date> dates = new ArrayList<Date>(eventsPerDate.keySet());

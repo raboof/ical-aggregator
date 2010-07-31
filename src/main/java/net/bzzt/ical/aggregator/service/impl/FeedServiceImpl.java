@@ -85,22 +85,50 @@ public class FeedServiceImpl implements FeedService {
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void reloadFeed(@Nonnull Feed feed) throws IOException, ParserException {
-		Calendar calendar = getCalendar(feed);
-
-		@SuppressWarnings("unchecked")
-		Collection<VEvent> components = (Collection<VEvent>) calendar
-				.getComponents(VEvent.VEVENT);
-		LOG.info(components.size() + " events found");
-		for (VEvent event : components) {
-			Event previousVersion = findPreviousVersion(feed, event);
-			if (previousVersion == null) {
-				addEvent(feed, event, false);
-			} else {
-				updateEvent(previousVersion, event);
+		int added = 0;
+		int updated = 0;
+		try
+		{
+			Calendar calendar = getCalendar(feed);
+	
+			@SuppressWarnings("unchecked")
+			Collection<VEvent> components = (Collection<VEvent>) calendar
+					.getComponents(VEvent.VEVENT);
+			LOG.info(components.size() + " events found");
+			
+			
+			for (VEvent event : components) {
+				Event previousVersion = findPreviousVersion(feed, event);
+				if (previousVersion == null) {
+					addEvent(feed, event, false);
+					added++;
+				} else {
+					updateEvent(previousVersion, event);
+					updated++;
+				}
 			}
+			feed.lastUpdateError = "";
 		}
+		catch (Exception e)
+		{
+			feed.lastUpdateError = e.getMessage();
+		}
+		feed.lastUpdate = new Date();
+		feed.lastUpdateAdded = added;
+		feed.lastUpdateEvents = updated + added;
+		saveOrUpdate(feed);
+		
+		calculateRecurrences(feed);
+		
 		LOG.info("Done reloading " + feed.url);
 		
+	}
+
+	private void calculateRecurrences(Feed feed)
+	{
+		Query query = em.createQuery("update Event e set aantalHerhalingen = (select count(id) from Event e2 where e.feed = e2.feed and e.summary = e2.summary and e.description = e2.description) where feed = :feed");
+		query.setParameter("feed", feed);
+		query.executeUpdate();
 	}
 
 	private void updateEvent(Event previousVersion, VEvent event) {
@@ -284,15 +312,15 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date)
+	public List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, int maxRecurrence)
 	{
-		return getEvents(selectedFeeds, new EventFilter(date));
+		return getEvents(selectedFeeds, new EventFilter(date, maxRecurrence));
 	}
 	
 	@Override
 	public List<Event> getEvents(Feed feed, boolean resolveDuplicates,
-			boolean onlyUpcoming) {
-		EventFilter filter = new EventFilter();
+			boolean onlyUpcoming, Integer maxRecurrence) {
+		EventFilter filter = new EventFilter(maxRecurrence);
 		filter.resolveDuplicates = resolveDuplicates;
 		if (onlyUpcoming)
 		{
@@ -320,6 +348,10 @@ public class FeedServiceImpl implements FeedService {
 			queryString += " and (year(start) < year(cast(:toDate as date)) or   (year(start) = year(cast(:toDate as date))   and (month(start) < month(cast(:toDate as date)) or " +
 					" (month(start) = month(cast(:toDate as date)) and day(start) <= day(cast(:toDate as date))))))";
 		}
+		if (filter.maxRecurrence != null)
+		{
+			queryString += " and (aantalHerhalingen is null or aantalHerhalingen < :maxRecurrence) ";
+		}
 
 		Query query = em.createQuery(queryString);
 		query.setHint("org.hibernate.cacheable", true);
@@ -336,6 +368,10 @@ public class FeedServiceImpl implements FeedService {
 			if (filter.toDate != null)
 			{
 				query.setParameter("toDate", format.parse(format.format(filter.toDate)), TemporalType.DATE);
+			}
+			if (filter.maxRecurrence != null)
+			{
+				query.setParameter("maxRecurrence", filter.maxRecurrence);
 			}
 		}
 		catch (ParseException e)
@@ -527,9 +563,9 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<Event> getEvents(List<Feed> selectedFeeds)
+	public List<Event> getEvents(List<Feed> selectedFeeds, Integer maxRecurrence)
 	{
-		return getEvents(selectedFeeds, new EventFilter());
+		return getEvents(selectedFeeds, new EventFilter(maxRecurrence));
 	}
 	
 	private List<Event> getEvents(List<Feed> selectedFeeds, EventFilter filter)

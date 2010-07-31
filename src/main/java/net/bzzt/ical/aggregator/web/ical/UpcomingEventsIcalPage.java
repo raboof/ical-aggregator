@@ -26,6 +26,8 @@ public class UpcomingEventsIcalPage extends IcalPage
 
 	@Nonnull
 	private final List<String> shortNames;
+
+	private Integer maxRecurrence;
 	
 	public UpcomingEventsIcalPage(PageParameters parameters)
 	{
@@ -38,6 +40,7 @@ public class UpcomingEventsIcalPage extends IcalPage
 		{
 			shortNames = Arrays.asList(sn);
 		}
+		maxRecurrence = parameters.getAsInteger("maxRecurrence");
 	}
 	
 	@Override
@@ -46,25 +49,14 @@ public class UpcomingEventsIcalPage extends IcalPage
 		Calendar calendar = new Calendar();
 		calendar.getProperties().add(new ProdId("aggregator"));
 		calendar.getProperties().add(Version.VERSION_2_0);
-//		feed.setFeedType("rss_2.0");
-//		feed.setTitle(WicketApplication.getTitle() + " Feed");
-//		feed.setLink(WicketApplication.getLink());
-//		feed.setDescription(WicketApplication.getTitle());
-//		feed.setUri(WicketApplication.getLink());
 		
 		List<Feed> selectedFeeds = feedService.getSelectedFeeds(shortNames);
 
-		for (Event event : feedService.getEvents(selectedFeeds))
+		for (Event event : feedService.getEvents(selectedFeeds, maxRecurrence))
 		{
 			calendar.getComponents().add(eventToVeventTransformer.transform(event));
 		}
 		
-//		List<SyndEntry> entries = new ArrayList<SyndEntry>();
-//		CollectionUtils.collect(feedService.getEvents(selectedFeeds),
-//			eventToVeventTransformer, entries);
-
-		//feed.setEntries(entries);
-
 		return calendar;
 
 	}

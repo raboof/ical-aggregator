@@ -11,9 +11,11 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Check;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -70,10 +72,10 @@ public class FeedSelection extends Panel
 
 			IModel<Collection<Feed>> collectionModel = (IModel) model;
 
-			final CheckGroup feed = new CheckGroup<Feed>("feed", collectionModel);
-			add(feed);
+			final CheckGroup feeds = new CheckGroup<Feed>("feed", collectionModel);
+			add(feeds);
 
-			feed.add(new PropertyListView<Feed>("feeds", feedService.getFeeds())
+			feeds.add(new PropertyListView<Feed>("feeds", feedService.getFeeds())
 			{
 
 				/**
@@ -90,7 +92,7 @@ public class FeedSelection extends Panel
 					item.add(check);
 					
 					Label name = new Label("name");
-					name.add(new AttributeModifier("for", true, new Model<String>(feed.getMarkupId() + "-" + check.getMarkupId())));
+					name.add(new AttributeModifier("for", true, new Model<String>(feeds.getMarkupId() + "-" + check.getMarkupId())));
 					item.add(name);
 					
 					WebMarkupContainer description = new WebMarkupContainer("descriptionContainer");
@@ -123,18 +125,11 @@ public class FeedSelection extends Panel
 								+ description.getMarkupId() + "').style.display = 'none'; } else { document.getElementById('"
 								+ description.getMarkupId() + "').style.display = 'block'; }");
 							toggle.add(new AttributeModifier("onclick", true, toggleDescription));
-//							name.add(new AttributeModifier("onclick", true, toggleDescription));
 						}
 					}
-//					{
-//						WebMarkupContainer close = new WebMarkupContainer("close");
-//						close.add(new AttributeModifier("onclick", true, new Model<String>("document.getElementById('"
-//							+ description.getMarkupId() + "').style.display = 'none';")));
-//						description.add(close);
-//					}
 				}
 			});
-			feed.add(new AjaxFormChoiceComponentUpdatingBehavior()
+			feeds.add(new AjaxFormChoiceComponentUpdatingBehavior()
 			{
 
 				/**
@@ -150,26 +145,31 @@ public class FeedSelection extends Panel
 				}
 			});
 
-			// CheckBoxMultipleChoice<Feed> checkBoxMultipleChoice = new CheckBoxMultipleChoice<Feed>(
-			// "feed", collectionModel, feedService.getFeeds(), new FeedRenderer());
+			
+			final CheckBox showRecurring = new CheckBox("showRecurring", new Model<Boolean>(((AggregatorSession) getSession()).getMaxRecurrence() == null));
+			showRecurring.add(new AjaxFormComponentUpdatingBehavior("onchange")
+			{
+				
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
 
-			// checkBoxMultipleChoice
-			// .add(new AjaxFormChoiceComponentUpdatingBehavior() {
-			//
-			// /**
-			// *
-			// */
-			// private static final long serialVersionUID = 1L;
-			//
-			// @Override
-			// protected void onUpdate(AjaxRequestTarget target) {
-			// ((AggregatorSession) getSession())
-			// .setSelectedFeeds(getModelObject());
-			// parent.refresh(target);
-			// }
-			// });
-			//
-			// add(checkBoxMultipleChoice);
+				@Override
+				protected void onUpdate(AjaxRequestTarget target)
+				{
+					if (showRecurring.getModelObject())
+					{
+						((AggregatorSession) getSession()).setMaxRecurrence(null);
+					}
+					else
+					{
+						((AggregatorSession) getSession()).setMaxRecurrence(5);
+					}
+					parent.refresh(target);
+				}
+			});
+			add(showRecurring);
 		}
 
 		@Override

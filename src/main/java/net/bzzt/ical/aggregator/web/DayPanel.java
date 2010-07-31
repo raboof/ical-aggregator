@@ -5,9 +5,11 @@ package net.bzzt.ical.aggregator.web;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.service.FeedService;
+import net.bzzt.ical.aggregator.util.PropertiesComparator;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,6 +22,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.IConverter;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 public class DayPanel extends Panel
 {
@@ -79,7 +83,9 @@ public class DayPanel extends Panel
 		head.add(link);
 		add(head);
 		
-		add(new ListView<Event>("events", feedService.getEventsForDay(AggregatorSession.get().getSelectedFeeds(), date)){
+		List<Event> eventsForDay = feedService.getEventsForDay(AggregatorSession.get().getSelectedFeeds(), date, AggregatorSession.get().getMaxRecurrence());
+		Collections.sort(eventsForDay, new PropertiesComparator<Event>("feed.shortName", "summary"));
+		add(new ListView<Event>("events", eventsForDay){
 
 			/**
 			 * 

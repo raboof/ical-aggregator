@@ -17,6 +17,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 	@Autowired
 	private FeedService feedService;
 
+	private Integer maxRecurrence = null;
+	
 	@Override
 	protected void setUp() throws Exception {
 	}
@@ -48,8 +50,8 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 		Feed feed = getFeed();
 		assertNotNull(feed.getId());
 		feedService.reloadFeed(feed);
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
     }
 	
 	public void testReload() throws IOException, ParserException
@@ -58,26 +60,26 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 		Feed feed = getFeed();
 		
 		feedService.reloadFeed(feed);
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
 
 		// Loading it again should not result in duplicates
 		feedService.reloadFeed(feed);
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
 	}
 	
 	public void testReloadNoUid() throws IOException, ParserException
 	{
 		Feed feed = getFeed("/tooUnique.ics");
 		feedService.reloadFeed(feed);
-		assertEquals(20, feedService.getEvents(feed, true, false).size());
-		assertEquals(20, feedService.getEvents(feed, false, false).size());
+		assertEquals(20, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(20, feedService.getEvents(feed, false, false, maxRecurrence).size());
 
 		feed.url = FeedTest.class.getResource("/tooUnique2.ics");
 		feedService.reloadFeed(feed);
-		assertEquals(20, feedService.getEvents(feed, true, false).size());
-		assertEquals(20, feedService.getEvents(feed, false, false).size());
+		assertEquals(20, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(20, feedService.getEvents(feed, false, false, maxRecurrence).size());
 		
 		feedService.delete(feed);
 	}
@@ -88,15 +90,15 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 		
     	// Initial import: example calendar has 40 events
 		feedService.reloadFeed(feed);
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
 
 		// Mark one event as duplicate
-		List<Event> events = feedService.getEvents(feed, false, false);
+		List<Event> events = feedService.getEvents(feed, false, false, maxRecurrence);
 		feedService.markDuplicate(events.get(0), events.get(1));
 		
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
-		assertEquals(39, feedService.getEvents(feed, true, false).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
+		assertEquals(39, feedService.getEvents(feed, true, false, maxRecurrence).size());
     }
 	
 	public void testDuplicateAcrossFeeds() throws IOException, ParserException
@@ -106,16 +108,16 @@ public class FeedTest extends AbstractJUnit38SpringContextTests {
 		// If an event is a duplicate of another event, and we find all 
 		// events for a given feed, we want to see the duplicates too
 		feedService.reloadFeed(feed);
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		List<Event> events = feedService.getEvents(feed, false, false);
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		List<Event> events = feedService.getEvents(feed, false, false, maxRecurrence);
 		assertEquals(40, events.size());
 
 		Event newEvent = new Event();
 		feedService.saveOrUpdateEvent(newEvent);
 		feedService.markDuplicate(newEvent, events.get(0));
 		
-		assertEquals(40, feedService.getEvents(feed, true, false).size());
-		assertEquals(40, feedService.getEvents(feed, false, false).size());
+		assertEquals(40, feedService.getEvents(feed, true, false, maxRecurrence).size());
+		assertEquals(40, feedService.getEvents(feed, false, false, maxRecurrence).size());
 	}
 	
 	public void testRefreshFeeds()
