@@ -28,6 +28,8 @@ public class AggregatorSession extends WebSession {
 	
 	private List<Feed> selectedFeeds;
 	
+	private Integer maxRecurrence = 5;
+	
 	public AggregatorSession(Request request) {
 		super(request);
 		
@@ -76,5 +78,15 @@ public class AggregatorSession extends WebSession {
 				selectedFeeds.remove(selectedFeed);
 			}
 		}
+	}
+
+	public Integer getMaxRecurrence()
+	{
+		return maxRecurrence;
+	}
+
+	public void setMaxRecurrence(Integer maxRecurrence)
+	{
+		this.maxRecurrence = maxRecurrence; 
 	}
 }

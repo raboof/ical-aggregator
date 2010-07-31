@@ -40,6 +40,12 @@ public class Feed implements Serializable, Identifiable<Long>, Comparable<Feed> 
 	
 	public Date lastUpdate;
 	
+	public Integer lastUpdateEvents = 0;
+	
+	public Integer lastUpdateAdded = 0;
+	
+	public String lastUpdateError;
+	
 	private Integer prio = 50;
 	
 	private Boolean showByDefault = true;
@@ -144,6 +150,38 @@ public class Feed implements Serializable, Identifiable<Long>, Comparable<Feed> 
 	public int compareTo(Feed o)
 	{
 		return name.compareTo(o.name);
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName()
+	{
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	/**
+	 * @return the shortName
+	 */
+	public String getShortName()
+	{
+		return shortName;
+	}
+
+	/**
+	 * @param shortName the shortName to set
+	 */
+	public void setShortName(String shortName)
+	{
+		this.shortName = shortName;
 	}
 	
 	

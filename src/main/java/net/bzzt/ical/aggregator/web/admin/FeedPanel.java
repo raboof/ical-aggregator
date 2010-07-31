@@ -55,6 +55,9 @@ public class FeedPanel extends Panel {
 			add(new TextField<URI>("link"));
 			add(new CheckBox("showByDefault"));
 			add(new Label("lastUpdate"));
+			add(new Label("lastUpdateAdded"));
+			add(new Label("lastUpdateEvents"));
+			add(new Label("lastUpdateError"));
 			
 			boolean existingIcsFeed = feed.getObject().id != null && feed.getObject().getUrl() != null;
 			add(new SubmitLink("reload")

@@ -29,9 +29,10 @@ public interface FeedService {
 	 * 
 	 * @param selectedFeeds
 	 * @param date
+	 * @param maxRecurrence TODO
 	 * @return
 	 */
-	List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date);
+	List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, int maxRecurrence);
 
 	/**
 	 * only 'verified' events.
@@ -39,9 +40,10 @@ public interface FeedService {
 	 * @param feed
 	 * @param resolveDuplicates
 	 * @param onlyUpcoming
+	 * @param maxRecurrence TODO
 	 * @return
 	 */
-	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean onlyUpcoming);
+	List<Event> getEvents(Feed feed, boolean resolveDuplicates, boolean onlyUpcoming, Integer maxRecurrence);
 
 	void markDuplicate(Event master, Event duplicate);
 
@@ -65,7 +67,7 @@ public interface FeedService {
 	 */
 	List<Event> getDuplicateCandidates(Event object);
 
-	List<Event> getEvents(List<Feed> selectedFeeds);
+	List<Event> getEvents(List<Feed> selectedFeeds, Integer maxRecurrence);
 
 	/** list of feeds that is shown by default */
 	List<Feed> getDefaultFeeds();

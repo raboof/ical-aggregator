@@ -9,7 +9,10 @@
 			<label>ICal URL:</label> <input size="50" wicket:id="url"></input><br/>
 			<label>Link:</label> <input size="50" wicket:id="link"></input><br/>
 			<label>Show by default:</label> <input wicket:id="showByDefault" type="checkbox"></input><br/>
-			<span wicket:id="lastUpdate"></span>
+			<span wicket:id="lastUpdate"></span>,
+			<span wicket:id="lastUpdateEvents">x</span> 
+			(+<span wicket:id="lastUpdateAdded">y</span>) 
+			<span wicket:id="lastUpdateError">z</span> 
 			<a wicket:id="reload"><wicket:message key="reload"></wicket:message></a>
 			<a wicket:id="clear"><wicket:message key="clear"></wicket:message></a>
 			<a wicket:id="validate"><wicket:message key="validate"></wicket:message></a>

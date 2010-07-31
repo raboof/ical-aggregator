@@ -104,7 +104,8 @@ public class DayView extends AggregatorLayoutPage
 				
 			});
 		
-		List<Event> eventsForDay = feedService.getEventsForDay(AggregatorSession.get().getSelectedFeeds(), date);
+		List<Event> eventsForDay = feedService.getEventsForDay(AggregatorSession.get().getSelectedFeeds(), date, 
+			AggregatorSession.get().getMaxRecurrence());
 		Collections.sort(eventsForDay);
 		
 		List<List<Event>> columns = splitEvents(eventsForDay, 3);

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
@@ -27,9 +28,12 @@ public class UpcomingEventsFeedPage extends FeedPage
 
 	@SpringBean
 	private FeedService feedService;
-
+	
 	@Nonnull
 	private final List<String> shortNames;
+
+	@Nullable
+	private final Integer maxRecurrence;
 	
 	public UpcomingEventsFeedPage(PageParameters parameters)
 	{
@@ -42,6 +46,7 @@ public class UpcomingEventsFeedPage extends FeedPage
 		{
 			shortNames = Arrays.asList(sn);
 		}
+		maxRecurrence = parameters.getAsInteger("maxRecurrence");
 	}
 	
 	@Override
@@ -56,10 +61,8 @@ public class UpcomingEventsFeedPage extends FeedPage
 		
 		List<Feed> selectedFeeds = feedService.getSelectedFeeds(shortNames);
 		
-		
-		
 		List<SyndEntry> entries = new ArrayList<SyndEntry>();
-		CollectionUtils.collect(feedService.getEvents(selectedFeeds),
+		CollectionUtils.collect(feedService.getEvents(selectedFeeds, maxRecurrence),
 			eventToSyndEntryTransformer, entries);
 
 		feed.setEntries(entries);

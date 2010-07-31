@@ -67,6 +67,11 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 	@Column(nullable=false)
 	private Boolean hidden = true;
 	
+	/**
+	 * Hoe vaak komt een event met dezelfde titel en beschrijving voor in deze feed?
+	 */
+	private Integer aantalHerhalingen;
+	
 	public Event()
 	{
 		
@@ -267,6 +272,52 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 			return result;
 		}
 	}
-	
-	
+
+	/**
+	 * @return the aantalHerhalingen
+	 */
+	public Integer getAantalHerhalingen()
+	{
+		return aantalHerhalingen;
+	}
+
+	/**
+	 * @param aantalHerhalingen the aantalHerhalingen to set
+	 */
+	public void setAantalHerhalingen(Integer aantalHerhalingen)
+	{
+		this.aantalHerhalingen = aantalHerhalingen;
+	}
+
+	/**
+	 * @return the feed
+	 */
+	public Feed getFeed()
+	{
+		return feed;
+	}
+
+	/**
+	 * @param feed the feed to set
+	 */
+	public void setFeed(Feed feed)
+	{
+		this.feed = feed;
+	}
+
+	/**
+	 * @return the summary
+	 */
+	public String getSummary()
+	{
+		return summary;
+	}
+
+	/**
+	 * @param summary the summary to set
+	 */
+	public void setSummary(String summary)
+	{
+		this.summary = summary;
+	}
 }
