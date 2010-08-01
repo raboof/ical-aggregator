@@ -32,7 +32,7 @@ public interface FeedService {
 	 * @param maxRecurrence TODO
 	 * @return
 	 */
-	List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, int maxRecurrence);
+	List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, Integer maxRecurrence);
 
 	/**
 	 * only 'verified' events.

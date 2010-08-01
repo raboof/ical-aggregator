@@ -312,7 +312,7 @@ public class FeedServiceImpl implements FeedService {
 	}
 
 	@Override
-	public List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, int maxRecurrence)
+	public List<Event> getEventsForDay(List<Feed> selectedFeeds, Date date, Integer maxRecurrence)
 	{
 		return getEvents(selectedFeeds, new EventFilter(date, maxRecurrence));
 	}
