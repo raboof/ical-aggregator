@@ -10,7 +10,12 @@ import net.fortuna.ical4j.data.ParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit38.AbstractJUnit38SpringContextTests;
- 
+
+/**
+ * test de feed dusch
+ * 
+ * @author arnouten
+ */
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class FeedTest extends AbstractJUnit38SpringContextTests {
     
