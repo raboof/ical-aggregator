@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import net.bzzt.ical.aggregator.web.model.Identifiable;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import net.bzzt.ical.aggregator.web.model.Identifiable;
 
 /** 'user' is not a valid database name in postgresql */
 @Entity(name="Users")

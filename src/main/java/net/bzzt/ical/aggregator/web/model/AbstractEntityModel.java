@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.EntityNotFoundException;
 
-
 import org.apache.wicket.model.IModel;
 
 public abstract class AbstractEntityModel<T extends Identifiable< ? >> implements IModel<T>

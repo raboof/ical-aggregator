@@ -72,7 +72,7 @@ public class FeedSelection extends Panel
 
 			IModel<Collection<Feed>> collectionModel = (IModel) model;
 
-			final CheckGroup feeds = new CheckGroup<Feed>("feed", collectionModel);
+			final CheckGroup<Feed> feeds = new CheckGroup<Feed>("feed", collectionModel);
 			add(feeds);
 
 			feeds.add(new PropertyListView<Feed>("feeds", feedService.getFeeds())
@@ -87,7 +87,7 @@ public class FeedSelection extends Panel
 				protected void populateItem(ListItem<Feed> item)
 				{
 					Feed modelObject = item.getModelObject();
-					Check check = new Check("check", new Model<Feed>(modelObject));
+					Check<Feed> check = new Check<Feed>("check", new Model<Feed>(modelObject));
 					check.setOutputMarkupId(true);
 					item.add(check);
 					

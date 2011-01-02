@@ -1,13 +1,13 @@
 package net.bzzt.ical.aggregator.web.admin;
 
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import net.bzzt.ical.aggregator.model.Right;
 import net.bzzt.ical.aggregator.service.UserService;
 import net.bzzt.ical.aggregator.web.AggregatorLayoutPage;
 import net.bzzt.ical.aggregator.web.AggregatorSession;
 import net.bzzt.ical.aggregator.web.EventVerificationPage;
+
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class EditPage extends AggregatorLayoutPage
 {

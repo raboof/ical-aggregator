@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.bzzt.ical.aggregator.model.Event;
 import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
@@ -43,10 +45,27 @@ public class EventListPanel extends Panel {
 	@SpringBean
 	private FeedService feedService;
 	
-	public EventListPanel(String id) {
+	public EventListPanel(String id) 
+	{
+		this(id, null);
+	}
+	
+	public EventListPanel(String id, @Nullable Date date)
+	{	
 		super(id);
 		
-		List<Event> eventsSorted = feedService.getEvents(((AggregatorSession)getSession()).getSelectedFeeds(), AggregatorSession.get().getMaxRecurrence());
+		List<Event> eventsSorted;
+		List<Feed> selectedFeeds = ((AggregatorSession)getSession()).getSelectedFeeds();
+		Integer maxRecurrence = AggregatorSession.get().getMaxRecurrence();
+		if (date == null)
+		{
+			eventsSorted = feedService.getEvents(selectedFeeds, maxRecurrence);
+		}
+		else
+		{
+			eventsSorted = feedService.getEventsForDay(selectedFeeds, date, maxRecurrence);
+			Collections.sort(eventsSorted);
+		}
 		
 		final MultiMap<Date,Event> eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
 		List<Date> dates = new ArrayList<Date>(eventsPerDate.keySet());

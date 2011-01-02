@@ -1,7 +1,8 @@
 package net.bzzt.ical.aggregator.web.opensocial;
 
+import java.util.Date;
+
 import net.bzzt.ical.aggregator.web.EventListPanel;
-import net.bzzt.ical.aggregator.web.WeekView;
 import net.bzzt.ical.aggregator.web.WicketApplication;
 
 import org.apache.wicket.AttributeModifier;
@@ -27,7 +28,7 @@ public class OpenSocialPage extends WebPage
 		
 		add(new Label("contentPrefix", "<![CDATA[").setEscapeModelStrings(false));
 		
-		WebMarkupContainer content = new EventListPanel("content");
+		WebMarkupContainer content = new EventListPanel("content", new Date());
 		add(content);
 		
 		add(new Label("contentPostfix", "]]>").setEscapeModelStrings(false));

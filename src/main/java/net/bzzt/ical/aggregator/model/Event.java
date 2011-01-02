@@ -11,12 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import net.bzzt.ical.aggregator.web.model.Identifiable;
+import net.fortuna.ical4j.model.Iso8601;
+
 import org.apache.wicket.util.time.Time;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import net.bzzt.ical.aggregator.web.model.Identifiable;
-import net.fortuna.ical4j.model.Iso8601;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -56,6 +56,8 @@ public class Event implements Serializable, Identifiable<Long>, Cloneable, Compa
 	public String rawEvent;
 
 	public URL url;
+
+	public String location;
 	
 	/** This event was added manually */
 	@Column(nullable=false)

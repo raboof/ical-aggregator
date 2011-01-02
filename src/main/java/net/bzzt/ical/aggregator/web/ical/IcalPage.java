@@ -30,7 +30,9 @@ public abstract class IcalPage extends WebPage
 		
 		response.setContentType("text/calendar; charset=UTF-8");
 		
-		CalendarOutputter outputter = new CalendarOutputter(true);
+		// validating is nice, but the validator disallows calendars with 0
+		// events - and what else are we going to do?
+		CalendarOutputter outputter = new CalendarOutputter(false);
 		
 		try
 		{

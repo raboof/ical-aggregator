@@ -20,7 +20,7 @@ public class EventFilter implements Serializable
 	
 	public Integer maxRecurrence;
 	
-	public EventFilter(Date date, int maxRecurrence)
+	public EventFilter(Date date, Integer maxRecurrence)
 	{
 		this.maxRecurrence = maxRecurrence;
 		this.fromDate = date;

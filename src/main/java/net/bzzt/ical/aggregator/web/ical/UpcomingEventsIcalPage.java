@@ -1,9 +1,8 @@
 package net.bzzt.ical.aggregator.web.ical;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -14,15 +13,16 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.XProperty;
 
 import org.apache.commons.collections.Transformer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Time;
 
 
 public class UpcomingEventsIcalPage extends IcalPage
@@ -39,6 +39,8 @@ public class UpcomingEventsIcalPage extends IcalPage
 
 	private Integer maxRecurrence;
 	
+	private Date date;
+	
 	public UpcomingEventsIcalPage(PageParameters parameters)
 	{
 		String[] sn = parameters.getStringArray("sn");
@@ -51,6 +53,11 @@ public class UpcomingEventsIcalPage extends IcalPage
 			shortNames = Arrays.asList(sn);
 		}
 		maxRecurrence = parameters.getAsInteger("maxRecurrence");
+		String date = parameters.getString("date");
+		if (StringUtils.isNotBlank(date))
+		{
+			this.date = (Date) WicketApplication.get().getConverterLocator().getConverter(Date.class).convertToObject(date, null);
+		}
 	}
 	
 	@Override
@@ -60,18 +67,21 @@ public class UpcomingEventsIcalPage extends IcalPage
 		calendar.getProperties().add(new ProdId("aggregator"));
 		calendar.getProperties().add(Version.VERSION_2_0);
 		calendar.getProperties().add(new XProperty("X-WR-CALNAME", WicketApplication.getTitle()));
-		try
-		{
-			calendar.getProperties().add(new Url(new URI(WicketApplication.getLink())));
-		}
-		catch (URISyntaxException e)
-		{
-			LOG.warn(e.getMessage(), e);
-		}
+		calendar.getProperties().add(new XProperty("X-URL", WicketApplication.getLink()));
 		
 		List<Feed> selectedFeeds = feedService.getSelectedFeeds(shortNames);
 
-		for (Event event : feedService.getEvents(selectedFeeds, maxRecurrence))
+		List<Event> events;
+		if (date == null)
+		{
+			events = feedService.getEvents(selectedFeeds, maxRecurrence);
+		}
+		else
+		{
+			events = feedService.getEventsForDay(selectedFeeds, date, maxRecurrence);
+		}
+		
+		for (Event event : events)
 		{
 			calendar.getComponents().add(eventToVeventTransformer.transform(event));
 		}

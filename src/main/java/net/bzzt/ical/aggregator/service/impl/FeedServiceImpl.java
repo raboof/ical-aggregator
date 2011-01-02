@@ -69,7 +69,7 @@ public class FeedServiceImpl implements FeedService {
 
 	public List<Feed> getFeeds() {
 		Query query = em.createQuery("select f from Feed f");
-		query.setHint("org.hibernate.cacheable", true);
+//		query.setHint("org.hibernate.cacheable", true);
 		@SuppressWarnings("unchecked")
 		List<Feed> resultList = query.getResultList();
 		return resultList;
@@ -163,6 +163,10 @@ public class FeedServiceImpl implements FeedService {
 		event.rawEvent = vevent.toString();
 		event.uid = vevent.getUid().getValue();
 		event.summary = vevent.getSummary().getValue();
+		if (vevent.getLocation() != null)
+		{
+			event.location = vevent.getLocation().getValue();
+		}
 		event.setHidden(event.getHidden());
 		event.setManual(event.getManual());
 		Description description = vevent.getDescription();
@@ -354,7 +358,7 @@ public class FeedServiceImpl implements FeedService {
 		}
 
 		Query query = em.createQuery(queryString);
-		query.setHint("org.hibernate.cacheable", true);
+		//query.setHint("org.hibernate.cacheable", true);
 		query.setParameter("feed", feed);
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -532,7 +536,7 @@ public class FeedServiceImpl implements FeedService {
 	private void getAlternativesRecursive(Event parent,
 			List<Event> results) {
 		Query query = em.createQuery("select e from Event e where duplicate_of = :event");
-		query.setHint("org.hibernate.cacheable", true);
+//		query.setHint("org.hibernate.cacheable", true);
 		
 		query.setParameter("event", parent);
 		List<Event> resultList = getResults(query);

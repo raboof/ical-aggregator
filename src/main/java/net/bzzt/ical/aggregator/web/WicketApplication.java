@@ -12,6 +12,7 @@ import net.bzzt.ical.aggregator.web.ical.UpcomingEventsIcalPage;
 import net.bzzt.ical.aggregator.web.opensocial.OpenSocialPage;
 import net.bzzt.ical.aggregator.web.opml.OpmlPage;
 import net.bzzt.ical.aggregator.web.rss.UpcomingEventsFeedPage;
+import net.bzzt.ical.aggregator.web.util.MultiFormatDateConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.IConverterLocator;
@@ -26,19 +27,22 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.ConverterLocator;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converters.DateConverter;
 import org.apache.wicket.util.time.Time;
 
 /**
- * Application object for your web application. If you want to run this
- * application without deploying, run the Start class.
+ * Application object for your web application. If you want to run this application without deploying, run the Start
+ * class.
  * 
  * @see net.bzzt.ical.aggregator.Start#main(String[])
  */
-public class WicketApplication extends WebApplication {
+public class WicketApplication extends WebApplication
+{
 	/**
 	 * Constructor
 	 */
-	public WicketApplication() {
+	public WicketApplication()
+	{
 	}
 
 	/*
@@ -47,11 +51,14 @@ public class WicketApplication extends WebApplication {
 	 * @see org.apache.wicket.protocol.http.WebApplication#init()
 	 */
 	@Override
-	protected void init() {
+	protected void init()
+	{
 		addComponentInstantiationListener(new SpringComponentInjector(this));
-		
+
+		getRequestLoggerSettings().setRequestLoggerEnabled(true);
+
 		getMarkupSettings().setStripWicketTags(true);
-		
+
 		mount(new MixedParamUrlCodingStrategy("/day", DayView.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/login", LoginPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/edit", EditPage.class, new String[0]));
@@ -60,12 +67,13 @@ public class WicketApplication extends WebApplication {
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/ical", UpcomingEventsIcalPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/opml", OpmlPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/opensocial/week.xml", OpenSocialPage.class, new String[0]));
-		
+
 		super.init();
 	}
 
 	@Override
-	public Session newSession(Request request, Response response) {
+	public Session newSession(Request request, Response response)
+	{
 		return new AggregatorSession(request);
 	}
 
@@ -75,34 +83,42 @@ public class WicketApplication extends WebApplication {
 	 * @see org.apache.wicket.Application#newConverterLocator()
 	 */
 	@Override
-	protected IConverterLocator newConverterLocator() {
+	public IConverterLocator newConverterLocator()
+	{
 		ConverterLocator locator = new ConverterLocator();
-		locator.set(URL.class, new IConverter() {
+		locator.set(URL.class, new IConverter()
+		{
 
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public Object convertToObject(String value, Locale locale) {
-				if (StringUtils.isBlank(value)) {
+			public Object convertToObject(String value, Locale locale)
+			{
+				if (StringUtils.isBlank(value))
+				{
 					return null;
 				}
 
-				try {
+				try
+				{
 					return new URL(value);
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					throw new ConversionException(e);
 				}
 			}
 
-			public String convertToString(Object value, Locale locale) {
+			public String convertToString(Object value, Locale locale)
+			{
 				return ((URL) value).toExternalForm();
 			}
 
 		});
-
-		locator.set(Time.class, new IConverter() {
+		locator.set(Time.class, new IConverter()
+		{
 
 			/**
 			 * 
@@ -110,17 +126,21 @@ public class WicketApplication extends WebApplication {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object convertToObject(String value, Locale locale) {
+			public Object convertToObject(String value, Locale locale)
+			{
 				return null;
 			}
 
 			@Override
-			public String convertToString(Object value, Locale locale) {
+			public String convertToString(Object value, Locale locale)
+			{
 				SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-				return format
-						.format(new Date(((Time) value).getMilliseconds()));
+				return format.format(new Date(((Time) value).getMilliseconds()));
 			}
 		});
+
+		DateConverter converter = new MultiFormatDateConverter("dd/MM/yyyy", "yyyy/MM/dd");
+		locator.set(Date.class, converter);
 
 		return locator;
 	}
@@ -128,7 +148,8 @@ public class WicketApplication extends WebApplication {
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
-	public Class<? extends AggregatorLayoutPage> getHomePage() {
+	public Class<? extends AggregatorLayoutPage> getHomePage()
+	{
 		return HomePage.class;
 	}
 
@@ -144,7 +165,7 @@ public class WicketApplication extends WebApplication {
 
 	public static String getLink()
 	{
-		HttpServletRequest httpServletRequest = ((WebRequest)RequestCycle.get().getRequest()).getHttpServletRequest();
+		HttpServletRequest httpServletRequest = ((WebRequest) RequestCycle.get().getRequest()).getHttpServletRequest();
 		int serverPort = httpServletRequest.getServerPort();
 		String scheme = httpServletRequest.getScheme();
 		String portExtension = "";
@@ -154,7 +175,7 @@ public class WicketApplication extends WebApplication {
 			portExtension = ":" + serverPort;
 		}
 		String url = scheme + "://" + httpServletRequest.getServerName() + portExtension;
-//			+ httpServletRequest.getContextPath();
+		// + httpServletRequest.getContextPath();
 		return url;
 	}
 
