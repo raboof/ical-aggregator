@@ -12,10 +12,11 @@ import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.util.Categorizer;
 import net.bzzt.ical.aggregator.util.CategoryHelper;
-import net.bzzt.ical.aggregator.util.MultiMap;
 import net.bzzt.ical.aggregator.web.model.CategorizedList;
 import net.bzzt.ical.aggregator.web.model.EventsCategorizer;
 
+import org.apache.commons.collections4.ListValuedMap;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -67,7 +68,7 @@ public class EventListPanel extends Panel {
 			Collections.sort(eventsSorted);
 		}
 		
-		final MultiMap<Date,Event> eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
+		final ListValuedMap<Date,Event> eventsPerDate = CategoryHelper.categorize(eventsSorted, new EventsCategorizer());
 		List<Date> dates = new ArrayList<Date>(eventsPerDate.keySet());
 		Collections.sort(dates);
 		
