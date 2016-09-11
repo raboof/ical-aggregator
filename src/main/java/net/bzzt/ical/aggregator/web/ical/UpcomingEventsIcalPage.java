@@ -12,11 +12,12 @@ import net.bzzt.ical.aggregator.model.Feed;
 import net.bzzt.ical.aggregator.service.FeedService;
 import net.bzzt.ical.aggregator.web.WicketApplication;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.XProperty;
 
-import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +30,7 @@ public class UpcomingEventsIcalPage extends IcalPage
 {
 	private static final Log LOG = LogFactory.getLog(UpcomingEventsIcalPage.class);
 	
-	private static final Transformer eventToVeventTransformer = new EventToVEventTransformer();
+	private static final Transformer<Event, VEvent> eventToVeventTransformer = new EventToVEventTransformer();
 
 	@SpringBean
 	private FeedService feedService;

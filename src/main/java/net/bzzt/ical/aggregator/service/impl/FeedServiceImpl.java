@@ -27,6 +27,7 @@ import net.bzzt.ical.aggregator.service.FeedService;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Description;
@@ -92,8 +93,7 @@ public class FeedServiceImpl implements FeedService {
 			Calendar calendar = getCalendar(feed);
 	
 			@SuppressWarnings("unchecked")
-			Collection<VEvent> components = (Collection<VEvent>) calendar
-					.getComponents(VEvent.VEVENT);
+			ComponentList<VEvent> components = calendar.getComponents(VEvent.VEVENT);
 			LOG.info(components.size() + " events found");
 			
 			

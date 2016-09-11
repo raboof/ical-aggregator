@@ -10,18 +10,13 @@ import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Url;
 
-import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang.StringUtils;
 
-public class EventToVEventTransformer implements Transformer
+public class EventToVEventTransformer implements Transformer<Event, VEvent>
 {
 
 	@Override
-	public Object transform(Object input)
-	{
-		return transform((Event) input);
-	}
-
 	public VEvent transform(Event input)
 	{
 		VEvent event = new VEvent(new Date(input.getStart()), new Date(input.getEnding()), input.summary);

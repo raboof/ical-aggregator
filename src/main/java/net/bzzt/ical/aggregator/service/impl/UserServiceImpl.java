@@ -37,6 +37,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User find(String username, String password)
 	{
+		Query query2 = em.createQuery("select username, password from Users u");
+		LOG.info(query2.getResultList());
+
 		Query query = em.createQuery("select u from Users u where username = :username and password = :password");
 		query.setParameter("username", username);
 		query.setParameter("password", password);
