@@ -26,8 +26,6 @@ public class AggregatorSession extends WebSession {
 	
 	private User loggedInUser;
 	
-	private List<Feed> selectedFeeds;
-	
 	private Integer maxRecurrence = 5;
 	
 	public AggregatorSession(Request request) {
@@ -37,18 +35,12 @@ public class AggregatorSession extends WebSession {
 		setLocale(new Locale("nl", "NL"));
 		
 		InjectorHolder.getInjector().inject(this);
-		
-		selectedFeeds = feedService.getDefaultFeeds();
 	}
 
 	public List<Feed> getSelectedFeeds() {
-		return selectedFeeds;
+		return feedService.getDefaultFeeds();
 	}
 
-	public void setSelectedFeeds(List<Feed> selectedFeeds) {
-		this.selectedFeeds = selectedFeeds;
-	}
-	
 	public static AggregatorSession get()
 	{
 		return (AggregatorSession) Session.get();
@@ -67,17 +59,6 @@ public class AggregatorSession extends WebSession {
 	public void login(User user)
 	{
 		loggedInUser = user;
-	}
-
-	public void removeFromFeedSelection(Feed feed)
-	{
-		for (Feed selectedFeed : new ArrayList<Feed>(selectedFeeds))
-		{
-			if (feed.id.equals(selectedFeed.id))
-			{
-				selectedFeeds.remove(selectedFeed);
-			}
-		}
 	}
 
 	public Integer getMaxRecurrence()

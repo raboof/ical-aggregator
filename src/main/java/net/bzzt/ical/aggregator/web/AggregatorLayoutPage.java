@@ -59,8 +59,6 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		add(new LocaleLink("toEnglish", Locale.ENGLISH));
 
 		add(new FeedbackPanel("feedback"));
-
-		add(new FeedSelection("feedSelection", this));
 	}
 
 	@Override

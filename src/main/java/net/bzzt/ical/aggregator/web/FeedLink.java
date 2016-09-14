@@ -9,6 +9,8 @@ import net.bzzt.ical.aggregator.web.model.JpaEntityModel;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.markup.html.panel.Panel;
 
 
@@ -22,25 +24,7 @@ public class FeedLink extends Panel {
 	public FeedLink(String id, Feed feed) {
 		super(id);
 	
-		Link<Feed> link = new Link<Feed>("feed", new JpaEntityModel<Feed>(feed))
-		{
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				List<Feed> feedList = new ArrayList<Feed>();
-				feedList.add(getModelObject());
-				((AggregatorSession) Session.get()).setSelectedFeeds(feedList);
-				setResponsePage(WicketApplication.get().getHomePage());
-			}
-			
-		};
-		link.add(new Label("shortName", feed.shortName));
-		add(link);
+		add(new ExternalLink("feed", feed.link.toString(), feed.shortName));
 	}
 
 }
