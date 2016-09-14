@@ -215,12 +215,7 @@
 			<version>${jetty.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-	      <groupId>org.wicketstuff</groupId>
-	      <artifactId>wicketstuff-rome</artifactId>
-	      <version>1.4-SNAPSHOT</version>
-	    </dependency>
-			
+
 	</dependencies>
 	<build>
 		<resources>

@@ -11,7 +11,6 @@ import net.bzzt.ical.aggregator.web.admin.EditPage;
 import net.bzzt.ical.aggregator.web.ical.UpcomingEventsIcalPage;
 import net.bzzt.ical.aggregator.web.opensocial.OpenSocialPage;
 import net.bzzt.ical.aggregator.web.opml.OpmlPage;
-import net.bzzt.ical.aggregator.web.rss.UpcomingEventsFeedPage;
 import net.bzzt.ical.aggregator.web.util.MultiFormatDateConverter;
 
 import org.apache.commons.lang.StringUtils;
@@ -63,7 +62,6 @@ public class WicketApplication extends WebApplication
 		mount(new MixedParamUrlCodingStrategy("/login", LoginPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/edit", EditPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/week", WeekView.class, new String[0]));
-		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/rss", UpcomingEventsFeedPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/upcoming/ical", UpcomingEventsIcalPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/feeds/opml", OpmlPage.class, new String[0]));
 		mount(new MixedParamUrlCodingStrategy("/opensocial/week.xml", OpenSocialPage.class, new String[0]));
