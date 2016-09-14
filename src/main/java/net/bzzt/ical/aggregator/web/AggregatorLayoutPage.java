@@ -48,7 +48,6 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		add(new Label("header", title));
 
 		
-		add(new BookmarkablePageLink<Void>("home", HomePage.class).setEnabled(!(this instanceof HomePage)));
 		add(new BookmarkablePageLink<Void>("list", EventListPage.class).setEnabled(!(this instanceof EventListPage)));
 
 		add(new BookmarkablePageLink<Void>("day", DayView.class).setEnabled(!(this instanceof DayView)));

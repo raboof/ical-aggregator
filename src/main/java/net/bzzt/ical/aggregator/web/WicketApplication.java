@@ -148,7 +148,7 @@ public class WicketApplication extends WebApplication
 	 */
 	public Class<? extends AggregatorLayoutPage> getHomePage()
 	{
-		return HomePage.class;
+		return EventListPage.class;
 	}
 
 	public static String getTitle()
