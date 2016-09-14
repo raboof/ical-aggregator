@@ -66,8 +66,6 @@ public abstract class AggregatorLayoutPage extends WebPage implements IHeaderCon
 		response.renderCSSReference(new ResourceReference(AggregatorLayoutPage.class, "style.css"));
 		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class, "jquery-1.4.2.min.js"),
 			"JQUERY");
-		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class,
-			"jquery.layout.min-1.2.0.js"), "JQUERY_LAYOUT");
 		// response.renderOnDomReadyJavascript("$('body').layout({ applyDefaultStyles: true });");
 		response.renderJavascriptReference(new ResourceReference(AggregatorLayoutPage.class,
 			"ajax/uniqueurls/wicket.ajax.uniqueurls.js"), "UNIQUEURLS");
