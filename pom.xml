@@ -285,5 +285,6 @@
 	<properties>
 		<wicket.version>1.4.6</wicket.version>
 		<jetty.version>6.1.24</jetty.version>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 </project>
